@@ -1,0 +1,15 @@
+/* Controls the layout of the image */
+#avhamazon-widget .wishlistimage {
+ border-style: solid;
+ border-width: 1px;
+}
+
+/* Controls the layout of caption of the image */
+#avhamazon-widget .wishlistcaption {
+ font-size: 100%;
+}
+
+/* Controls the layout of the footer */
+#avhamazon-widget .footer {
+	float: right;
+}
