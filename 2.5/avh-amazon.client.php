@@ -109,7 +109,7 @@ class avh_amazon {
 		 * Set static class properties
 		 *
 		 */
-		$this->version = "2.0.2-rc1";
+		$this->version = "2.1";
 		/**
 		 * Locale WSDL Array initialization
 		 *
@@ -247,8 +247,8 @@ class avh_amazon {
 			}
 			// If a newer version is running do upgrades if neccesary and update the database.
 			if ( $this->version > $options_from_table['version'] ) {
-				// Starting with version 2.0.2 I switched to a new way of storing the widget options in the database. We need to convert these.
-				if ( $options_from_table['version'] < "2.0.2" ) {
+				// Starting with version 2.1 I switched to a new way of storing the widget options in the database. We need to convert these.
+				if ( $options_from_table['version'] < "2.1" ) {
 					$this->upgradeWidgetOptions_2_1 ();
 				}
 
@@ -318,9 +318,7 @@ function avhamazon_init () {
 		require (dirname ( __FILE__ ) . '/inc/avh-amazon.admin.php');
 		$avhamazon_admin = new AVHAmazonAdmin ( $avhamazon->default_options, $avhamazon->version, $avhamazon->info, $avhamazon->locale_table );
 		// Installation
-		register_activation_hook ( __FILE__, array (
-				& $avhamazon_admin,
-				'installPlugin' ) );
+		register_activation_hook ( __FILE__, array ( & $avhamazon_admin, 'installPlugin' ) );
 	}
 
 	// Include shortcode class
