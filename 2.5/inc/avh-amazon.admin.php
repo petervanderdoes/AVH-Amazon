@@ -256,7 +256,7 @@ jQuery(document).ready(function() {
 					'<ul>'.
 					'<li>Add Associated ID.'.
 					'<li>Choice of thumbnail size, Small/Medium/Large.'.
-					'<li>Option to use up to 9 widgets.'.
+					'<li>Option to use up to unlimited widgets.'.
 					'<li>Multiple items from the same Wish List can be displayed in the widget.'.
 					'<li>A configurable footer can be displayed on the bottom of the widget linking to the list on Amazon.'.
 					'</ul>'.

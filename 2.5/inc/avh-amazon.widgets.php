@@ -48,9 +48,7 @@ class AVHAmazonWidget {
 		$this->locale_table = $locale_table;
 
 		// Initialize!
-		add_action ( 'widgets_init', array (
-				&$this,
-				'initWidget' ) );
+		add_action ( 'widgets_init', array ( &$this, 'initWidget' ) );
 	}
 
 	/**
@@ -263,8 +261,7 @@ class AVHAmazonWidget {
 
 		extract ( $args, EXTR_SKIP );
 		if ( is_numeric ( $widget_args ) ) {
-			$widget_args = array (
-					'number' => $widget_args );
+			$widget_args = array ( 'number' => $widget_args );
 		}
 
 		$widget_args = wp_parse_args ( $widget_args, array ( 'number' => - 1 ) );
@@ -307,18 +304,21 @@ class AVHAmazonWidget {
 		/**
 		 * Set up WSDL Cache
 		 */
-		$wsdlurl = $avhamazon->wsdlurl_table[$locale];
+		$avhamazon->wsdlurl = $avhamazon->wsdlurl_table[$locale];
 		$cache = new wsdlcache ( $avhamazon->wsdlcachefolder, 0 ); // Cache it indefinitely
-		$wsdl = $cache->get ( $wsdlurl );
-		if ( is_null ( $wsdl ) ) {
-			$wsdl = new wsdl ( $wsdlurl );
-			$cache->put ( $wsdl );
+		$avhamazon->wsdl = $cache->get ( $avhamazon->wsdlurl );
+		if ( is_null ( $avhamazon->wsdl ) ) {
+			$avhamazon->wsdl = new wsdl ( $avhamazon->wsdlurl );
+			$cache->put ( $avhamazon->wsdl );
+		} else {
+			$avhamazon->wsdl->debug_str = '';
+			$avhamazon->wsdl->debug ( 'Retrieved from cache' );
 		}
 
 		/**
 		 * Create SOAP Client
 		 */
-		$client = new nusoap_client ( $wsdl, true );
+		$client = new nusoap_client ( $avhamazon->wsdl, true );
 		$client->soap_defencoding = 'UTF-8';
 		$proxy = $client->getProxy ();
 

@@ -191,6 +191,10 @@ class AVHAmazonShortcode {
 			$myurl .= '&tag=' . $associatedid;
 
 			// If no content is given we use the Title from Amazon.
+			echo '<pre>';
+			print_r($item_result);
+			echo '</pre>';
+			die();
 			$content = ($content) ? $content : $item_result['Items']['Item']['ItemAttributes']['Title'];
 
 			switch ( $attrs['linktype'] ) {
