@@ -88,6 +88,7 @@ class AVHAmazonShortcode {
 
 		if ( $GLOBALS['editing'] ) { //@todo Check if there's a better solution for this.
 			wp_enqueue_script ( 'avhamazonmetabox', $this->info['install_url'] . '/inc/js/metabox.js', array ( 'jquery' ), $this->version );
+			wp_enqueue_script('jquery-ui-tabs');
 		}
 	}
 
@@ -152,6 +153,14 @@ class AVHAmazonShortcode {
 			$attrs['asin'] = $Item['Item']['ASIN'];
 		}
 
+		if ( 'all' == strtolower($attrs['asin'])) {
+			foreach ($list_result['Lists']['List']['ListItem'] as $key => $value) {
+				$attrs['asin'] = $value['Item']['ASIN'];
+				list ( $oneresult, $error ) = $this->shortcodeAsin ( &$proxy, $attrs, $content, $associatedid );
+				$result .= $oneresult.'<br />';
+			}
+			$attrs['asin'] = null;
+		}
 		if ( $attrs['asin'] ) {
 			list ( $result, $error ) = $this->shortcodeAsin ( &$proxy, $attrs, $content, $associatedid );
 		}
@@ -191,10 +200,6 @@ class AVHAmazonShortcode {
 			$myurl .= '&tag=' . $associatedid;
 
 			// If no content is given we use the Title from Amazon.
-			echo '<pre>';
-			print_r($item_result);
-			echo '</pre>';
-			die();
 			$content = ($content) ? $content : $item_result['Items']['Item']['ItemAttributes']['Title'];
 
 			switch ( $attrs['linktype'] ) {
@@ -203,7 +208,11 @@ class AVHAmazonShortcode {
 					break;
 				case 'pic' :
 					$imgsrc = $item_result['Items']['Item']['SmallImage']['URL'];
-					$return = '<a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" src="' . $imgsrc . '" alt="' . $content . '"/></a>';
+					$return = '<div class="wp-caption alignleft"><a title="' . $content . '" href="' . $myurl . '"><img src="' . $imgsrc . '" alt="' . $content . '"/></a><p class="wp-caption-text">'.$content .'</p></div>';
+					break;
+				case 'pic-text' :
+					$imgsrc = $item_result['Items']['Item']['SmallImage']['URL'];
+					$return = '<table style=" border: none; cellpadding: 2px; align: left"><tr><td><a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" src="' . $imgsrc . '" alt="' . $content . '"/></a></td><td><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a></td></tr></table>';
 					break;
 				default :
 					$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
@@ -245,7 +254,7 @@ class AVHAmazonShortcode {
 	function metaboxTabWishlist ($locale) {
 
 		echo '<div id="avhamazon_tab_wishlist" class="ui-tabs-panel">';
-		echo '	<div id="avhamazon-wishlist-show">';
+		echo '	<div id="avhamazon-wishlist-show" style="display:block">';
 		echo '		<p>';
 		echo '			<label style="display:block">' . __ ( 'Wish List ID:', 'avhamazon' );
 		echo '			<input style="width: 13em" type="text" value="" id="avhamazon_scwishlist_wishlist" name="avhamazon_scwishlist_wishlist" autocomplete="on"/>';
@@ -262,6 +271,9 @@ class AVHAmazonShortcode {
 		echo '			<input class="button-secondary" type="submit" value="Show Items" id="avhamazon_submit_wishlist" name="avhamazon_submit_wishlist" />';
 		echo '		</p>';
 		echo '	</div>';
+		echo '<div id="avhamazon_wishlist_loading" style="display:hide">';
+		echo '	<p>Searching <img src="'.$this->info['install_url'].'/images/ajax-loader.gif"></p>';
+		echo '</div>';
 		echo '	<div id="avhamazon_wishlist_output"></div>';
 		echo '</div>';
 	}
@@ -292,6 +304,9 @@ class AVHAmazonShortcode {
 		echo '			<input class="button-secondary" type="button" value="Show Item" id="avhamazon_submit_asin" name="avhamazon_submit_asin" />';
 		echo '		</p>';
 		echo '	</div>';
+		echo '<div id="avhamazon_asin_loading" style="display:hide">';
+		echo '	<p>Searching <img src="'.$this->info['install_url'].'/images/ajax-loader.gif"></p>';
+		echo '</div>';
 		echo '	<div id="avhamazon_asin_output"></div>';
 		echo '</div>';
 	}
@@ -450,7 +465,8 @@ class AVHAmazonShortcode {
 
 		echo '<p><strong>' . __ ( 'Link type:', 'avhamazon' ) . '</strong><br/>';
 		echo '<label><input type="radio" value="text" id="avhamazon_sc' . $tabid . '_linktypet" checked="checked" name="avhamazon_sc' . $tabid . '_linktype"/> ' . __ ( 'Text', 'avhamazon' ) . '</label><br />';
-		echo '<label><input type="radio" value="pic" id="avhamazon_sc' . $tabid . '_linktypep" name="avhamazon_sc' . $tabid . '_linktype"/> ' . __ ( 'Picture', 'avhamazon' ) . '</label></p>';
+		echo '<label><input type="radio" value="pic" id="avhamazon_sc' . $tabid . '_linktypep" name="avhamazon_sc' . $tabid . '_linktype"/> ' . __ ( 'Picture', 'avhamazon' ) . '</label><br />';
+		echo '<label><input type="radio" value="pic-text" id="avhamazon_sc' . $tabid . '_linktypept" name="avhamazon_sc' . $tabid . '_linktype"/> ' . __ ( 'Picture and Text', 'avhamazon' ) . '</label></p>';
 		echo '<p><label><strong>' . __ ( 'Content:', 'avhamazon' ) . '</strong>';
 		echo '<input type="text" style="width: 98%" id="avhamazon_sc' . $tabid . '_content" name="avhamazon_sc' . $tabid . '_content"/></p>';
 	}

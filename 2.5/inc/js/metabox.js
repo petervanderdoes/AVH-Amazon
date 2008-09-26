@@ -58,6 +58,8 @@ jQuery(document).ready(function() {
 	jQuery('#avhamazon_submit_asin').click( avhamazon_metabox_submit_asin );
 	jQuery('#avhamazon_asin_show').find('input').keydown(avhamazon_metabox_asin);
 	jQuery('#avhamazon_asin_show').find('select').keydown(avhamazon_metabox_asin);
+	jQuery('#avhamazon_wishlist_loading').hide();
+	jQuery('#avhamazon_asin_loading').hide();
 	jQuery('#avhamazon_tabs').tabs();
 	}
 	);
@@ -67,7 +69,7 @@ function avhamazon_metabox_submit_wishlist() {
 	values[0] = jQuery('#avhamazon_scwishlist_wishlist').attr('value');
 	values[1] = jQuery('#avhamazon_scwishlist_locale').attr('value');
 	if (values[0]) {
-		avhamazon_metabox_submit('wishlist','#avhamazon_wishlist_output',values);
+		avhamazon_metabox_submit('wishlist','#avhamazon_wishlist_output','#avhamazon_wishlist_loading', values);
 	} else {
 		alert ('No Wish List ID given');
 	}
@@ -88,7 +90,7 @@ function avhamazon_metabox_submit_asin( event ) {
 	values[0] = jQuery('#avhamazon_asin_nr').attr('value');
 	values[1] = jQuery('#avhamazon_scasin_locale').attr('value');
 	if (values[0]) {
-		avhamazon_metabox_submit('asin','#avhamazon_asin_output',values);
+		avhamazon_metabox_submit('asin','#avhamazon_asin_output','#avhamazon_asin_loading',values);
 	} else {
 		alert ('No ASIN given');
 	}
@@ -103,15 +105,20 @@ function avhamazon_metabox_asin( event ) {
 	return true;
 }
 	
-function avhamazon_metabox_submit(avhamazon_action, avhamazon_output, avhamazon_values) {
+function avhamazon_metabox_submit(avhamazon_action, avhamazon_output, avhamazon_loading, avhamazon_values) {
+	jQuery(avhamazon_output).hide();
+	jQuery(avhamazon_loading).show();
+	jQuery('avhamazon_wishlist_loading_pic').css('visibility','visible')
 	jQuery.post(
 		jQuery('#avhamazon_mb_url').attr("value")+"/wp-admin/admin-ajax.php",
 		{ action: 'avhamazon_metabox', 'cookie': encodeURIComponent(document.cookie), 'avhamazon_mb_action': avhamazon_action, 'avhamazon_mb_values[]': avhamazon_values }, 
 		function(data, textStatus) {
+			jQuery(avhamazon_loading).hide();
 			jQuery(avhamazon_output).html(data.substr(0,data.length-1));
 			jQuery(avhamazon_output).find('#avhamazon_sendtoeditor').each(function() {
-			jQuery(this).click( avhamazon_metabox_sendtoeditor );
-			});				
+				jQuery(this).click( avhamazon_metabox_sendtoeditor );
+			});
+			jQuery(avhamazon_output).show();
 			}
 	);
 }
