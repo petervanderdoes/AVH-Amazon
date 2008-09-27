@@ -3,7 +3,7 @@
 require (dirname ( __FILE__ ) . '/../inc/nusoap/nusoap.php');
 require (dirname ( __FILE__ ) . '/../inc/nusoap/class.wsdlcache.php');
 
-class avh_amazon {
+class AVHAmazonCore {
 
 	/**
 	 * Amazon WSDl URL Array
@@ -58,7 +58,7 @@ class avh_amazon {
 	var $version;
 
 	/**
-	 * Paths and URI's of the WordPress information
+	 * Paths and URI's of the WordPress information, 'home', 'siteurl', 'install_url', 'install_dir'
 	 *
 	 * @var array
 	 */
@@ -100,27 +100,23 @@ class avh_amazon {
 	var $use_cache;
 
 	/**
-	 * PHP4 constructor - Initialize AVH Amazon`
+	 * PHP4 constructor - Initialize the Core
 	 *
-	 * @return avh_amazon
+	 * @return
 	 */
-	function avh_amazon () {
-		/**
-		 * Set static class properties
-		 *
-		 */
+	function AVHAmazonCore () {
+
 		$this->version = "2.1";
-		/**
-		 * Locale WSDL Array initialization
-		 *
-		 */
+
 		$this->wsdlurl_table = array (
 				'US' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/AWSECommerceService.wsdl',
 				'CA' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/CA/AWSECommerceService.wsdl',
 				'DE' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/DE/AWSECommerceService.wsdl',
 				'UK' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/UK/AWSECommerceService.wsdl' );
 		$this->wsdlurl = $this->wsdlurl_table['US'];
+
 		$this->accesskeyid = '1MPCC36EZ827YJQ02AG2';
+
 		$this->locale_table = array (
 				'US' => 'Amazon.com',
 				'CA' => 'Amazon.ca',
@@ -261,6 +257,7 @@ class avh_amazon {
 		$this->options = $default_options;
 	} // End handleOptions()
 
+
 	/**
 	 * Upgrade the the way the widgets data is stored
 	 *
@@ -292,6 +289,133 @@ class avh_amazon {
 		add_option ( 'widget_avhamazon_wishlist', $all_options );
 
 	} // End upgradeWidgetOptions_2_1
+
+	/**
+	 * Get all the items from the list
+	 *
+	 * @param string $ListID The Wish List ID of the list to get
+	 * @param class $proxy
+	 * @return array Items
+	 */
+	function avh_getListResults ( $ListID, &$proxy ) {
+
+		$list = $proxy->ListLookup ( $this->avh_getSoapListLookupParams ( $ListID ) );
+
+		if ( 1 == $list['Lists']['List']['TotalItems'] ) {
+			$list['Lists']['List']['ListItem'] = array (
+					'0' => $list['Lists']['List']['ListItem'] ); // If one item in the list we need to make it a multi array
+		} else {
+			if ( $list['Lists']['List']['TotalPages'] > 1 ) { // If the list contains over 10 items we need to process the other pages.
+				$page = 2;
+				while ( $page <= $list['Lists']['List']['TotalPages'] ) {
+					$result = $proxy->ListLookup ( $this->avh_getSoapListLookupParams ( $ListID, null, $page ) );
+					foreach ( $result['Lists']['List']['ListItem'] as $key => $value ) {
+						$newkey = 10 * ($page - 1) + $key;
+						$list['Lists']['List']['ListItem'][$newkey] = $result['Lists']['List']['ListItem'][$key]; //Add the items from the remaining pages to the lists.
+					}
+					$page ++;
+				}
+			}
+		}
+		return ($list);
+	}
+
+	/**
+	 * Get a list of keys from the Item List to display
+	 *
+	 * @param array $list The wishlist
+	 * @param int $nr_of_items Amount of keys to return, default is 1
+	 * @return array Associative array where the value is the Keys
+	 */
+	function avh_getItemKeys ( $list, $nr_of_items = 1 ) {
+		$total_items = count ( $list );
+		if ( $nr_of_items > $total_items ) $nr_of_items = $total_items;
+		return (( array ) array_rand ( $list, $nr_of_items ));
+	}
+
+	/**
+	 * SOAP Find the List parameters
+	 *
+	 * @param string $ListID
+	 * @param string $WhatList
+	 * @return array
+	 */
+	function avh_getSoapListLookupParams ( $ListID, $WhatList = null, $page = null ) {
+
+		$WhatList = (is_null ( $WhatList ) ? 'WishList' : $WhatList);
+		$page = (is_null ( $page ) ? 1 : $page);
+
+		$listLookupRequest[] = array (
+				'ListId' => $ListID,
+				'ListType' => $WhatList,
+				'ResponseGroup' => 'ListFull',
+				'IsOmitPurchasedItems' => '1',
+				'ProductPage' => ( string ) $page,
+				'Sort' => 'LastUpdated' );
+
+		$listLookup = array (
+				'AWSAccessKeyId' => $this->accesskeyid,
+				'Request' => $listLookupRequest );
+		return $listLookup;
+	}
+
+	/**
+	 * SOAP Get Item Details
+	 *
+	 * @param string $Itemid
+	 * @param string $associatedid
+	 * @return array
+	 */
+	function avh_getSoapItemLookupParams ( $Itemid, $associatedid ) {
+
+		$itemLookupRequest[] = array (
+				'ItemId' => $Itemid,
+				'IdType' => 'ASIN',
+				'Condition' => 'All',
+				'ResponseGroup' => 'Medium' );
+
+		$itemLookUp = array (
+				'AWSAccessKeyId' => $this->accesskeyid,
+				'Request' => $itemLookupRequest,
+				'AssociateTag' => $associatedid );
+		return $itemLookUp;
+	}
+
+	/**
+	 * Get the options for the widget
+	 *
+	 * @param array $a
+	 * @param mixed $key
+	 * @return mixed
+	 */
+	function avh_getWidgetOptions ( $a, $key ) {
+		$return = '';
+
+		if ( $a[$key] ) {
+			$return = $a[$key]; // From widget
+		} elseif ( $this->options[$key] ) {
+			$return = $this->options[$key]; // From Admin Page
+		} else {
+			$return = $this->default_options[$key]; // Default
+		}
+		return ($return);
+	}
+
+	/**
+	 * Find the associate id based on the locale and locale_table
+	 *
+	 * @param string $locale
+	 *
+	 */
+	function avh_getAssociateId ( $locale ) {
+
+		if ( array_key_exists ( $locale, $this->associate_table ) ) {
+			$associatedid = $this->associate_table[$locale];
+		} else {
+			$associatedid = 'avh-amazon-20';
+		}
+		return ($associatedid);
+	}
 } //End Class avh_amazon
 
 
@@ -300,40 +424,26 @@ class avh_amazon {
  *
  */
 function avhamazon_init () {
-	global $avhamazon;
-
-	// Initialize AVHAmazon
-	$avhamazon = new avh_amazon ( );
-
-	// Old method for is_admin function (fix for WP 2.3.2 and sup !)
-	if ( ! function_exists ( 'is_admin_old' ) ) {
-
-		function is_admin_old () {
-			return (stripos ( $_SERVER['REQUEST_URI'], 'wp-admin/' ) !== false);
-		}
-	}
 
 	// Admin and XML-RPC
-	if ( is_admin () || is_admin_old () || (defined ( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST) ) {
+	if ( is_admin () ) {
 		require (dirname ( __FILE__ ) . '/inc/avh-amazon.admin.php');
-		$avhamazon_admin = new AVHAmazonAdmin ( $avhamazon->default_options, $avhamazon->version, $avhamazon->info, $avhamazon->locale_table );
+		$avhamazon_admin = & new AVHAmazonAdmin ( );
 		// Installation
 		register_activation_hook ( __FILE__, array ( & $avhamazon_admin, 'installPlugin' ) );
 	}
 
 	// Include shortcode class
 	require (dirname ( __FILE__ ) . '/inc/avh-amazon.shortcode.php');
-	$avhamazon_shortcode = new AVHAmazonShortcode ( $avhamazon->default_options, $avhamazon->version, $avhamazon->info, $avhamazon->locale_table );
+	$avhamazon_shortcode = & new AVHAmazonShortcode ( );
 
 	// Include the widgets code
 	require (dirname ( __FILE__ ) . '/inc/avh-amazon.widgets.php');
-	$avhamazon_widget = new AVHAmazonWidget ( $avhamazon->default_options, $avhamazon->version, $avhamazon->info, $avhamazon->locale_table );
+	$avhamazon_widget = & new AVHAmazonWidget ( );
 
-	// Include general functions
-	require (dirname ( __FILE__ ) . '/inc/avh-amazon.functions.php');
 
 } // End avhamazon_init()
 
-$avhamazon = null;
+
 add_action ( 'plugins_loaded', 'avhamazon_init' );
 ?>

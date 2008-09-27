@@ -1,13 +1,6 @@
 <?php
-class AVHAmazonAdmin {
+class AVHAmazonAdmin extends AVHAmazonCore {
 
-	var $version;
-	var $info;
-	var $options;
-	var $default_options;
-	var $db_options;
-	var $locale_table;
-	var $associate_table;
 	/**
 	 * Message management
 	 *
@@ -20,45 +13,9 @@ class AVHAmazonAdmin {
 	 *
 	 * @return
 	 */
-	function AVHAmazonAdmin($default_options = array(), $version = '', $info = array(), $locale_table = array()) {
+	function AVHAmazonAdmin() {
 
-		// 1. load version number
-		$this->version = $version;
-		unset( $version );
-
-		// 2. Set class property for default options
-		$this->default_options = $default_options;
-
-		// 3. Get options from WP
-		$this->db_options = 'avhamazon';
-		$options_from_table = get_option( $this->db_options );
-
-		// 4. Update default options by getting not empty values from options table
-		foreach ( ( array ) $default_options as $default_options_name => $default_options_value ) {
-			if ( ! is_null( $options_from_table[$default_options_name] ) ) {
-				if ( is_int( $default_options_value ) ) {
-					$default_options[$default_options_name] = ( int ) $options_from_table[$default_options_name];
-				} else {
-					$default_options[$default_options_name] = $options_from_table[$default_options_name];
-					if ('associated_id' == $default_options_name) {
-						if ('blogavirtualh-20' == $options_from_table[$default_options_name] ) $default_options[$default_options_name] = 'avh-amazon-20';
-					}
-				}
-			}
-		}
-
-		// 5. Set the class property and unset no used variable
-		$this->options = $default_options;
-		unset( $default_options );
-		unset( $options_from_table );
-		unset( $default_options_value );
-
-		// 6. Get info data from constructor
-		$this->info = $info;
-		unset( $info );
-
-		// Get Locale Table
-		$this->locale_table=$locale_table;
+		parent::AVHAmazonCore();
 
 		// 8. Admin URL and Pagination
 		$this->admin_base_url = $this->info['siteurl'] . '/wp-admin/admin.php?page=';
@@ -360,27 +317,27 @@ jQuery(document).ready(function() {
 	 *
 	 */
 	function installPlugin() {
-		global $avhamazon;
+
 		$options_from_table = get_option( $this->db_options );
 		if ( ! $options_from_table ) {
 			$this->resetToDefaultOptions();
 		}
 
-		$avhamazon->wsdlcachefolder = $this->info['install_dir'] . '/cache/';
-		if ( ! is_dir( $avhamazon->wsdlcachefolder ) ) {
-			$this->message = "Can't find the cache folder. This plugin will not work unless " . $avhamazon->wsdlcachefolder . "is present and writeable";
+		$this->wsdlcachefolder = $this->info['install_dir'] . '/cache/';
+		if ( ! is_dir( $this->wsdlcachefolder ) ) {
+			$this->message = "Can't find the cache folder. This plugin will not work unless " . $this->wsdlcachefolder . "is present and writeable";
 			$this->displayMessage();
 			$this->removePlugin( trim( $_GET['plugin'] ) );
 
 		} else {
-			$cache = new wsdlcache( $avhamazon->wsdlcachefolder, 0 ); // Cache it indefinitely
-			$avhamazon->wsdl = $cache->get( $avhamazon->wsdlurl );
-			if ( is_null( $avhamazon->wsdl ) ) {
-				$avhamazon->wsdl = new wsdl( $avhamazon->wsdlurl );
-				$cache->put( $avhamazon->wsdl );
+			$cache = new nusoap_wsdlcache( $this->wsdlcachefolder, 0 ); // Cache it indefinitely
+			$this->wsdl = $cache->get( $this->wsdlurl );
+			if ( is_null( $this->wsdl ) ) {
+				$this->wsdl = new wsdl( $this->wsdlurl );
+				$cache->put( $this->wsdl );
 			} else {
-				$avhamazon->wsdl->debug_str = '';
-				$avhamazon->wsdl->debug( 'Retrieved from cache' );
+				$this->wsdl->debug_str = '';
+				$this->wsdl->debug( 'Retrieved from cache' );
 			}
 		}
 	}

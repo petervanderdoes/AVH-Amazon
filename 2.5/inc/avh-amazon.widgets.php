@@ -1,51 +1,9 @@
 <?php
-class AVHAmazonWidget {
-	var $version;
-	var $info;
-	var $options;
-	var $default_widget_options;
-	var $db_options;
-	var $locale_table;
+class AVHAmazonWidget extends AVHAmazonCore {
 
-	function AVHAmazonWidget ( $default_options = array(), $version = '', $info = array(), $locale_table = array() ) {
+	function AVHAmazonWidget (  ) {
 
-		// Load version number
-		$this->version = $version;
-		unset ( $version );
-
-		// Set class property for default options
-		$this->default_options = $default_options;
-
-		// Get options from WP
-		$this->db_options = 'avhamazon';
-		$options_from_table = get_option ( $this->db_options );
-
-		// Update default options by getting not empty values from options table
-		foreach ( ( array ) $default_options as $default_options_name => $default_options_value ) {
-			if ( ! is_null ( $options_from_table[$default_options_name] ) ) {
-				if ( is_int ( $default_options_value ) ) {
-					$default_options[$default_options_name] = ( int ) $options_from_table[$default_options_name];
-				} else {
-					$default_options[$default_options_name] = $options_from_table[$default_options_name];
-					if ( 'associated_id' == $default_options_name ) {
-						if ( 'blogavirtualh-20' == $options_from_table[$default_options_name] ) $default_options[$default_options_name] = 'avh-amazon-20'; // Changed the Amazon ID for better tracking
-					}
-				}
-			}
-		}
-
-		// Set the class property and unset no used variable
-		$this->options = $default_options;
-		unset ( $default_options );
-		unset ( $options_from_table );
-		unset ( $default_options_value );
-
-		// Get info data from constructor
-		$this->info = $info;
-		unset ( $info );
-
-		// Set locale Tables
-		$this->locale_table = $locale_table;
+		parent::AVHAmazonCore();
 
 		// Initialize!
 		add_action ( 'widgets_init', array ( &$this, 'initWidget' ) );
@@ -257,7 +215,6 @@ class AVHAmazonWidget {
 	 * @param array $widget_args
 	 */
 	function widgetWishlist ( $args, $widget_args = 1 ) {
-		global $avhamazon;
 
 		extract ( $args, EXTR_SKIP );
 		if ( is_numeric ( $widget_args ) ) {
@@ -304,25 +261,25 @@ class AVHAmazonWidget {
 		/**
 		 * Set up WSDL Cache
 		 */
-		$avhamazon->wsdlurl = $avhamazon->wsdlurl_table[$locale];
-		$cache = new wsdlcache ( $avhamazon->wsdlcachefolder, 0 ); // Cache it indefinitely
-		$avhamazon->wsdl = $cache->get ( $avhamazon->wsdlurl );
-		if ( is_null ( $avhamazon->wsdl ) ) {
-			$avhamazon->wsdl = new wsdl ( $avhamazon->wsdlurl );
-			$cache->put ( $avhamazon->wsdl );
+		$this->wsdlurl = $this->wsdlurl_table[$locale];
+		$cache = new wsdlcache ( $this->wsdlcachefolder, 0 ); // Cache it indefinitely
+		$this->wsdl = $cache->get ( $this->wsdlurl );
+		if ( is_null ( $this->wsdl ) ) {
+			$this->wsdl = new wsdl ( $this->wsdlurl );
+			$cache->put ( $this->wsdl );
 		} else {
-			$avhamazon->wsdl->debug_str = '';
-			$avhamazon->wsdl->debug ( 'Retrieved from cache' );
+			$this->wsdl->debug_str = '';
+			$this->wsdl->debug ( 'Retrieved from cache' );
 		}
 
 		/**
 		 * Create SOAP Client
 		 */
-		$client = new nusoap_client ( $avhamazon->wsdl, true );
+		$client = new nusoap_client ( $this->wsdl, true );
 		$client->soap_defencoding = 'UTF-8';
 		$proxy = $client->getProxy ();
 
-		$list_result = avh_getListResults ( $ListID, $proxy );
+		$list_result = $this->avh_getListResults ( $ListID, $proxy );
 		$total_items = count ( $list_result['Lists']['List']['ListItem'] );
 		echo '<link media="screen" type="text/css" href=' . $this->info['install_url'] . '/inc/avh-amazon.widget.css?ver=' . $this->version . ' rel="stylesheet">' . "\n";
 
@@ -344,11 +301,11 @@ class AVHAmazonWidget {
 				echo 'Error<br/><pre>' . $err . '</pre>';
 			} else {
 				// Display the result
-				$Item_keys = avh_getItemKeys ( $list_result['Lists']['List']['ListItem'], $nr_of_items );
+				$Item_keys = $this->avh_getItemKeys ( $list_result['Lists']['List']['ListItem'], $nr_of_items );
 
 				foreach ( $Item_keys as $value ) {
 					$Item = $list_result['Lists']['List']['ListItem'][$value];
-					$item_result = $proxy->ItemLookup ( avh_getSoapItemLookupParams ( $Item['Item']['ASIN'], $associatedid ) );
+					$item_result = $proxy->ItemLookup ( $this->avh_getSoapItemLookupParams ( $Item['Item']['ASIN'], $associatedid ) );
 					switch ( $imagesize ) {
 						case Small :
 							$imgsrc = $item_result['Items']['Item']['SmallImage']['URL'];
