@@ -248,6 +248,9 @@ class AVHAmazonCore {
 					$this->upgradeWidgetOptions_2_1 ();
 				}
 
+				// Clear the cache folder from all WSDL Cache
+				$this->clearCacheFolder();
+
 				// Write the new default options and the proper version to the database
 				$default_options['version'] = $this->version;
 				update_option ( $this->db_options, $default_options );
@@ -257,7 +260,19 @@ class AVHAmazonCore {
 		$this->options = $default_options;
 	} // End handleOptions()
 
-
+	/**
+	 * Clear all files in the cache folder except the readme file
+	 *
+	 */
+	function clearCacheFolder () {
+		if ( ! $dirhandle = @opendir ( $this->wsdlcachefolder ) ) return;
+		while ( false !== ($filename = readdir ( $dirhandle )) ) {
+			if ( $filename != "." && $filename != ".." && $filename != "readme" ) {
+				$filename = $this->wsdlcachefolder . $filename;
+				@unlink ( $filename );
+			}
+		}
+	}
 	/**
 	 * Upgrade the the way the widgets data is stored
 	 *
