@@ -231,32 +231,32 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		}
 
 		// Title of the widget
-		$title = avh_getWidgetOptions ( $options[$number], 'title' );
+		$title = $this->getWidgetOptions ( $options[$number], 'title' );
 
 		// Wishlist ID
-		$ListID = avh_getWidgetOptions ( $options[$number], 'wishlist_id' );
+		$ListID = $this->getWidgetOptions ( $options[$number], 'wishlist_id' );
 
 		// Assiociated ID
-		$associatedid = avh_getWidgetOptions ( $options[$number], 'associated_id' );
+		$associatedid = $this->getWidgetOptions ( $options[$number], 'associated_id' );
 
 		// Image size
-		$imagesize = avh_getWidgetOptions ( $options[$number], 'wishlist_imagesize' );
+		$imagesize = $this->getWidgetOptions ( $options[$number], 'wishlist_imagesize' );
 
 		// Amazon locale
-		$locale = avh_getWidgetOptions ( $options[$number], 'locale' );
+		$locale = $this->getWidgetOptions ( $options[$number], 'locale' );
 
 		// Number of Items
-		$nr_of_items = avh_getWidgetOptions ( $options[$number], 'nr_of_items' );
+		$nr_of_items = $this->getWidgetOptions ( $options[$number], 'nr_of_items' );
 
 		// Show Footer
-		$show_footer = avh_getWidgetOptions ( $options[$number], 'show_footer' );
+		$show_footer = $this->getWidgetOptions ( $options[$number], 'show_footer' );
 
 		// Footer Template
-		$footer_template = avh_getWidgetOptions ( $options[$number], 'footer_template' );
+		$footer_template = $this->getWidgetOptions ( $options[$number], 'footer_template' );
 
 		// Check default assiociate ID and change it for the Locale
 		if ( 'avh-amazon-20' == $associatedid ) {
-			$associatedid = avh_getAssociateId ( $locale );
+			$associatedid = $this->getAssociateId ( $locale );
 		}
 		/**
 		 * Set up WSDL Cache
@@ -279,7 +279,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		$client->soap_defencoding = 'UTF-8';
 		$proxy = $client->getProxy ();
 
-		$list_result = $this->avh_getListResults ( $ListID, $proxy );
+		$list_result = $this->getListResults ( $ListID, $proxy );
 		$total_items = count ( $list_result['Lists']['List']['ListItem'] );
 		echo '<link media="screen" type="text/css" href=' . $this->info['install_url'] . '/inc/avh-amazon.widget.css?ver=' . $this->version . ' rel="stylesheet">' . "\n";
 
@@ -301,11 +301,11 @@ class AVHAmazonWidget extends AVHAmazonCore {
 				echo 'Error<br/><pre>' . $err . '</pre>';
 			} else {
 				// Display the result
-				$Item_keys = $this->avh_getItemKeys ( $list_result['Lists']['List']['ListItem'], $nr_of_items );
+				$Item_keys = $this->getItemKeys ( $list_result['Lists']['List']['ListItem'], $nr_of_items );
 
 				foreach ( $Item_keys as $value ) {
 					$Item = $list_result['Lists']['List']['ListItem'][$value];
-					$item_result = $proxy->ItemLookup ( $this->avh_getSoapItemLookupParams ( $Item['Item']['ASIN'], $associatedid ) );
+					$item_result = $proxy->ItemLookup ( $this->getSoapItemLookupParams ( $Item['Item']['ASIN'], $associatedid ) );
 					switch ( $imagesize ) {
 						case Small :
 							$imgsrc = $item_result['Items']['Item']['SmallImage']['URL'];

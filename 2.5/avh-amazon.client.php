@@ -312,9 +312,9 @@ class AVHAmazonCore {
 	 * @param class $proxy
 	 * @return array Items
 	 */
-	function avh_getListResults ( $ListID, &$proxy ) {
+	function getListResults ( $ListID, &$proxy ) {
 
-		$list = $proxy->ListLookup ( $this->avh_getSoapListLookupParams ( $ListID ) );
+		$list = $proxy->ListLookup ( $this->getSoapListLookupParams ( $ListID ) );
 
 		if ( 1 == $list['Lists']['List']['TotalItems'] ) {
 			$list['Lists']['List']['ListItem'] = array (
@@ -323,7 +323,7 @@ class AVHAmazonCore {
 			if ( $list['Lists']['List']['TotalPages'] > 1 ) { // If the list contains over 10 items we need to process the other pages.
 				$page = 2;
 				while ( $page <= $list['Lists']['List']['TotalPages'] ) {
-					$result = $proxy->ListLookup ( $this->avh_getSoapListLookupParams ( $ListID, null, $page ) );
+					$result = $proxy->ListLookup ( $this->getSoapListLookupParams ( $ListID, null, $page ) );
 					foreach ( $result['Lists']['List']['ListItem'] as $key => $value ) {
 						$newkey = 10 * ($page - 1) + $key;
 						$list['Lists']['List']['ListItem'][$newkey] = $result['Lists']['List']['ListItem'][$key]; //Add the items from the remaining pages to the lists.
@@ -342,7 +342,7 @@ class AVHAmazonCore {
 	 * @param int $nr_of_items Amount of keys to return, default is 1
 	 * @return array Associative array where the value is the Keys
 	 */
-	function avh_getItemKeys ( $list, $nr_of_items = 1 ) {
+	function getItemKeys ( $list, $nr_of_items = 1 ) {
 		$total_items = count ( $list );
 		if ( $nr_of_items > $total_items ) $nr_of_items = $total_items;
 		return (( array ) array_rand ( $list, $nr_of_items ));
@@ -355,7 +355,7 @@ class AVHAmazonCore {
 	 * @param string $WhatList
 	 * @return array
 	 */
-	function avh_getSoapListLookupParams ( $ListID, $WhatList = null, $page = null ) {
+	function getSoapListLookupParams ( $ListID, $WhatList = null, $page = null ) {
 
 		$WhatList = (is_null ( $WhatList ) ? 'WishList' : $WhatList);
 		$page = (is_null ( $page ) ? 1 : $page);
@@ -381,7 +381,7 @@ class AVHAmazonCore {
 	 * @param string $associatedid
 	 * @return array
 	 */
-	function avh_getSoapItemLookupParams ( $Itemid, $associatedid ) {
+	function getSoapItemLookupParams ( $Itemid, $associatedid ) {
 
 		$itemLookupRequest[] = array (
 				'ItemId' => $Itemid,
@@ -403,7 +403,7 @@ class AVHAmazonCore {
 	 * @param mixed $key
 	 * @return mixed
 	 */
-	function avh_getWidgetOptions ( $a, $key ) {
+	function getWidgetOptions ( $a, $key ) {
 		$return = '';
 
 		if ( $a[$key] ) {
@@ -422,7 +422,7 @@ class AVHAmazonCore {
 	 * @param string $locale
 	 *
 	 */
-	function avh_getAssociateId ( $locale ) {
+	function getAssociateId ( $locale ) {
 
 		if ( array_key_exists ( $locale, $this->associate_table ) ) {
 			$associatedid = $this->associate_table[$locale];
