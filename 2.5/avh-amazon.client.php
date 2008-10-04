@@ -76,6 +76,8 @@ class AVHAmazonCore {
 	 *
 	 * @var array
 	 */
+	var $default_general_options;
+	var $default_widget_wishlist_options;
 	var $default_options;
 
 	/**
@@ -132,9 +134,11 @@ class AVHAmazonCore {
 		$this->use_cache = false;
 
 		// Default Options
-		$this->default_options = array (
+		$this->default_general_options = array (
 				'version' => $this->version,
-				'associated_id' => 'avh-amazon-20',
+				'associated_id' => 'avh-amazon-20' );
+
+		$this->default_widget_wishlist_options = array (
 				'title' => 'Amazon Wish List',
 				'wishlist_id' => '2CC2KKW02870',
 				'wishlist_imagesize' => 'Medium',
@@ -142,6 +146,10 @@ class AVHAmazonCore {
 				'nr_of_items' => 1,
 				'show_footer' => 0,
 				'footer_template' => 'Show all %nr_of_items% items' );
+
+		$this->default_options = array (
+				'general' => $this->default_general_options,
+				'widget_wishlist' => $this->default_widget_wishlist_options );
 
 		$this->handleOptions ();
 
@@ -227,16 +235,24 @@ class AVHAmazonCore {
 		if ( empty ( $options_from_table ) ) {
 			$options_from_table = $this->default_options; // New installation
 		} else {
+			// As of version 2.2 I changed the way I store the default options.
+			// I need to upgrade the options before setting the options but we don't update the version yet.
+			if (! $options_from_table['core']) {
+				$this->upgradeDefaultOptions_2_2();
+				$options_from_table = get_option ( 'avhamazon' ); // Get the new options
+			}
 
 			// Update default options by getting not empty values from options table
-			foreach ( ( array ) $default_options as $default_options_name => $default_options_value ) {
-				if ( ! is_null ( $options_from_table[$default_options_name] ) ) {
-					if ( is_int ( $default_options_value ) ) {
-						$default_options[$default_options_name] = ( int ) $options_from_table[$default_options_name];
-					} else {
-						$default_options[$default_options_name] = $options_from_table[$default_options_name];
-						if ( 'associated_id' == $default_options_name ) {
-							if ( 'blogavirtualh-20' == $options_from_table[$default_options_name] ) $default_options[$default_options_name] = 'avh-amazon-20';
+			foreach ( ( array ) $default_options as $section_key => $section_array ) {
+				foreach ( ( array ) $section_array as $name => $value ) {
+					if ( ! is_null ( $options_from_table[$section_key][$name] ) ) {
+						if ( is_int ( $value ) ) {
+							$default_options[$section_key][$name] = ( int ) $options_from_table[$section_key][$name];
+						} else {
+							$default_options[$section_key][$name] = $options_from_table[$section_key][$name];
+							if ( 'associated_id' == $name ) {
+								if ( 'blogavirtualh-20' == $options_from_table[$section_key][$name] ) $default_options[$section_key][$name] = 'avh-amazon-20';
+							}
 						}
 					}
 				}
@@ -244,7 +260,7 @@ class AVHAmazonCore {
 			// If a newer version is running do upgrades if neccesary and update the database.
 			if ( $this->version > $options_from_table['version'] ) {
 				// Starting with version 2.1 I switched to a new way of storing the widget options in the database. We need to convert these.
-				if ( $options_from_table['version'] < "2.1" ) {
+				if ( $options_from_table['general']['version'] < "2.1" ) {
 					$this->upgradeWidgetOptions_2_1 ();
 				}
 
@@ -252,7 +268,7 @@ class AVHAmazonCore {
 				$this->clearCacheFolder();
 
 				// Write the new default options and the proper version to the database
-				$default_options['version'] = $this->version;
+				$default_options['general']['version'] = $this->version;
 				update_option ( $this->db_options, $default_options );
 			}
 		}
@@ -272,7 +288,8 @@ class AVHAmazonCore {
 				@unlink ( $filename );
 			}
 		}
-	}
+	} // end clearCacheFolder
+
 	/**
 	 * Upgrade the the way the widgets data is stored
 	 *
@@ -304,6 +321,30 @@ class AVHAmazonCore {
 		add_option ( 'widget_avhamazon_wishlist', $all_options );
 
 	} // End upgradeWidgetOptions_2_1
+
+	/**
+	 * Since version 2.2 the default options are stored in a multidimensional array.
+	 * This function will convert the pre 2.2 settings to the new standard.
+	 *
+	 * @since 2.2
+	 *
+	 */
+	function upgradeDefaultOptions_2_2 () {
+		$oldvalues = get_option ( 'avhamazon' );
+		$newvalues = array (
+				'general' => array (),
+				'widget_wishlist' => array () );
+		foreach ( $oldvalues as $name => $value ) {
+			if ( array_key_exists ( $name, $this->default_options['core'] ) ) {
+				$newvalues['general'][$name] = $value;
+			}
+			if ( array_key_exists ( $name, $this->default_options['widget_wishlist'] ) ) {
+				$newvalues['widget_wishlist'][$name] = $value;
+			}
+		}
+		delete_option ( 'avhamazon' );
+		add_options ( 'avhamazon', $newvalues );
+	} // end upgradeDefaultOptions
 
 	/**
 	 * Get all the items from the list
@@ -401,17 +442,18 @@ class AVHAmazonCore {
 	 *
 	 * @param array $a
 	 * @param mixed $key
+	 * @param string $widget Which widget to get the values from
 	 * @return mixed
 	 */
-	function getWidgetOptions ( $a, $key ) {
+	function getWidgetOptions ( $a, $key, $widget='widget_wishlist' ) {
 		$return = '';
 
 		if ( $a[$key] ) {
 			$return = $a[$key]; // From widget
-		} elseif ( $this->options[$key] ) {
-			$return = $this->options[$key]; // From Admin Page
+		} elseif ( $this->options[$widget][$key] ) {
+			$return = $this->options[$widget][$key]; // From Admin Page
 		} else {
-			$return = $this->default_options[$key]; // Default
+			$return = $this->default_options[$widget][$key]; // Default
 		}
 		return ($return);
 	}
