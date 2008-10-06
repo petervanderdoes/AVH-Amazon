@@ -66,6 +66,7 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 
 		$result = '';
 		$error = '';
+		//@TODO Fill the locale, wishlist and linktype with default values
 		$attrs = shortcode_atts ( array (
 				'asin' => '',
 				'locale' => 'US',

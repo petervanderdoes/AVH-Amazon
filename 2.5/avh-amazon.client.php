@@ -78,6 +78,7 @@ class AVHAmazonCore {
 	 */
 	var $default_general_options;
 	var $default_widget_wishlist_options;
+	var $default_shortcode_options;
 	var $default_options;
 
 	/**
@@ -108,13 +109,14 @@ class AVHAmazonCore {
 	 */
 	function AVHAmazonCore () {
 
-		$this->version = "2.1";
+		$this->version = "2.2";
 
 		$this->wsdlurl_table = array (
 				'US' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/AWSECommerceService.wsdl',
 				'CA' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/CA/AWSECommerceService.wsdl',
 				'DE' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/DE/AWSECommerceService.wsdl',
-				'UK' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/UK/AWSECommerceService.wsdl' );
+				'UK' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/UK/AWSECommerceService.wsdl'
+		);
 		$this->wsdlurl = $this->wsdlurl_table['US'];
 
 		$this->accesskeyid = '1MPCC36EZ827YJQ02AG2';
@@ -123,12 +125,14 @@ class AVHAmazonCore {
 				'US' => 'Amazon.com',
 				'CA' => 'Amazon.ca',
 				'DE' => 'Amazon.de',
-				'UK' => 'Amazon.co.uk' );
+				'UK' => 'Amazon.co.uk'
+		);
 		$this->associate_table = array (
 				'US' => 'avh-amazon-20',
 				'CA' => 'avh-amazon-ca-20',
 				'DE' => 'avh-amazon-de-21',
-				'UK' => 'avh-amazon-uk-21' );
+				'UK' => 'avh-amazon-uk-21'
+		);
 
 		$this->db_options = 'avhamazon';
 		$this->use_cache = false;
@@ -136,7 +140,8 @@ class AVHAmazonCore {
 		// Default Options
 		$this->default_general_options = array (
 				'version' => $this->version,
-				'associated_id' => 'avh-amazon-20' );
+				'associated_id' => 'avh-amazon-20'
+		);
 
 		$this->default_widget_wishlist_options = array (
 				'title' => 'Amazon Wish List',
@@ -145,11 +150,17 @@ class AVHAmazonCore {
 				'locale' => 'US',
 				'nr_of_items' => 1,
 				'show_footer' => 0,
-				'footer_template' => 'Show all %nr_of_items% items' );
-
+				'footer_template' => 'Show all %nr_of_items% items'
+		);
+		$this->default_shortcode_options = array (
+				'wishlist_id' => '',
+				'locale' => 'US'
+		);
 		$this->default_options = array (
 				'general' => $this->default_general_options,
-				'widget_wishlist' => $this->default_widget_wishlist_options );
+				'widget_wishlist' => $this->default_widget_wishlist_options,
+				'shortcode' => $this->default_shortcode_options
+		);
 
 		$this->handleOptions ();
 
@@ -237,14 +248,13 @@ class AVHAmazonCore {
 		} else {
 			// As of version 2.2 I changed the way I store the default options.
 			// I need to upgrade the options before setting the options but we don't update the version yet.
-			if (! $options_from_table['core']) {
+			if (! $options_from_table['general']) {
 				$this->upgradeDefaultOptions_2_2();
 				$options_from_table = get_option ( 'avhamazon' ); // Get the new options
 			}
-
 			// Update default options by getting not empty values from options table
-			foreach ( ( array ) $default_options as $section_key => $section_array ) {
-				foreach ( ( array ) $section_array as $name => $value ) {
+			foreach ( $default_options as $section_key => $section_array ) {
+				foreach ( $section_array as $name => $value ) {
 					if ( ! is_null ( $options_from_table[$section_key][$name] ) ) {
 						if ( is_int ( $value ) ) {
 							$default_options[$section_key][$name] = ( int ) $options_from_table[$section_key][$name];
@@ -258,7 +268,7 @@ class AVHAmazonCore {
 				}
 			}
 			// If a newer version is running do upgrades if neccesary and update the database.
-			if ( $this->version > $options_from_table['version'] ) {
+			if ( $this->version > $options_from_table['general']['version'] ) {
 				// Starting with version 2.1 I switched to a new way of storing the widget options in the database. We need to convert these.
 				if ( $options_from_table['general']['version'] < "2.1" ) {
 					$this->upgradeWidgetOptions_2_1 ();
@@ -266,7 +276,6 @@ class AVHAmazonCore {
 
 				// Clear the cache folder from all WSDL Cache
 				$this->clearCacheFolder();
-
 				// Write the new default options and the proper version to the database
 				$default_options['general']['version'] = $this->version;
 				update_option ( $this->db_options, $default_options );
@@ -335,7 +344,7 @@ class AVHAmazonCore {
 				'general' => array (),
 				'widget_wishlist' => array () );
 		foreach ( $oldvalues as $name => $value ) {
-			if ( array_key_exists ( $name, $this->default_options['core'] ) ) {
+			if ( array_key_exists ( $name, $this->default_options['general'] ) ) {
 				$newvalues['general'][$name] = $value;
 			}
 			if ( array_key_exists ( $name, $this->default_options['widget_wishlist'] ) ) {
@@ -343,7 +352,7 @@ class AVHAmazonCore {
 			}
 		}
 		delete_option ( 'avhamazon' );
-		add_options ( 'avhamazon', $newvalues );
+		add_option ( 'avhamazon', $newvalues );
 	} // end upgradeDefaultOptions
 
 	/**
@@ -442,7 +451,7 @@ class AVHAmazonCore {
 	 *
 	 * @param array $a
 	 * @param mixed $key
-	 * @param string $widget Which widget to get the values from
+	 * @param string $widget Which widget to get the values from. Defined in the options variable.
 	 * @return mixed
 	 */
 	function getWidgetOptions ( $a, $key, $widget='widget_wishlist' ) {

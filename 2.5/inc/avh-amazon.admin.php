@@ -137,123 +137,115 @@ jQuery(document).ready(function() {
 	 * WP Page Options- AVH Amazon options
 	 *
 	 */
+	//@TODO Set up shortcode page, optiosn are locale, wishlist and linktype
 	function pageOptions() {
 		$option_data = array (
-			'general'=>array (
-				array (
-					'associated_id',
-					'Associated ID:',
-					'text',
-					16,
-					'Use this Associated ID when clicking on the wishlist')),
-			'wishlist'=>array (
-				array (
-					'wishlist_id',
-					'Default wishlist ID:',
-					'text',
-					16,
-					'This is the default wishlist ID, if you don\'t fill out a Wishlist ID in the widget this one will be used.'),
-				array (
-					'locale',
-					'Locale Amazon:',
-					'dropdown',
-					'US/CA/DE/UK', // Locale Value
-					'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk'), // Locale Text
-				array (
-					'wishlist_imagesize',
-					'Size of thumbnail:',
-					'dropdown',
-					'Small/Medium/Large', // Value
-					'Small/Medium/Large'), // Text
-				array (
-					'nr_of_items',
-					'Number of items:',
-					'text',
-					3,
-					'Amount of items of your Wish List to show in the widget.'),
-				array (
-					'footer_template',
-					'Footer template:',
-					'text',
-					30,
-					'The display of the footer is controlled in the widget options<BR />%nr_of_items% is replaced by the actual number of items in the wishlist.'
-					)
-			),
-			'faq'=>array(
-				array (
-					'text-helper',
-					'text-helper',
-					'helper',
-					'',
-					'<b>Where is the Baby/Wedding Registry widget?</b><br />'.
-					'There is no seperate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.<br /><br />'.
-					'<b>How do I find my Baby Registry and/or Wedding Registry ID?</b><br />'.
-					'When you create either registry Amazon sends you an email with the direct link to access your registry. The ID is the last part of the URL.<br />' .
-					'Example:<br />'.
-					'http://www.amazon.com/gp/registry/1234567890ABC<br/>'.
-					'The ID is 1234567890ABC<br /><br />'.
-					'<b>What is an ASIN?</b><br />'.
-					'ASIN stands for Amazon Standard Identification Number.'.
-					'Every product has its own ASIN--a unique code they use to identify it. For books, the ASIN is the same as the 10-digit ISBN number.<br />'.
-					'You will find an item\'s ASIN on the product detail page.<br /><br />')),
-			'about'=>array (
-				array (
-					'text-helper',
-					'text-helper',
-					'helper',
-					'',
-					'<p>The AVH Amazon plugin gives you the ability to add multiple widgets which will display one or more random item(s) from your Amazon wishlist, baby registry and/or wedding registry.'.
-					'It also has the ability to show itemsmwith their link, in posts and pages by use of shortcode.<br />'.
-					'In the plugin reference is made to Wishlist only but you can use your Baby Registry ID or Wedding Registry ID as well.</p>'.
-					'<b>General</b>'.
-					'<ul>'.
-					'<li>Works with amazon.com, and locales amazon.ca, amazon.de and amazon.co.uk.<br /><br />'.
-					'</ul>'.
-					'<b>Wishlist</b>'.
-					'<ul>'.
-					'<li>Add Associated ID.'.
-					'<li>Choice of thumbnail size, Small/Medium/Large.'.
-					'<li>Option to use up to unlimited widgets.'.
-					'<li>Multiple items from the same Wish List can be displayed in the widget.'.
-					'<li>A configurable footer can be displayed on the bottom of the widget linking to the list on Amazon.'.
-					'</ul>'.
-					'<b>Shortcode</b>'.
-					'<ul>'.
-					'<li>Create the shortcode with the help of a metabox'.
-					'<li>In the metabox you can select an item or select to randomize the items from your wishlist or search for an item by ASIN.'.
-					'<li>The shortcode creates text or picture links.'.
-					'<li>If a text link is used, the default text is the item description from Amazon but the text of the link can be changed.'.
-					'</ul>'.
-					'<b>Tools</b>'.
-					'<ul>'.
-					'<li>Look up your wishlist ID.'.
-					'</ul>'.
-					'<b>Support</b><br />'.
-					'For support visit the AVH support forums at <a href="http://forums.avirtualhome.com/">http://forums.avirtualhome.com/</a><br /><br />'.
-					'<b>Developer</b><br />'.
-					'Peter van der Does')));
+				'general' => array (
+						array (
+								'avhamazon[general][associated_id]',
+								'Associated ID:',
+								'text',
+								16,
+								'Use this Associated ID when clicking on the wishlist'
+						)
+				),
+				'wishlist' => array (
+						array (
+								'avhamazon[widget_wishlist][wishlist_id]',
+								'Default wishlist ID:',
+								'text',
+								16,
+								'This is the default wishlist ID, if you don\'t fill out a Wishlist ID in the widget this one will be used.'
+						),
+						array (
+								'avhamazon[widget_wishlist][locale]',
+								'Locale Amazon:',
+								'dropdown',
+								'US/CA/DE/UK',  // Locale Value
+								'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk'
+						),  // Locale Text
+						array (
+								'avhamazon[widget_wishlist][wishlist_imagesize]',
+								'Size of thumbnail:',
+								'dropdown',
+								'Small/Medium/Large',  // Value
+								'Small/Medium/Large'
+						),  // Text
+						array (
+								'avhamazon[widget_wishlist][nr_of_items]',
+								'Number of items:',
+								'text',
+								3,
+								'Amount of items of your Wish List to show in the widget.'
+						),
+						array (
+								'avhamazon[widget_wishlist][footer_template]',
+								'Footer template:',
+								'text',
+								30,
+								'The display of the footer is controlled in the widget options<BR />%nr_of_items% is replaced by the actual number of items in the wishlist.'
+						)
+				),
+				'shortcode' => array (
+						array (
+								'avhamazon[shortcode][wishlist_id]',
+								'Default wishlist ID:',
+								'text',
+								16,
+								'This is the default wishlist ID, if you don\'t fill out a Wishlist ID in the widget this one will be used.'
+						),
+						array (
+								'avhamazon[shortcode][locale]',
+								'Locale Amazon:',
+								'dropdown',
+								'US/CA/DE/UK',  // Locale Value
+								'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk'
+						)
+				),  // Locale Text
+				'faq' => array (
+						array (
+								'text-helper',
+								'text-helper',
+								'helper',
+								'',
+								'<b>Where is the Baby/Wedding Registry widget?</b><br />' . 'There is no seperate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.<br /><br />' . '<b>How do I find my Baby Registry and/or Wedding Registry ID?</b><br />' . 'When you create either registry Amazon sends you an email with the direct link to access your registry. The ID is the last part of the URL.<br />' . 'Example:<br />' . 'http://www.amazon.com/gp/registry/1234567890ABC<br/>' . 'The ID is 1234567890ABC<br /><br />' . '<b>What is an ASIN?</b><br />' . 'ASIN stands for Amazon Standard Identification Number.' . 'Every product has its own ASIN--a unique code they use to identify it. For books, the ASIN is the same as the 10-digit ISBN number.<br />' . 'You will find an item\'s ASIN on the product detail page.<br /><br />'
+						)
+				),
+				'about' => array (
+						array (
+								'text-helper',
+								'text-helper',
+								'helper',
+								'',
+								'<p>The AVH Amazon plugin gives you the ability to add multiple widgets which will display one or more random item(s) from your Amazon wishlist, baby registry and/or wedding registry.' . 'It also has the ability to show itemsmwith their link, in posts and pages by use of shortcode.<br />' . 'In the plugin reference is made to Wishlist only but you can use your Baby Registry ID or Wedding Registry ID as well.</p>' . '<b>General</b>' . '<ul>' . '<li>Works with amazon.com, and locales amazon.ca, amazon.de and amazon.co.uk.<br /><br />' . '</ul>' . '<b>Wishlist</b>' . '<ul>' . '<li>Add Associated ID.' . '<li>Choice of thumbnail size, Small/Medium/Large.' . '<li>Option to use up to unlimited widgets.' . '<li>Multiple items from the same Wish List can be displayed in the widget.' . '<li>A configurable footer can be displayed on the bottom of the widget linking to the list on Amazon.' . '</ul>' . '<b>Shortcode</b>' . '<ul>' . '<li>Create the shortcode with the help of a metabox' . '<li>In the metabox you can select an item or select to randomize the items from your wishlist or search for an item by ASIN.' . '<li>The shortcode creates text or picture links.' . '<li>If a text link is used, the default text is the item description from Amazon but the text of the link can be changed.' . '</ul>' . '<b>Tools</b>' . '<ul>' . '<li>Look up your wishlist ID.' . '</ul>' . '<b>Support</b><br />' . 'For support visit the AVH support forums at <a href="http://forums.avirtualhome.com/">http://forums.avirtualhome.com/</a><br /><br />' . '<b>Developer</b><br />' . 'Peter van der Does'
+						)
+				)
+		);
 
 		// Update or reset options
-		if ( isset( $_POST['updateoptions'] ) ) {
-		// Set all checkboxes unset
-			if (isset ($_POST['avh_checkboxes'])) {
-				$checkboxes = explode('|', $_POST['avh_checkboxes']);
-				foreach ( $checkboxes as $value) {
-					$this->setOption ( $value, 0);
+		if ( isset ( $_POST['updateoptions'] ) ) {
+			// Set all checkboxes unset
+			if ( isset ( $_POST['avh_checkboxes'] ) ) {
+				$checkboxes = explode ( '|', $_POST['avh_checkboxes']);
+				foreach ( $checkboxes as $value ) {
+					$value = ltrim ( $value, 'option[' );
+					$value = rtrim ( $value, ']' );
+					$keys = explode ( '][', $value );
+					$this->setOption ( $keys, 0 );
 				}
 			}
-			foreach ( ( array ) $this->options as $key => $value ) {
-				$newval = (isset( $_POST[$key] )) ? stripslashes( $_POST[$key] ) : '0';
-				if ('nr_of_items' == $key) {
-					if (!is_numeric($_POST[$key])) {
-						$newval = 1;
+			$formoptions=$_POST['option'];
+			foreach ( $this->options as $key => $value ) {
+				foreach ( $value as $key2 => $value2 ) {
+					$newval = (isset ( $formoptions[$key][$key2] )) ? stripslashes ( $formoptions[$key][$key2] ) : '0';
+					if ( 'nr_of_items' == $key2 ) {
+						if ( ! is_numeric ( $formoptions[$key][$key2] ) ) {
+							$newval = 1;
+						}
 					}
-				}
-				$skipped_options = array (
-					'use_auto_tags',
-					'auto_list');
-				if ( $newval != $value && ! in_array( $key, $skipped_options ) ) {
-					$this->setOption( $key, $newval );
+					if ( $newval != $value2 ) {
+						$this->setOption ( array ( $key, $key2 ), $newval );
+					}
 				}
 			}
 			$this->saveOptions();
@@ -272,13 +264,17 @@ jQuery(document).ready(function() {
 		});
 
   </script>
-<div id="wpbody"><div class="wrap avh_wrap">
+<div id="wpbody">
+<div class="wrap avh_wrap">
 <h2><?php _e( 'AVH Amazon: Options', 'avhamazon' );	?></h2>
-<form action="<?php	echo $this->admin_base_url . 'avhamazon_options'; ?>" method="post">
-<p>
-<input type="submit" name="updateoptions" value="<?php _e( 'Update Options &raquo;', 'avhamazon' ); ?>" />
-<input type="submit" name="reset_options" onclick="return confirm('<?php _e( 'Do you really want to restore the default options?', 'avhamazon' ); ?>');" value="<?php _e( 'Reset Options', 'avhamazon' ); ?>" />
-</p>
+<form
+	action="<?php	echo $this->admin_base_url . 'avhamazon_options'; ?>"
+	method="post">
+<p><input type="submit" name="updateoptions"
+	value="<?php _e( 'Update Options &raquo;', 'avhamazon' ); ?>" /> <input
+	type="submit" name="reset_options"
+	onclick="return confirm('<?php _e( 'Do you really want to restore the default options?', 'avhamazon' ); ?>');"
+	value="<?php _e( 'Reset Options', 'avhamazon' ); ?>" /></p>
 <div id="printOptions">
 <ul class="avhamazon_submenu">
 			<?php
@@ -307,7 +303,8 @@ jQuery(document).ready(function() {
 		<?php
 		$this->printAdminFooter();
 		?>
-		</div></div>
+		</div>
+</div>
 
 <?php
 	}
@@ -357,11 +354,13 @@ jQuery(document).ready(function() {
 	/**
 	 * Update an option value  -- note that this will NOT save the options.
 	 *
-	 * @param string $optname
+	 * @param array $optkeys
 	 * @param string $optval
 	 */
-	function setOption($optname, $optval) {
-		$this->options[$optname] = $optval;
+	function setOption($optkeys, $optval) {
+		$key1=$optkeys[0];
+		$key2=$optkeys[1];
+		$this->options[$key1][$key2] = $optval;
 	}
 
 	/**
@@ -520,6 +519,9 @@ jQuery(document).ready(function() {
 				break;
 			case 'wishlist' :
 				return __( 'Wishlist', 'avhamazon' );
+				break;
+			case 'shortcode' :
+				return __( 'Shortcode', 'avhamazon' );
 				break;
 			case 'faq' :
 				return __( 'FAQ', 'avhamazon' );
