@@ -195,7 +195,7 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 
 		//@todo Use of the nonce field for security
 		//wp_nonce_field( 'avhamazon-metabox', '_ajax_nonce', false );
-		$locale = "US";
+		$locale = $this->getOption('locale','shortcode');
 
 		echo '<ul id="avhamazon_tabs" class="ui-tabs-nav">';
 		echo '<input name="avhamazon_mb_url" id="avhamazon_mb_url" value="' . $this->info['siteurl'] . '" type="hidden" />';
@@ -216,11 +216,12 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 	 */
 	function metaboxTabWishlist ($locale) {
 
+		$wishlist_id=$this->getOption('wishlist_id','shortcode');
 		echo '<div id="avhamazon_tab_wishlist" class="ui-tabs-panel">';
 		echo '	<div id="avhamazon-wishlist-show" style="display:block">';
 		echo '		<p>';
 		echo '			<label style="display:block">' . __ ( 'Wish List ID:', 'avhamazon' );
-		echo '			<input style="width: 13em" type="text" value="" id="avhamazon_scwishlist_wishlist" name="avhamazon_scwishlist_wishlist" autocomplete="on"/>';
+		echo '			<input style="width: 13em" type="text" value="'.$wishlist_id.'" id="avhamazon_scwishlist_wishlist" name="avhamazon_scwishlist_wishlist" autocomplete="on"/>';
 		echo '			</label>';
 		echo '			<label style="display:block">' . __ ( 'Locale Amazon:', 'avhamazon' );
 		echo '			<select id="avhamazon_scwishlist_locale" name="avhamazon_scwishlist_locale" />';

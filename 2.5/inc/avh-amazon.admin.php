@@ -149,7 +149,7 @@ jQuery(document).ready(function() {
 								'Use this Associated ID when clicking on the wishlist'
 						)
 				),
-				'wishlist' => array (
+				'widget_wishlist' => array (
 						array (
 								'avhamazon[widget_wishlist][wishlist_id]',
 								'Default wishlist ID:',
@@ -234,7 +234,7 @@ jQuery(document).ready(function() {
 					$this->setOption ( $keys, 0 );
 				}
 			}
-			$formoptions=$_POST['option'];
+			$formoptions=$_POST['avhamazon'];
 			foreach ( $this->options as $key => $value ) {
 				foreach ( $value as $key2 => $value2 ) {
 					$newval = (isset ( $formoptions[$key][$key2] )) ? stripslashes ( $formoptions[$key][$key2] ) : '0';
@@ -453,6 +453,9 @@ jQuery(document).ready(function() {
 		foreach ( $option_data as $section => $options ) {
 			$output .= "\n" . '<div id="' . sanitize_title( $section ) . '"><fieldset class="options"><legend>' . $this->getNiceTitleOptions( $section ) . '</legend><table class="form-table">' . "\n";
 			foreach ( ( array ) $options as $option ) {
+				$option_key=rtrim($option[0],']');
+				$option_key=substr($option_key,strpos($option_key,'][')+2);
+
 				// Helper
 				if ( $option[2] == 'helper' ) {
 					$output .= '<tr style="vertical-align: top;"><td class="helper" colspan="2">' . $option[4] . '</td></tr>' . "\n";
@@ -461,7 +464,7 @@ jQuery(document).ready(function() {
 
 				switch ( $option[2] ) {
 					case 'checkbox' :
-						$input_type = '<input type="checkbox" id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape( $option[3] ) . '" ' . checked('1',$option_actual[$option[0]]) . ' />' . "\n";
+						$input_type = '<input type="checkbox" id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape( $option[3] ) . '" ' . checked('1',$option_actual[$section][$option_key]) . ' />' . "\n";
 						$checkbox .= $option[0] . '|' ;
 						$explanation = $option[4];
 						break;
@@ -471,20 +474,20 @@ jQuery(document).ready(function() {
 						$seltext = explode( '/', $option[4] );
 						$seldata = '';
 						foreach ( ( array ) $selvalue as $key => $sel ) {
-							$seldata .= '<option value="' . $sel . '" ' . (($option_actual[$option[0]] == $sel) ? 'selected="selected"' : '') . ' >' . ucfirst( $seltext[$key] ) . '</option>' . "\n";
+							$seldata .= '<option value="' . $sel . '" ' . (($option_actual[$section][$option_key] == $sel) ? 'selected="selected"' : '') . ' >' . ucfirst( $seltext[$key] ) . '</option>' . "\n";
 						}
 						$input_type = '<select id="' . $option[0] . '" name="' . $option[0] . '">' . $seldata . '</select>' . "\n";
 						$explanation = $option[5];
 						break;
 
 					case 'text-color' :
-						$input_type = '<input type="text" ' . (($option[3] > 50) ? ' style="width: 95%" ' : '') . 'id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape( $option_actual[$option[0]] ) . '" size="' . $option[3] . '" /><div class="box_color ' . $option[0] . '"></div>' . "\n";
+						$input_type = '<input type="text" ' . (($option[3] > 50) ? ' style="width: 95%" ' : '') . 'id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape( $option_actual[$section][$option_key] ) . '" size="' . $option[3] . '" /><div class="box_color ' . $option[0] . '"></div>' . "\n";
 						$explanation = $option[4];
 						break;
 
 					case 'text' :
 					default :
-						$input_type = '<input type="text" ' . (($option[3] > 50) ? ' style="width: 95%" ' : '') . 'id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape( $option_actual[$option[0]] ) . '" size="' . $option[3] . '" />' . "\n";
+						$input_type = '<input type="text" ' . (($option[3] > 50) ? ' style="width: 95%" ' : '') . 'id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape( $option_actual[$section][$option_key] ) . '" size="' . $option[3] . '" />' . "\n";
 						$explanation = $option[4];
 						break;
 				}
@@ -517,7 +520,7 @@ jQuery(document).ready(function() {
 			case 'general' :
 				return __( 'General', 'avhamazon' );
 				break;
-			case 'wishlist' :
+			case 'widget_wishlist' :
 				return __( 'Wishlist', 'avhamazon' );
 				break;
 			case 'shortcode' :

@@ -460,9 +460,23 @@ class AVHAmazonCore {
 		if ( $a[$key] ) {
 			$return = $a[$key]; // From widget
 		} elseif ( $this->options[$widget][$key] ) {
-			$return = $this->options[$widget][$key]; // From Admin Page
+			$return = $this->getOption($key,$widget); // From Admin Page or Default value
+		}
+		return ($return);
+	}
+
+	/**
+	 * Get the value for an option. If there's no option is set on the Admin page, return the default value.
+	 *
+	 * @param string $key
+	 * @param string $option
+	 * @return mixed
+	 */
+	function getOption($key,$option) {
+		if ( $this->options[$option][$key] ) {
+			$return = $this->options[$option][$key]; // From Admin Page
 		} else {
-			$return = $this->default_options[$widget][$key]; // Default
+			$return = $this->default_options[$option][$key]; // Default
 		}
 		return ($return);
 	}
