@@ -110,7 +110,7 @@ class AVHAmazonCore {
 	function AVHAmazonCore () {
 
 		$this->version = "2.2";
-
+		//@TODO New WSDL
 		$this->wsdlurl_table = array (
 				'US' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/AWSECommerceService.wsdl',
 				'CA' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/CA/AWSECommerceService.wsdl',
@@ -286,7 +286,9 @@ class AVHAmazonCore {
 	} // End handleOptions()
 
 	/**
-	 * Clear all files in the cache folder except the readme file
+	 * Clear all files in the cache folder except the readme file.
+	 *
+	 * @since 2.2
 	 *
 	 */
 	function clearCacheFolder () {
@@ -354,6 +356,7 @@ class AVHAmazonCore {
 		delete_option ( 'avhamazon' );
 		add_option ( 'avhamazon', $newvalues );
 	} // end upgradeDefaultOptions
+
 
 	/**
 	 * Get all the items from the list
@@ -444,6 +447,36 @@ class AVHAmazonCore {
 				'Request' => $itemLookupRequest,
 				'AssociateTag' => $associatedid );
 		return $itemLookUp;
+	}
+
+	/**
+	 * Get the image URL for an item
+	 *
+	 * @param string $imagesize (small,medium,large)
+	 * @param array Result of the Item Lookup call
+	 * @return string URL of the image
+	 */
+	function getImageUrl ( $imagesize, $item_result ) {
+		$imageurl = $this->info['install_url'] . '/images/';
+		switch ( strtolower ( $imagesize ) ) {
+			case small :
+				$imgsrc = $item_result['Items']['Item']['SmallImage']['URL'];
+				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . 'no-image-75.gif';
+				break;
+			case medium :
+				$imgsrc = $item_result['Items']['Item']['MediumImage']['URL'];
+				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . 'no-image-160.gif';
+				break;
+			case large :
+				$imgsrc = $item_result['Items']['Item']['LargeImage']['URL'];
+				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . 'no-image-500.gif';
+				break;
+			default :
+				$imgsrc = $item_result['Items']['Item']['MediumImage']['URL'];
+				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . 'no-image-160.gif';
+				break;
+		}
+		return ($imgsrc);
 	}
 
 	/**

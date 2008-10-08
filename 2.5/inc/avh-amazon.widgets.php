@@ -303,24 +303,14 @@ class AVHAmazonWidget extends AVHAmazonCore {
 				foreach ( $Item_keys as $value ) {
 					$Item = $list_result['Lists']['List']['ListItem'][$value];
 					$item_result = $proxy->ItemLookup ( $this->getSoapItemLookupParams ( $Item['Item']['ASIN'], $associatedid ) );
-					switch ( $imagesize ) {
-						case Small :
-							$imgsrc = $item_result['Items']['Item']['SmallImage']['URL'];
-							break;
-						case Medium :
-							$imgsrc = $item_result['Items']['Item']['MediumImage']['URL'];
-							break;
-						case Large :
-							$imgsrc = $item_result['Items']['Item']['LargeImage']['URL'];
-							break;
-						default :
-							$imgsrc = $item_result['Items']['Item']['MediumImage']['URL'];
-							break;
-					}
+
+					$imgsrc = $this->getImageUrl ( $imagesize, $item_result );
+
 					$pos = strpos ( $item_result['Items']['Item']['DetailPageURL'], $Item['Item']['ASIN'] );
 					$myurl = substr ( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen ( $Item['Item']['ASIN'] ) );
 					$myurl .= '/ref=wl_it_dp?ie=UTF8&colid=' . $ListID;
 					$myurl .= '&tag=' . $associatedid;
+
 					echo '<a title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" src="' . $imgsrc . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a><br/>';
 					echo '<div class="wishlistcaption">' . $Item['Item']['ItemAttributes']['Title'] . '</div>';
 					echo '<BR />';

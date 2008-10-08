@@ -137,7 +137,6 @@ jQuery(document).ready(function() {
 	 * WP Page Options- AVH Amazon options
 	 *
 	 */
-	//@TODO Set up shortcode page, optiosn are locale, wishlist and linktype
 	function pageOptions() {
 		$option_data = array (
 				'general' => array (

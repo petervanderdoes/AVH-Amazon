@@ -66,10 +66,10 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 
 		$result = '';
 		$error = '';
-		//@TODO Fill the locale, wishlist and linktype with default values
+		$locale = $this->getOption('locale','shortcode');
 		$attrs = shortcode_atts ( array (
 				'asin' => '',
-				'locale' => 'US',
+				'locale' => $locale,
 				'linktype' => 'text',
 				'wishlist' => '' ), $atts );
 
@@ -170,11 +170,11 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 					$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
 					break;
 				case 'pic' :
-					$imgsrc = $item_result['Items']['Item']['SmallImage']['URL'];
+					$imgsrc = $this->getImageUrl('small', $item_result);
 					$return = '<div class="wp-caption alignleft"><a title="' . $content . '" href="' . $myurl . '"><img src="' . $imgsrc . '" alt="' . $content . '"/></a><p class="wp-caption-text">'.$content .'</p></div>';
 					break;
 				case 'pic-text' :
-					$imgsrc = $item_result['Items']['Item']['SmallImage']['URL'];
+					$imgsrc = $this->getImageUrl('small', $item_result);
 					$return = '<table style=" border: none; cellpadding: 2px; align: left"><tr><td><a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" src="' . $imgsrc . '" alt="' . $content . '"/></a></td><td><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a></td></tr></table>';
 					break;
 				default :
