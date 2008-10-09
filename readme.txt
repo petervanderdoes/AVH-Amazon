@@ -30,8 +30,9 @@ In the plugin reference is made to Wishlist only but you can use your Baby Regis
 * Shortcode
 	* Create the shortcode with the help of a metabox
 	* In the metabox you can select an item or select to randomize the items from your wishlist or search for an item by ASIN. 
-	* The shortcode creates text or picture links.
-	* If a text link is used, the default text is the item description from Amazon but the text of the link can be changed.
+	* The shortcode creates text, picture or text & picture links.
+	* If a text link or text & picture link is used, the default text is the item description from Amazon but the text of the link can be changed.
+	* The value all for the ASIN option will show all items from your wishlist. In combination with a text & picture link type you can create a wishlist page.
 
 * Tools
 	* Look up your wishlist ID.
@@ -73,6 +74,16 @@ You will find an item's ASIN on the product detail page.
 None
 
 == Arbitrary section ==
+* Version 2.2
+	* Display a "no image available" picture when no picture is available.
+	* Ability to set default settings for the shortcode.
+	* Improve storage of the options.
+	* Clear the cache folder at each upgrade.
+	* Show searching indicator when searching for WishList or Asin in the Shortcode Metabox.
+	* Bugfix: Fixed memory problem. Problem was not using avhamazon class in the shortcode.
+	* Bugfix: Metabox was displayed incorrectly on the Page page.
+	* RFC: Added option pic+text for the linktype parameter in the shortcode.
+	* RFC: Added option all for the asin parameter in the shortcode. This will show all items from a wishlist.
 * Version 2.1
 	* Changed the amount of widgets you can use from 9 to unlimited.
 * Version 2.0.1

@@ -191,7 +191,7 @@ jQuery(document).ready(function() {
 								'Default wishlist ID:',
 								'text',
 								16,
-								'This is the default wishlist ID, if you don\'t fill out a Wishlist ID in the widget this one will be used.'
+								'This value will be automatically be entered in the AVH Amazon Short Code - wishlist metabox.'
 						),
 						array (
 								'avhamazon[shortcode][locale]',
@@ -207,7 +207,17 @@ jQuery(document).ready(function() {
 								'text-helper',
 								'helper',
 								'',
-								'<b>Where is the Baby/Wedding Registry widget?</b><br />' . 'There is no seperate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.<br /><br />' . '<b>How do I find my Baby Registry and/or Wedding Registry ID?</b><br />' . 'When you create either registry Amazon sends you an email with the direct link to access your registry. The ID is the last part of the URL.<br />' . 'Example:<br />' . 'http://www.amazon.com/gp/registry/1234567890ABC<br/>' . 'The ID is 1234567890ABC<br /><br />' . '<b>What is an ASIN?</b><br />' . 'ASIN stands for Amazon Standard Identification Number.' . 'Every product has its own ASIN--a unique code they use to identify it. For books, the ASIN is the same as the 10-digit ISBN number.<br />' . 'You will find an item\'s ASIN on the product detail page.<br /><br />'
+								'<b>Where is the Baby/Wedding Registry widget?</b><br />' .
+									'There is no seperate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.<br /><br />' .
+								'<b>How do I find my Baby Registry and/or Wedding Registry ID?</b><br />' .
+									'When you create either registry Amazon sends you an email with the direct link to access your registry. The ID is the last part of the URL.<br />' .
+									'Example:<br />' .
+									'http://www.amazon.com/gp/registry/1234567890ABC<br/>' .
+									'The ID is 1234567890ABC<br /><br />' .
+								'<b>What is an ASIN?</b><br />' .
+									'ASIN stands for Amazon Standard Identification Number.<br />' .
+									'Every product has its own ASIN--a unique code they use to identify it. For books, the ASIN is the same as the 10-digit ISBN number.<br />' .
+									'You will find an item\'s ASIN on the product detail page.<br /><br />'
 						)
 				),
 				'about' => array (
@@ -216,7 +226,36 @@ jQuery(document).ready(function() {
 								'text-helper',
 								'helper',
 								'',
-								'<p>The AVH Amazon plugin gives you the ability to add multiple widgets which will display one or more random item(s) from your Amazon wishlist, baby registry and/or wedding registry.' . 'It also has the ability to show itemsmwith their link, in posts and pages by use of shortcode.<br />' . 'In the plugin reference is made to Wishlist only but you can use your Baby Registry ID or Wedding Registry ID as well.</p>' . '<b>General</b>' . '<ul>' . '<li>Works with amazon.com, and locales amazon.ca, amazon.de and amazon.co.uk.<br /><br />' . '</ul>' . '<b>Wishlist</b>' . '<ul>' . '<li>Add Associated ID.' . '<li>Choice of thumbnail size, Small/Medium/Large.' . '<li>Option to use up to unlimited widgets.' . '<li>Multiple items from the same Wish List can be displayed in the widget.' . '<li>A configurable footer can be displayed on the bottom of the widget linking to the list on Amazon.' . '</ul>' . '<b>Shortcode</b>' . '<ul>' . '<li>Create the shortcode with the help of a metabox' . '<li>In the metabox you can select an item or select to randomize the items from your wishlist or search for an item by ASIN.' . '<li>The shortcode creates text or picture links.' . '<li>If a text link is used, the default text is the item description from Amazon but the text of the link can be changed.' . '</ul>' . '<b>Tools</b>' . '<ul>' . '<li>Look up your wishlist ID.' . '</ul>' . '<b>Support</b><br />' . 'For support visit the AVH support forums at <a href="http://forums.avirtualhome.com/">http://forums.avirtualhome.com/</a><br /><br />' . '<b>Developer</b><br />' . 'Peter van der Does'
+								'<p>The AVH Amazon plugin gives you the ability to add multiple widgets which will display one or more random item(s) from your Amazon wishlist, baby registry and/or wedding registry. It also has the ability to show items with their link, in posts and pages by use of shortcode.<br />' .
+								'In the plugin reference is made to Wishlist only but you can use your Baby Registry ID or Wedding Registry ID as well.</p>' .
+								'<b>General</b>' .
+									'<ul>' .
+										'<li>Works with amazon.com, and locales amazon.ca, amazon.de and amazon.co.uk.<br /><br />' .
+									'</ul>' .
+								'<b>Wishlist</b>' .
+									'<ul>' .
+										'<li>Add Associated ID.' .
+										'<li>Choice of thumbnail size, Small/Medium/Large.' .
+										'<li>Option to use up to unlimited widgets.' .
+										'<li>Multiple items from the same Wish List can be displayed in the widget.' .
+										'<li>A configurable footer can be displayed on the bottom of the widget linking to the list on Amazon.' .
+									'</ul>' .
+								'<b>Shortcode</b>' .
+									'<ul>' .
+										'<li>Create the shortcode with the help of a metabox' .
+										'<li>In the metabox you can select an item or select to randomize the items from your wishlist or search for an item by ASIN.' .
+										'<li>The shortcode creates text, picture or text & picture links.' .
+										'<li>If a text link or text & picture links is used, the default text is the item description from Amazon but the text of the link can be changed.' .
+										'<li>The value all for the ASIN option will show all items from your wishlist. In combination with a text & picture link type you can create a wishlist page.' .
+									'</ul>' .
+								'<b>Tools</b>' .
+									'<ul>' .
+										'<li>Look up your wishlist ID.' .
+									'</ul>' .
+								'<b>Support</b><br />' .
+									'For support visit the AVH support forums at <a href="http://forums.avirtualhome.com/">http://forums.avirtualhome.com/</a><br /><br />' .
+								'<b>Developer</b><br />' .
+									'Peter van der Does'
 						)
 				)
 		);
