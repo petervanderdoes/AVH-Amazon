@@ -210,23 +210,27 @@ class AVHAmazonWidget extends AVHAmazonCore {
 	 *
 	 * @param array $args
 	 * @param array $widget_args
+	 * @param boolean $usingwidget
 	 */
-	function widgetWishlist ( $args, $widget_args = 1 ) {
+	function widgetWishlist ( $args, $widget_args = 1, $usingwidget = TRUE ) {
 
 		extract ( $args, EXTR_SKIP );
 		if ( is_numeric ( $widget_args ) ) {
-			$widget_args = array ( 'number' => $widget_args );
+			$widget_args = array (
+					'number' => $widget_args
+			);
 		}
 
-		$widget_args = wp_parse_args ( $widget_args, array ( 'number' => - 1 ) );
+		$widget_args = wp_parse_args ( $widget_args, array ('number' => - 1	) );
 		extract ( $widget_args, EXTR_SKIP );
 
-		// Data should be stored as array:  array( number => data for that instance of the widget, ... )
-		$options = get_option ( 'widget_avhamazon_wishlist' );
-		if ( ! isset ( $options[$number] ) ) {
-			return;
+		if ( $usingwidget ) {
+			// Data should be stored as array:  array( number => data for that instance of the widget, ... )
+			$options = get_option ( 'widget_avhamazon_wishlist' );
+			if ( ! isset ( $options[$number] ) ) {
+				return;
+			}
 		}
-
 		// Title of the widget
 		$title = $this->getWidgetOptions ( $options[$number], 'title', 'widget_wishlist' );
 
