@@ -47,6 +47,10 @@ The avh-amazon plugin can be installed in 3 easy steps:
 
 == Frequently Asked Questions ==
 
+= Can I use this plugin if I don't have a widget enabled theme? =
+Yes you can, you can use the following code to display the wishlist:
+<?php $avhwidget=& new AVHAmazonWidget();$avhwidget->widgetWishlist(array(),1 , FALSE); ?>
+
 = What about support? =
 I created a support site at http://forums.avirtualhome.com where you can ask questions or request features.
 
@@ -68,6 +72,7 @@ The ID is 1234567890ABC
 = What is an ASIN? =
 ASIN stands for Amazon Standard Identification Number. Every product has its own ASIN--a unique code they use to identify it. For books, the ASIN is the same as the 10-digit ISBN number.
 You will find an item's ASIN on the product detail page.
+
 
 == Screenshots ==
 

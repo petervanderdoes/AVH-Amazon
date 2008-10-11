@@ -207,6 +207,9 @@ jQuery(document).ready(function() {
 								'text-helper',
 								'helper',
 								'',
+								'<b>Can I use this plugin if I don\'t have a widget enabled theme?</b><br />' .
+									'Yes you can, you can use the following code to display the wishlist:<br />' .
+									'<?php $avhwidget=& new AVHAmazonWidget();$avhwidget->widgetWishlist(array(),1 , FALSE); ?> <br /><br />' .
 								'<b>Where is the Baby/Wedding Registry widget?</b><br />' .
 									'There is no seperate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.<br /><br />' .
 								'<b>How do I find my Baby Registry and/or Wedding Registry ID?</b><br />' .
