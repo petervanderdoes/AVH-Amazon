@@ -119,13 +119,13 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 		if ( 'all' == strtolower($attrs['asin'])) {
 			foreach ($list_result['Lists']['List']['ListItem'] as $key => $value) {
 				$attrs['asin'] = $value['Item']['ASIN'];
-				list ( $oneresult, $error ) = $this->shortcodeAsin ( &$proxy, $attrs, $content, $associatedid );
+				list ( $oneresult, $error ) = $this->shortcodeAsin ( $proxy, $attrs, $content, $associatedid );
 				$result .= $oneresult.'<br />';
 			}
 			$attrs['asin'] = null;
 		}
 		if ( $attrs['asin'] ) {
-			list ( $result, $error ) = $this->shortcodeAsin ( &$proxy, $attrs, $content, $associatedid );
+			list ( $result, $error ) = $this->shortcodeAsin ( $proxy, $attrs, $content, $associatedid );
 		}
 
 		if ( $error ) {
@@ -145,7 +145,7 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 	 * @param string $associatedid
 	 * @return array $return and $error, if and error occurs the error variable is used and return will be empty.
 	 */
-	function shortcodeAsin ( $proxy, $attrs, $content, $associatedid ) {
+	function shortcodeAsin ( & $proxy, $attrs, $content, $associatedid ) {
 
 		$error = '';
 		$item_result = $proxy->ItemLookup ( $this->getSoapItemLookupParams ( $attrs['asin'], $associatedid ) );

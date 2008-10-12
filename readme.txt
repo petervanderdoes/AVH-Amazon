@@ -81,6 +81,7 @@ None
 == Arbitrary section ==
 * Version 2.2.2
 	* Bugfix: Support for non-widget code was broken.
+	* Bugfix: When running PHP 5 some warnings "Call-time pass-by-reference has been deprecated"
 * Version 2.2.1
 	* Bugfix: Widget didn't get the default values.
 * Version 2.2
