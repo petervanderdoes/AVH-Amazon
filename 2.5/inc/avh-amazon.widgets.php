@@ -15,6 +15,8 @@ class AVHAmazonWidget extends AVHAmazonCore {
 	 */
 	function initWidget () {
 
+		add_action ( 'wp_head', array ( &$this, 'widgetCss'));
+
 		$widget_options = array ('classname' => 'widget_avhamazon_wishlist' );
 		$widget_function = array (&$this,'widgetWishlist' );
 
@@ -282,7 +284,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 
 		$list_result = $this->getListResults ( $ListID, $proxy );
 		$total_items = count ( $list_result['Lists']['List']['ListItem'] );
-		echo '<link media="screen" type="text/css" href=' . $this->info['install_url'] . '/inc/avh-amazon.widget.css?ver=' . $this->version . ' rel="stylesheet">' . "\n";
+
 
 		echo $before_widget;
 		echo '<!-- AVH Amazon version ' . $this->version . ' | http://blog.avirtualhome.com/wordpress-plugins/ -->';
@@ -329,6 +331,14 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		}
 		echo "</div>";
 		echo $after_widget;
+	}
+
+	/**
+	 * Output the CSS file
+	 *
+	 */
+	function widgetCss() {
+		echo '<link media="screen" type="text/css" href=' . $this->info['install_url'] . '/inc/avh-amazon.widget.css?ver=' . $this->version . ' rel="stylesheet">' . "\n";
 	}
 }
 
