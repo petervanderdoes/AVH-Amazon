@@ -14,24 +14,26 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 	var $locale_table;
 
 	/**
-	 * PHP4 Constructor
+	 * PHP5 Constructor
 	 *
-	 * @param array $default_options
-	 * @param string $version
-	 * @param array $info
-	 * @param array $locale_table
-	 *
-	 * @return AVHAmazonShortcode
 	 */
-	function AVHAmazonShortcode ( ) {
+	function __construct ( ) {
 
-		parent::AVHAmazonCore();
+		parent::__construct();
 
 		// Set the actions, filters and shortcode.
 		add_action ( 'admin_menu', array ( &$this, 'handleAdminMenu' ) );
 		add_action ( 'wp_ajax_avhamazon_metabox', array ( &$this, 'on_wp_ajax_avhamazon_metabox' ) ); // New function for AJAX calls from the submit button.
 		add_filter ( 'admin_print_scripts', array (	&$this,	'adminHead' ) ); // Runs in the HTML header so a plugin can add JavaScript scripts to all admin pages.
 		add_shortcode ( 'avhamazon', array ( &$this, 'handleShortcode' ) );
+	}
+
+	/**
+	 * PHP4 Constructor
+	 *
+	 */
+	function AVHAmazonShortcode () {
+		$this->__construct ();
 	}
 
 	/**

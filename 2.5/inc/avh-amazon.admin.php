@@ -8,31 +8,26 @@ class AVHAmazonAdmin extends AVHAmazonCore {
 	var $message = '';
 	var $status = '';
 
-	/**
-	 * PHP4 Constructor - Intialize Admin
-	 *
-	 * @return
-	 */
-	function AVHAmazonAdmin() {
+	function __construct () {
 
-		parent::AVHAmazonCore();
+		parent::__construct();
 
-		// 8. Admin URL and Pagination
+		// Admin URL and Pagination
 		$this->admin_base_url = $this->info['siteurl'] . '/wp-admin/admin.php?page=';
-		if ( isset( $_GET['pagination'] ) ) {
+		if ( isset ( $_GET['pagination'] ) ) {
 			$this->actual_page = ( int ) $_GET['pagination'];
 		}
 
-		// 9. Admin Capabilities
+		// Admin Capabilities
 		add_action('init', array(&$this, 'initRoles'));
 
-		// 10. Admin menu
+		// Admin menu
 		add_action( 'admin_menu', array ( &$this, 'adminMenu') );
 
-		// 12. CSS Helper
+		// CSS Helper
 		add_action( 'admin_head', array ( &$this, 'helperCSS') );
 
-		// 17. Helper JS & jQuery & Prototype
+		// Helper JS & jQuery & Prototype
 		$avhamazon_pages = array (
 			'avhamazon_options',
 			'avhamazon_tools');
@@ -44,6 +39,15 @@ class AVHAmazonAdmin extends AVHAmazonCore {
 			wp_enqueue_script( 'jquery-forms', $this->info['install_url'] . '/inc/js/jquery.form.js', array ('jquery'), '3' );
 		}
 		return;
+	}
+
+	/**
+	 * PHP4 Constructor - Intialize Admin
+	 *
+	 * @return
+	 */
+	function AVHAmazonAdmin() {
+		$this->__construct();
 	}
 
 	/**

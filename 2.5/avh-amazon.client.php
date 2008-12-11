@@ -103,14 +103,12 @@ class AVHAmazonCore {
 	var $use_cache;
 
 	/**
-	 * PHP4 constructor - Initialize the Core
+	 * PHP5 constructor
 	 *
-	 * @return
 	 */
-	function AVHAmazonCore () {
+	function __construct () {
 
 		$this->version = "2.2.3";
-		//@TODO New WSDL
 		$this->wsdlurl_table = array (
 				'US' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/AWSECommerceService.wsdl',
 				'CA' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/CA/AWSECommerceService.wsdl',
@@ -216,6 +214,15 @@ class AVHAmazonCore {
 
 
 		return;
+
+	}
+	/**
+	 * PHP4 constructor - Initialize the Core
+	 *
+	 * @return
+	 */
+	function AVHAmazonCore () {
+		$this->__construct();
 	}
 
 	/**

@@ -1,12 +1,25 @@
 <?php
 class AVHAmazonWidget extends AVHAmazonCore {
 
-	function AVHAmazonWidget (  ) {
-
-		parent::AVHAmazonCore();
+	/**
+	 * PHP5 Constructor
+	 *
+	 */
+	function __construct () {
+		parent::__construct();
 
 		// Initialize!
-		add_action ( 'widgets_init', array ( &$this, 'initWidget' ) );
+		add_action ( 'widgets_init', array (&$this, 'initWidget') );
+	}
+
+	/**
+	 * PHP4 Constructor
+	 *
+	 * @return AVHAmazonWidget
+	 */
+	function AVHAmazonWidget () {
+		$this->__construct ();
+
 	}
 
 	/**
@@ -15,17 +28,27 @@ class AVHAmazonWidget extends AVHAmazonCore {
 	 */
 	function initWidget () {
 
-		add_action ( 'wp_head', array ( &$this, 'widgetCss'));
+		add_action ( 'wp_head', array (
+				&$this,
+				'widgetCss'
+		) );
 
-		$widget_options = array ('classname' => 'widget_avhamazon_wishlist' );
-		$widget_function = array (&$this,'widgetWishlist' );
+		$widget_options = array (
+				'classname' => 'widget_avhamazon_wishlist'
+		);
+		$widget_function = array (
+				&$this,
+				'widgetWishlist'
+		);
 
 		$control_options = array (
 				'width' => 300,
-				'height' => 270 );
+				'height' => 270
+		);
 		$control_function = array (
 				&$this,
-				'widgetControl' );
+				'widgetControl'
+		);
 		$name = 'AVH Amazon Wishlist';
 
 		if ( ! $options = get_option ( 'widget_avhamazon_wishlist' ) ) {
@@ -43,18 +66,22 @@ class AVHAmazonWidget extends AVHAmazonCore {
 			$id = 'widget-avhamazon-wishlist-' . $key;
 			$registered = true;
 			wp_register_sidebar_widget ( $id, $name, $widget_function, $widget_options, array (
-					'number' => $key ) );
+					'number' => $key
+			) );
 			wp_register_widget_control ( $id, $name, $control_function, $control_options, array (
-					'number' => $key ) );
+					'number' => $key
+			) );
 
 		}
 
 		// If there are none, we register the widget's existance with a generic template
 		if ( ! $registered ) {
 			wp_register_sidebar_widget ( 'widget-avhamazon-wishlist-1', $name, $widget_function, $widget_options, array (
-					'number' => - 1 ) );
+					'number' => - 1
+			) );
 			wp_register_widget_control ( 'widget-avhamazon-wishlist-1', $name, $control_function, $control_options, array (
-					'number' => - 1 ) );
+					'number' => - 1
+			) );
 
 		}
 	}
@@ -67,14 +94,17 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		global $wp_registered_widgets;
 		static $updated = false; // Whether or not we have already updated the data after a POST submit
 
+
 		$locale_table = $this->locale_table;
 
 		if ( is_numeric ( $widget_args ) ) {
 			$widget_args = array (
-					'number' => $widget_args );
+					'number' => $widget_args
+			);
 		}
 		$widget_args = wp_parse_args ( $widget_args, array (
-				'number' => - 1 ) );
+				'number' => - 1
+		) );
 		extract ( $widget_args, EXTR_SKIP );
 
 		// Data should be stored as array:  array( number => data for that instance of the widget, ... )
@@ -223,7 +253,9 @@ class AVHAmazonWidget extends AVHAmazonCore {
 			);
 		}
 
-		$widget_args = wp_parse_args ( $widget_args, array ('number' => - 1	) );
+		$widget_args = wp_parse_args ( $widget_args, array (
+				'number' => - 1
+		) );
 		extract ( $widget_args, EXTR_SKIP );
 
 		if ( $usingwidget ) {
@@ -285,7 +317,6 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		$list_result = $this->getListResults ( $ListID, $proxy );
 		$total_items = count ( $list_result['Lists']['List']['ListItem'] );
 
-
 		echo $before_widget;
 		echo '<!-- AVH Amazon version ' . $this->version . ' | http://blog.avirtualhome.com/wordpress-plugins/ -->';
 		echo '<div id="avhamazon-widget">';
@@ -337,7 +368,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 	 * Output the CSS file
 	 *
 	 */
-	function widgetCss() {
+	function widgetCss () {
 		echo '<link media="screen" type="text/css" href=' . $this->info['install_url'] . '/inc/avh-amazon.widget.css?ver=' . $this->version . ' rel="stylesheet">' . "\n";
 	}
 }
