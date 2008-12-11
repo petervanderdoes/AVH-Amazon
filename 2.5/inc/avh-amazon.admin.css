@@ -40,11 +40,6 @@ div.clearer{clear:both;line-height:1px;font-size:1px;height:1px;}
 .box_color{display:block;width:20px;height:20px;border:1px solid #ccc;}
 
 /* Metabox */
-#avhamazonmetabox01 {
- margin-left: 120px;
- padding: 4px 0;
-}
-
 #avhamazonmetabox01 div.ui-tabs-panel {
 border-style:solid;
 border-width:4px;
