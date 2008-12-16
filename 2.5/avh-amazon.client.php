@@ -248,7 +248,7 @@ class AVHAmazonCore {
 		$default_options = $this->default_options;
 
 		// Get options from WP options
-		$options_from_table = get_option ( 'avhamazon' );
+		$options_from_table = get_option ( $this->db_options );
 
 		if ( empty ( $options_from_table ) ) {
 			$options_from_table = $this->default_options; // New installation
@@ -257,7 +257,7 @@ class AVHAmazonCore {
 			// I need to upgrade the options before setting the options but we don't update the version yet.
 			if (! $options_from_table['general']) {
 				$this->upgradeDefaultOptions_2_2();
-				$options_from_table = get_option ( 'avhamazon' ); // Get the new options
+				$options_from_table = get_option ( $this->db_options ); // Get the new options
 			}
 			// Update default options by getting not empty values from options table
 			foreach ( $default_options as $section_key => $section_array ) {
@@ -348,6 +348,7 @@ class AVHAmazonCore {
 	 *
 	 */
 	function upgradeDefaultOptions_2_2 () {
+		// Keep hardcoded name, in case we change the name at a later stage
 		$oldvalues = get_option ( 'avhamazon' );
 		$newvalues = array (
 				'general' => array (),
@@ -361,7 +362,7 @@ class AVHAmazonCore {
 			}
 		}
 		delete_option ( 'avhamazon' );
-		add_option ( 'avhamazon', $newvalues );
+		add_option ( $this->db_options, $newvalues );
 	} // end upgradeDefaultOptions
 
 
