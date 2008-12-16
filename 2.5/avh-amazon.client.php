@@ -87,6 +87,7 @@ class AVHAmazonCore {
 	 * @var string
 	 */
 	var $db_options_name_core;
+	var $db_options_name_widget_wishlist;
 
 	/**
 	 * Dateformat used in the plugin

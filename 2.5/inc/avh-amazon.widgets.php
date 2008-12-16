@@ -45,10 +45,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 				'width' => 300,
 				'height' => 270
 		);
-		$control_function = array (
-				&$this,
-				'widgetControl'
-		);
+		$control_function = array (	&$this,	'widgetControl' );
 		$name = 'AVH Amazon Wishlist';
 
 		if ( ! $options = get_option ( $this->db_options_name_widget_wishlist ) ) {
@@ -65,23 +62,15 @@ class AVHAmazonWidget extends AVHAmazonCore {
 			// $id should look like {$id_base}-{$o}
 			$id = 'widget-avhamazon-wishlist-' . $key;
 			$registered = true;
-			wp_register_sidebar_widget ( $id, $name, $widget_function, $widget_options, array (
-					'number' => $key
-			) );
-			wp_register_widget_control ( $id, $name, $control_function, $control_options, array (
-					'number' => $key
-			) );
+			wp_register_sidebar_widget ( $id, $name, $widget_function, $widget_options, array (	'number' => $key ) );
+			wp_register_widget_control ( $id, $name, $control_function, $control_options, array ( 'number' => $key ) );
 
 		}
 
 		// If there are none, we register the widget's existance with a generic template
 		if ( ! $registered ) {
-			wp_register_sidebar_widget ( 'widget-avhamazon-wishlist-1', $name, $widget_function, $widget_options, array (
-					'number' => - 1
-			) );
-			wp_register_widget_control ( 'widget-avhamazon-wishlist-1', $name, $control_function, $control_options, array (
-					'number' => - 1
-			) );
+			wp_register_sidebar_widget ( 'widget-avhamazon-wishlist-1', $name, $widget_function, $widget_options, array ( 'number' => - 1 ) );
+			wp_register_widget_control ( 'widget-avhamazon-wishlist-1', $name, $control_function, $control_options, array ( 'number' => - 1 ) );
 
 		}
 	}
@@ -102,9 +91,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 					'number' => $widget_args
 			);
 		}
-		$widget_args = wp_parse_args ( $widget_args, array (
-				'number' => - 1
-		) );
+		$widget_args = wp_parse_args ( $widget_args, array ( 'number' => - 1 ) );
 		extract ( $widget_args, EXTR_SKIP );
 
 		// Data should be stored as array:  array( number => data for that instance of the widget, ... )
