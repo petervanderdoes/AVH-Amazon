@@ -1,18 +1,6 @@
 <?php
 class AVHAmazonShortcode extends AVHAmazonCore {
 
-	var $version;
-
-	var $info;
-
-	var $options;
-
-	var $default_options;
-
-	var $db_options;
-
-	var $locale_table;
-
 	/**
 	 * PHP5 Constructor
 	 *
