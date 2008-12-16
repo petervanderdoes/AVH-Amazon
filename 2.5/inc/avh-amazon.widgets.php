@@ -355,7 +355,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 				if ( $show_footer ) {
 					$footer = str_replace ( '%nr_of_items%', $total_items, $footer_template );
 					$myurl = $list_result['Lists']['List']['ListURL'];
-					$myurl .= '&tag=' . $associatedid;
+					$myurl .= '?tag=' . $associatedid;
 					echo '<div class="footer"><a title="Show all on Wishlist" href="' . $myurl . '">' . $footer . '</a></div><br />';
 				}
 			}
