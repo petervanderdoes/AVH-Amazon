@@ -79,6 +79,9 @@ You will find an item's ASIN on the product detail page.
 None
 
 == Arbitrary section ==
+* Version 2.3
+	* With WordPress 2.7, when deleting the plugin it will clean up the database, removing the entries related the plugin.
+	* Source code improvements.
 * Version 2.2.4
 	* Bugfix: The footer in the widget wasn't linking correctly.
 * Version 2.2.3
