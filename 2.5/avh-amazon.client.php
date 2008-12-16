@@ -541,6 +541,27 @@ class AVHAmazonCore {
 		}
 		return ($associatedid);
 	}
+
+	/**
+	 * Get the base directory of a directory structure
+	 *
+	 * @param string $directory
+	 * @return string
+	 *
+	 * @since 2.3
+	 *
+	 */
+	function getBaseDirectory($directory)
+{
+    //get public directory structure eg "/top/second/third"
+    $public_directory = dirname($directory);
+    //place each directory into array
+    $directory_array = explode('/', $public_directory);
+    //get highest or top level in array of directory strings
+    $public_base = max($directory_array);
+
+    return $public_base;
+}
 } //End Class avh_amazon
 
 

@@ -82,8 +82,27 @@ class AVHAmazonAdmin extends AVHAmazonCore {
 	function adminMenu() {
 		add_management_page( __( 'AVH Amazon Tools', 'avhamazon' ), __( 'AVH Amazon Tools', 'avhamazon' ), 'avh_amazon', 'avhamazon_tools', array (	&$this, 'pageAVHAmazonTools') );
 		add_options_page( __( 'AVH Amazon: Options', 'avhamazon' ), 'AVH Amazon', 'avh_amazon', 'avhamazon_options', array ( &$this, 'pageOptions') );
+		add_filter( 'plugin_action_links', array( &$this,'filterPluginActions'), 10, 2 );
+
 	}
 
+	/**
+	 * Adds Settings next to the plugin actions
+	 *
+	 */
+	function filterPluginActions ( $links, $file ) {
+		static $this_plugin;
+
+		if ( ! $this_plugin ) $this_plugin = $this->getBaseDirectory( plugin_basename($this->info['install_dir']) );
+		if ( $file ) $file = $this->getBaseDirectory($file);
+		if ( $file == $this_plugin ) {
+			$settings_link = '<a href="options-general.php?page=avhamazon_options">' . __ ( 'Settings', 'avhamazon' ) . '</a>';
+			array_unshift( $links, $settings_link ); // before other links
+			//$links = array_merge ( array (	$settings_link ), $links ); // before other links
+		}
+		return $links;
+
+	}
 	/**
 	 * WP Page Manage - AVH Amazon Find Wishlist ID
 	 *
