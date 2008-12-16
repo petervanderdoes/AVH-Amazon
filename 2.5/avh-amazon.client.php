@@ -86,7 +86,7 @@ class AVHAmazonCore {
 	 *
 	 * @var string
 	 */
-	var $db_options;
+	var $db_options_name_core;
 
 	/**
 	 * Dateformat used in the plugin
@@ -132,7 +132,8 @@ class AVHAmazonCore {
 				'UK' => 'avh-amazon-uk-21'
 		);
 
-		$this->db_options = 'avhamazon';
+		$this->db_options_name_core = 'avhamazon';
+		$this->db_options_name_widget_wishlist = 'widget_avhamazon_wishlist';
 		$this->use_cache = false;
 
 		// Default Options
@@ -248,7 +249,7 @@ class AVHAmazonCore {
 		$default_options = $this->default_options;
 
 		// Get options from WP options
-		$options_from_table = get_option ( $this->db_options );
+		$options_from_table = get_option ( $this->db_options_name_core );
 
 		if ( empty ( $options_from_table ) ) {
 			$options_from_table = $this->default_options; // New installation
@@ -257,7 +258,7 @@ class AVHAmazonCore {
 			// I need to upgrade the options before setting the options but we don't update the version yet.
 			if (! $options_from_table['general']) {
 				$this->upgradeDefaultOptions_2_2();
-				$options_from_table = get_option ( $this->db_options ); // Get the new options
+				$options_from_table = get_option ( $this->db_options_name_core ); // Get the new options
 			}
 			// Update default options by getting not empty values from options table
 			foreach ( $default_options as $section_key => $section_array ) {
@@ -285,7 +286,7 @@ class AVHAmazonCore {
 				$this->clearCacheFolder();
 				// Write the new default options and the proper version to the database
 				$default_options['general']['version'] = $this->version;
-				update_option ( $this->db_options, $default_options );
+				update_option ( $this->db_options_name_core, $default_options );
 			}
 		}
 		// Set the class property for options
@@ -318,6 +319,7 @@ class AVHAmazonCore {
 	 *
 	 */
 	function upgradeWidgetOptions_2_1 () {
+		//  Keep hardcoded name, in case we change the name at a later stage
 		$oldvalues = get_option ( 'widget_avhamazon_wishlist' );
 		$all_options = array ();
 
@@ -336,7 +338,7 @@ class AVHAmazonCore {
 		}
 
 		delete_option ( 'widget_avhamazon_wishlist' );
-		add_option ( 'widget_avhamazon_wishlist', $all_options );
+		add_option ( $this->db_options_name_widget_wishlist, $all_options );
 
 	} // End upgradeWidgetOptions_2_1
 
@@ -362,7 +364,7 @@ class AVHAmazonCore {
 			}
 		}
 		delete_option ( 'avhamazon' );
-		add_option ( $this->db_options, $newvalues );
+		add_option ( $this->db_options_name_core, $newvalues );
 	} // end upgradeDefaultOptions
 
 

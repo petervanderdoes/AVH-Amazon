@@ -51,7 +51,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		);
 		$name = 'AVH Amazon Wishlist';
 
-		if ( ! $options = get_option ( 'widget_avhamazon_wishlist' ) ) {
+		if ( ! $options = get_option ( $this->db_options_name_widget_wishlist ) ) {
 			$options = array ();
 		}
 
@@ -109,7 +109,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 
 		// Data should be stored as array:  array( number => data for that instance of the widget, ... )
 		// Get actual options
-		$all_options = get_option ( 'widget_avhamazon_wishlist' );
+		$all_options = get_option ( $this->db_options_name_widget_wishlist );
 		if ( ! is_array ( $all_options ) ) {
 			$all_options = array ();
 		}
@@ -260,7 +260,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 
 		if ( $usingwidget ) {
 			// Data should be stored as array:  array( number => data for that instance of the widget, ... )
-			$options = get_option ( 'widget_avhamazon_wishlist' );
+			$options = get_option ( $this->db_options_name_widget_wishlist );
 			if ( ! isset ( $options[$number] ) ) {
 				return;
 			}

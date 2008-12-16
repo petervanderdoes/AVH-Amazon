@@ -360,7 +360,7 @@ jQuery(document).ready(function() {
 	 */
 	function installPlugin() {
 
-		$options_from_table = get_option( $this->db_options );
+		$options_from_table = get_option( $this->db_options_name_core );
 		if ( ! $options_from_table ) {
 			$this->resetToDefaultOptions();
 		}
@@ -413,7 +413,7 @@ jQuery(document).ready(function() {
 	 *
 	 */
 	function saveOptions() {
-		update_option( $this->db_options, $this->options );
+		update_option( $this->db_options_name_core, $this->options );
 		wp_cache_flush(); // Delete cache
 	}
 
@@ -422,7 +422,7 @@ jQuery(document).ready(function() {
 	 *
 	 */
 	function resetToDefaultOptions() {
-		update_option( $this->db_options, $this->default_options );
+		update_option( $this->db_options_name_core, $this->default_options );
 		$this->options = $this->default_options;
 		wp_cache_flush(); // Delete cache
 	}
@@ -432,7 +432,7 @@ jQuery(document).ready(function() {
 	 *
 	 */
 	function deleteAllOptions() {
-		delete_option( $this->db_options, $this->default_options );
+		delete_option( $this->db_options_name_core, $this->default_options );
 		wp_cache_flush(); // Delete cache
 	}
 
