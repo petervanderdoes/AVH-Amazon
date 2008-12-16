@@ -226,7 +226,7 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 		echo '		</p>';
 		echo '	</div>';
 		echo '<div id="avhamazon_wishlist_loading" style="display:hide">';
-		echo '	<p>Searching <img src="'.$this->info['install_url'].'/images/ajax-loader.gif"></p>';
+		echo '	<p>Searching <img src="'.$this->info['graphics_url'].'/ajax-loader.gif"></p>';
 		echo '</div>';
 		echo '	<div id="avhamazon_wishlist_output"></div>';
 		echo '</div>';
@@ -259,7 +259,7 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 		echo '		</p>';
 		echo '	</div>';
 		echo '<div id="avhamazon_asin_loading" style="display:hide">';
-		echo '	<p>Searching <img src="'.$this->info['install_url'].'/images/ajax-loader.gif"></p>';
+		echo '	<p>Searching <img src="'.$this->info['graphics_url'].'/ajax-loader.gif"></p>';
 		echo '</div>';
 		echo '	<div id="avhamazon_asin_output"></div>';
 		echo '</div>';

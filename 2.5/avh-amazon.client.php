@@ -191,7 +191,8 @@ class AVHAmazonCore {
 				'home' => get_option ( 'home' ),
 				'siteurl' => $info['siteurl'],
 				'install_url' => $info['install_url'],
-				'install_dir' => $info['install_dir'] );
+				'install_dir' => $info['install_dir'],
+				'graphics_url' => $info['install_url'] . '/images' );
 
 		// Set class property for the WSDl cache folder
 		$this->wsdlcachefolder = str_replace ( '/2.5', '', $this->info['install_dir'] ) . '/cache/';
@@ -467,23 +468,23 @@ class AVHAmazonCore {
 	 * @return string URL of the image
 	 */
 	function getImageUrl ( $imagesize, $item_result ) {
-		$imageurl = $this->info['install_url'] . '/images/';
+		$imageurl = $this->info['graphics_url'];
 		switch ( strtolower ( $imagesize ) ) {
 			case small :
 				$imgsrc = $item_result['Items']['Item']['SmallImage']['URL'];
-				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . 'no-image-75.gif';
+				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . '/no-image-75.gif';
 				break;
 			case medium :
 				$imgsrc = $item_result['Items']['Item']['MediumImage']['URL'];
-				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . 'no-image-160.gif';
+				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . '/no-image-160.gif';
 				break;
 			case large :
 				$imgsrc = $item_result['Items']['Item']['LargeImage']['URL'];
-				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . 'no-image-500.gif';
+				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . '/no-image-500.gif';
 				break;
 			default :
 				$imgsrc = $item_result['Items']['Item']['MediumImage']['URL'];
-				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . 'no-image-160.gif';
+				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . '/no-image-160.gif';
 				break;
 		}
 		return ($imgsrc);
