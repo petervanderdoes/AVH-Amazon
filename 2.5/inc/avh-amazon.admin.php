@@ -328,9 +328,9 @@ jQuery(document).ready(function() {
 		});
 
   </script>
-<div id="wpbody">
+
 <div class="wrap avh_wrap">
-<h2><?php _e( 'AVH Amazon: Options', 'avhamazon' );	?></h2>
+<h2><?php _e( 'AVH Amazon: Optionzs', 'avhamazon' );	?></h2>
 <form
 	action="<?php	echo $this->admin_base_url . 'avhamazon_options'; ?>"
 	method="post">
@@ -368,7 +368,7 @@ jQuery(document).ready(function() {
 		$this->printAdminFooter();
 		?>
 		</div>
-</div>
+
 
 <?php
 	}
