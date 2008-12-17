@@ -80,6 +80,7 @@ None
 
 == Arbitrary section ==
 * Version 2.3-rc
+	* RFC: When calling the widget directly the array parameter can hold the widget options.
 	* With WordPress 2.7, when deleting the plugin it will clean up the database, removing the entries related the plugin.
 	* Source code improvements.
 * Version 2.2.4

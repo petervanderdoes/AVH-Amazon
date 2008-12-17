@@ -234,9 +234,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 			);
 		}
 
-		$widget_args = wp_parse_args ( $widget_args, array (
-				'number' => - 1
-		) );
+		$widget_args = wp_parse_args ( $widget_args, array ( 'number' => - 1 ) );
 		extract ( $widget_args, EXTR_SKIP );
 
 		if ( $usingwidget ) {
@@ -247,28 +245,28 @@ class AVHAmazonWidget extends AVHAmazonCore {
 			}
 		}
 		// Title of the widget
-		$title = $this->getWidgetOptions ( $options[$number], 'title', 'widget_wishlist' );
+		$title = isset($title) ? $title : $this->getWidgetOptions ( $options[$number], 'title', 'widget_wishlist' );
 
 		// Wishlist ID
-		$ListID = $this->getWidgetOptions ( $options[$number], 'wishlist_id', 'widget_wishlist' );
+		$ListID = isset($ListID) ? $ListID : $this->getWidgetOptions ( $options[$number], 'wishlist_id', 'widget_wishlist' );
 
 		// Assiociated ID
-		$associatedid = $this->getWidgetOptions ( $options[$number], 'associated_id', 'general' );
+		$associatedid = isset($associatedid) ? $associatedid : $this->getWidgetOptions ( $options[$number], 'associated_id', 'general' );
 
 		// Image size
-		$imagesize = $this->getWidgetOptions ( $options[$number], 'wishlist_imagesize', 'widget_wishlist' );
+		$imagesize = isset($imagesize) ? $imagesize : $this->getWidgetOptions ( $options[$number], 'wishlist_imagesize', 'widget_wishlist' );
 
 		// Amazon locale
-		$locale = $this->getWidgetOptions ( $options[$number], 'locale', 'widget_wishlist' );
+		$locale = isset($locale) ? $locale : $this->getWidgetOptions ( $options[$number], 'locale', 'widget_wishlist' );
 
 		// Number of Items
-		$nr_of_items = $this->getWidgetOptions ( $options[$number], 'nr_of_items', 'widget_wishlist' );
+		$nr_of_items = isset($nr_of_items) ? $nr_of_items : $this->getWidgetOptions ( $options[$number], 'nr_of_items', 'widget_wishlist' );
 
 		// Show Footer
-		$show_footer = $this->getWidgetOptions ( $options[$number], 'show_footer', 'widget_wishlist' );
+		$show_footer = isset($show_footer) ? $show_footer : $this->getWidgetOptions ( $options[$number], 'show_footer', 'widget_wishlist' );
 
 		// Footer Template
-		$footer_template = $this->getWidgetOptions ( $options[$number], 'footer_template', 'widget_wishlist' );
+		$footer_template = isset($footer_template) ? $footer_template : $this->getWidgetOptions ( $options[$number], 'footer_template', 'widget_wishlist' );
 
 		// Check default assiociate ID and change it for the Locale
 		if ( 'avh-amazon-20' == $associatedid ) {
