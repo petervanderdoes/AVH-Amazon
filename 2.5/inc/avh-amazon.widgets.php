@@ -28,18 +28,12 @@ class AVHAmazonWidget extends AVHAmazonCore {
 	 */
 	function initWidget () {
 
-		add_action ( 'wp_head', array (
-				&$this,
-				'widgetCss'
-		) );
+		add_action ( 'wp_head', array ( &$this, 'widgetCss'));
 
 		$widget_options = array (
 				'classname' => 'widget_avhamazon_wishlist'
 		);
-		$widget_function = array (
-				&$this,
-				'widgetWishlist'
-		);
+		$widget_function = array (	&$this,	'widgetWishlist' );
 
 		$control_options = array (
 				'width' => 300,
@@ -356,7 +350,12 @@ class AVHAmazonWidget extends AVHAmazonCore {
 	 *
 	 */
 	function widgetCss () {
-		echo '<link media="screen" type="text/css" href=' . $this->info['install_url'] . '/inc/avh-amazon.widget.css?ver=' . $this->version . ' rel="stylesheet">' . "\n";
+		if ( $this->info['wordpress_version'] >= 2.6 ) {
+			$this->handleCssFile ( 'avhamazonwidget', '/inc/avh-amazon.widget.css' );
+		} else {
+			// for older versions
+			echo '<link media="all" type="text/css" href="' . $this->info['install_url'] . '/inc/avh-amazon.widget.css?ver=' . $this->version . '" rel="stylesheet"> </link>';
+		}
 	}
 }
 

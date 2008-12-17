@@ -83,7 +83,6 @@ class AVHAmazonAdmin extends AVHAmazonCore {
 		add_management_page( __( 'AVH Amazon Tools', 'avhamazon' ), __( 'AVH Amazon Tools', 'avhamazon' ), 'avh_amazon', 'avhamazon_tools', array (	&$this, 'pageAVHAmazonTools') );
 		add_options_page( __( 'AVH Amazon: Options', 'avhamazon' ), 'AVH Amazon', 'avh_amazon', 'avhamazon_options', array ( &$this, 'pageOptions') );
 		add_filter( 'plugin_action_links', array( &$this,'filterPluginActions'), 10, 2 );
-
 	}
 
 	/**
@@ -330,7 +329,7 @@ jQuery(document).ready(function() {
   </script>
 
 <div class="wrap avh_wrap">
-<h2><?php _e( 'AVH Amazon: Optionzs', 'avhamazon' );	?></h2>
+<h2><?php _e( 'AVH Amazon: Options', 'avhamazon' );	?></h2>
 <form
 	action="<?php	echo $this->admin_base_url . 'avhamazon_options'; ?>"
 	method="post">
@@ -497,8 +496,13 @@ jQuery(document).ready(function() {
 	 * Print link to CSS
 	 *
 	 */
-	function helperCSS() {
-		echo '<link rel="stylesheet" href="' . $this->info['install_url'] . '/inc/avh-amazon.admin.css?ver=' . $this->version . '" type="text/css" />' . "\n";
+	function helperCSS () {
+		if ( $this->info['wordpress_version'] >= 2.6 ) {
+			$this->handleCssFile ( 'avhamazonadmin', '/inc/avh-amazon.admin.css' );
+		} else {
+			// for older versions
+			echo '<link media="all" type="text/css" href="' . $this->info['install_url'] . '/inc/avh-amazon.admin.css?ver=' . $this->version . '" rel="stylesheet"> </link>';
+		}
 	}
 
 	/**

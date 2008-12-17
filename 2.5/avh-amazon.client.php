@@ -184,6 +184,7 @@ class AVHAmazonCore {
 			if ( $path != 'plugins' ) {
 				$info['install_url'] .= '/' . $path;
 				$info['install_dir'] .= '/' . $path;
+				$info['install_uri'] = '/wp-content/plugins/'. $path;
 			}
 		}
 
@@ -192,8 +193,10 @@ class AVHAmazonCore {
 				'home' => get_option ( 'home' ),
 				'siteurl' => $info['siteurl'],
 				'install_url' => $info['install_url'],
+				'install_uri' => $info['install_uri'],
 				'install_dir' => $info['install_dir'],
-				'graphics_url' => $info['install_url'] . '/images' );
+				'graphics_url' => $info['install_url'] . '/images',
+				'wordpress_version' => $this->getWordpressVersion() );
 
 		// Set class property for the WSDl cache folder
 		$this->wsdlcachefolder = str_replace ( '/2.5', '', $this->info['install_dir'] ) . '/cache/';
@@ -214,7 +217,6 @@ class AVHAmazonCore {
 		//	$mofile = $this->info['install_dir'].'/languages/avhamazon-'.$locale.'.mo';
 		//	load_textdomain('avhamazon', $mofile);
 		//}
-
 
 		return;
 
@@ -551,17 +553,46 @@ class AVHAmazonCore {
 	 * @since 2.3
 	 *
 	 */
-	function getBaseDirectory($directory)
-{
-    //get public directory structure eg "/top/second/third"
-    $public_directory = dirname($directory);
-    //place each directory into array
-    $directory_array = explode('/', $public_directory);
-    //get highest or top level in array of directory strings
-    $public_base = max($directory_array);
+	function getBaseDirectory ( $directory ) {
+		//get public directory structure eg "/top/second/third"
+		$public_directory = dirname ( $directory );
+		//place each directory into array
+		$directory_array = explode ( '/', $public_directory );
+		//get highest or top level in array of directory strings
+		$public_base = max ( $directory_array );
 
-    return $public_base;
-}
+		return $public_base;
+	}
+
+	/**
+	 * Returns the wordpress version
+	 *
+	 * @return float
+	 *
+	 * @since 2.3
+	 */
+	function getWordpressVersion () {
+		global $wp_version;
+		$version = ( float ) $wp_version;
+		return $version;
+	}
+
+	/**
+	 * Insert the CSS file
+	 *
+	 * @param string $handle CSS Handle
+	 * @param string $cssfile
+	 *
+	 * @since 2.3
+	 */
+	function handleCssFile ( $handle, $cssfile ) {
+		wp_register_style ( $handle, $this->info['install_uri'] . $cssfile, array (), $this->version, 'all' );
+		if ( did_action ( 'wp_print_styles' ) ) { // we already printed the style queue.  Print this one immediately
+			wp_print_styles ( $handle );
+		} else {
+			wp_enqueue_style ( $handle );
+		}
+	}
 } //End Class avh_amazon
 
 
