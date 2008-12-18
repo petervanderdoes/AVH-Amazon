@@ -136,7 +136,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 				$all_options[$widget_number] = $options;
 			}
 
-			update_option ( 'widget_avhamazon_wishlist', $all_options );
+			update_option ( $this->db_options_name_widget_wishlist, $all_options );
 			$updated = true;
 		}
 

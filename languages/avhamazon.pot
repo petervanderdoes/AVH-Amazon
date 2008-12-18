@@ -3,126 +3,14 @@ msgstr ""
 "Project-Id-Version: AVH Amazon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-13 20:56-0500\n"
-"PO-Revision-Date: 2008-07-13 20:57-0500\n"
+"PO-Revision-Date: 2008-12-17 09:49-0500\n"
 "Last-Translator: Peter van der Does <peter@avirtualhome.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: __;_e\n"
-"X-Poedit-Basepath: /d1/development/wordpress/wp-plugins.org/avh-amazon\n"
-"X-Poedit-SearchPath-0: trunk\n"
-"X-Poedit-SearchPath-1: trunk/2.5\n"
-"X-Poedit-SearchPath-2: trunk/2.3\n"
-"X-Poedit-SearchPath-3: trunk/2.5/inc\n"
-"X-Poedit-SearchPath-4: trunk/2.3/inc\n"
-
-#: trunk/avh-amazon.php:35
-msgid "AVH Amazon can't work with this WordPress version !"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.admin.php:115
-#: trunk/2.3/inc/avh-amazon.admin.php:95
-msgid "AVH Amazon Tools"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.admin.php:118
-#: trunk/2.5/inc/avh-amazon.admin.php:258
-#: trunk/2.3/inc/avh-amazon.admin.php:98
-#: trunk/2.3/inc/avh-amazon.admin.php:240
-msgid "AVH Amazon: Options"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.admin.php:163
-#: trunk/2.3/inc/avh-amazon.admin.php:143
-msgid "AVH Amazon: Tools"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.admin.php:261
-#: trunk/2.5/inc/avh-amazon.admin.php:280
-#: trunk/2.3/inc/avh-amazon.admin.php:249
-#: trunk/2.3/inc/avh-amazon.admin.php:273
-msgid "Update Options &raquo;"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.admin.php:262
-#: trunk/2.5/inc/avh-amazon.admin.php:283
-#: trunk/2.3/inc/avh-amazon.admin.php:252
-#: trunk/2.3/inc/avh-amazon.admin.php:276
-msgid "Do you really want to restore the default options?"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.admin.php:262
-#: trunk/2.5/inc/avh-amazon.admin.php:286
-#: trunk/2.3/inc/avh-amazon.admin.php:255
-#: trunk/2.3/inc/avh-amazon.admin.php:279
-msgid "Reset Options"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.admin.php:380
-#: trunk/2.3/inc/avh-amazon.admin.php:373
-#, php-format
-msgid "&copy; Copyright 2008 <a href=\"http://blog.avirtualhome.com/\" title=\"My Thoughts\">Peter van der Does</a> | AVH Amazon Version %s"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.admin.php:487
-#: trunk/2.3/inc/avh-amazon.admin.php:480
-msgid "General"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.admin.php:490
-#: trunk/2.3/inc/avh-amazon.admin.php:483
-msgid "Wishlist"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.admin.php:493
-#: trunk/2.3/inc/avh-amazon.admin.php:486
-msgid "FAQ"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.admin.php:496
-#: trunk/2.3/inc/avh-amazon.admin.php:489
-msgid "About"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.widgets.php:147
-#: trunk/2.3/inc/avh-amazon.widgets.php:147
-msgid "Empty field will use default value."
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.widgets.php:150
-#: trunk/2.3/inc/avh-amazon.widgets.php:150
-msgid "Title:"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.widgets.php:155
-#: trunk/2.3/inc/avh-amazon.widgets.php:155
-msgid "Associated ID:"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.widgets.php:160
-#: trunk/2.3/inc/avh-amazon.widgets.php:160
-msgid "Wishlist ID:"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.widgets.php:189
-#: trunk/2.3/inc/avh-amazon.widgets.php:189
-msgid "AVH Amazon Wishlist Widgets"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.widgets.php:190
-#: trunk/2.3/inc/avh-amazon.widgets.php:190
-msgid "How many wishlist widgets would you like?"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.widgets.php:194
-#: trunk/2.3/inc/avh-amazon.widgets.php:194
-msgid "Save"
-msgstr ""
-
-#: trunk/2.5/inc/avh-amazon.widgets.php:208
-#: trunk/2.3/inc/avh-amazon.widgets.php:208
-#, php-format
-msgid "AVH Amazon Wishlist %d"
-msgstr ""
+"X-Poedit-Basepath: /d1/development/wordpress/plugin/avh-amazon/source/\n"
+"X-Poedit-SearchPath-0: 2.5\n"
+"X-Poedit-SearchPath-1: 2.5/inc\n"
 
