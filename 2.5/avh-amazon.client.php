@@ -109,7 +109,7 @@ class AVHAmazonCore {
 	 */
 	function __construct () {
 
-		$this->version = "2.3-rc";
+		$this->version = "2.3";
 		$this->wsdlurl_table = array (
 				'US' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/AWSECommerceService.wsdl',
 				'CA' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/CA/AWSECommerceService.wsdl',
