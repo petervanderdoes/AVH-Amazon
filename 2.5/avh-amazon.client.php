@@ -111,10 +111,10 @@ class AVHAmazonCore {
 
 		$this->version = "2.3-rc";
 		$this->wsdlurl_table = array (
-				'US' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/AWSECommerceService.wsdl',
-				'CA' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/CA/AWSECommerceService.wsdl',
-				'DE' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/DE/AWSECommerceService.wsdl',
-				'UK' => 'http://ecs.amazonaws.com/AWSECommerceService/2008-08-19/UK/AWSECommerceService.wsdl'
+				'US' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/AWSECommerceService.wsdl',
+				'CA' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/CA/AWSECommerceService.wsdl',
+				'DE' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/DE/AWSECommerceService.wsdl',
+				'UK' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/UK/AWSECommerceService.wsdl'
 		);
 		$this->wsdlurl = $this->wsdlurl_table['US'];
 
