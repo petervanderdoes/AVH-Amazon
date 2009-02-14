@@ -379,9 +379,9 @@ class AVHAmazonCore {
 	 * @param class $proxy
 	 * @return array Items
 	 */
-	function getListResults ( $ListID, &$proxy ) {
+	function getListResults ( $ListID, &$proxy='' ) {
 
-		$list = $proxy->ListLookup ( $this->getSoapListLookupParams ( $ListID ) );
+		$list = $this->restCall($this->getRestListLookupParams ( $ListID ));
 
 		if ( 1 == $list['Lists']['List']['TotalItems'] ) {
 			$list['Lists']['List']['ListItem'] = array (
@@ -390,7 +390,7 @@ class AVHAmazonCore {
 			if ( $list['Lists']['List']['TotalPages'] > 1 ) { // If the list contains over 10 items we need to process the other pages.
 				$page = 2;
 				while ( $page <= $list['Lists']['List']['TotalPages'] ) {
-					$result = $proxy->ListLookup ( $this->getSoapListLookupParams ( $ListID, null, $page ) );
+					$result = $this->restCall( $this->getRestListLookupParams ( $ListID, null, $page ) );
 					foreach ( $result['Lists']['List']['ListItem'] as $key => $value ) {
 						$newkey = 10 * ($page - 1) + $key;
 						$list['Lists']['List']['ListItem'][$newkey] = $result['Lists']['List']['ListItem'][$key]; //Add the items from the remaining pages to the lists.
@@ -415,6 +415,46 @@ class AVHAmazonCore {
 		return (( array ) array_rand ( $list, $nr_of_items ));
 	}
 
+	/**
+	 * Actual Rest Call
+	 *
+	 * @param array $query_array
+	 * @return array
+	 */
+	function restCall($query_array) {
+		$xml_array=array();
+
+		$querystring= $this->http_parse_query($query_array);
+		$response = wp_remote_request ('http://ecs.amazonaws.com/onca/xml?'.$querystring);
+		$xml_array = $this->xml2array($response['body']);
+
+		return ($xml_array['ListLookupResponse']);
+	}
+	/**
+	 * Rest Request - ListLookup
+	 *
+	 * @param string $ListID
+	 * @param string $WhatList
+	 * @param integer $page
+	 * @return string
+	 */
+	function getRestListLookupParams ( $ListID, $WhatList = null, $page = null ) {
+
+		$WhatList = (is_null ( $WhatList ) ? 'WishList' : $WhatList);
+		$page = (is_null ( $page ) ? 1 : $page);
+
+		$listLookup = array ('Service' => 'AWSECommerceService',
+				'Operation' => 'ListLookup',
+				'AWSAccessKeyId' => $this->accesskeyid,
+				'ListId' => $ListID,
+				'ListType' => $WhatList,
+				'ResponseGroup' => 'ListFull',
+				'IsOmitPurchasedItems' => '1',
+				'ProductPage' => ( string ) $page,
+				'Sort' => 'LastUpdated' );
+
+		return $listLookup;
+	}
 	/**
 	 * SOAP Find the List parameters
 	 *
@@ -463,6 +503,166 @@ class AVHAmazonCore {
 		return $itemLookUp;
 	}
 
+	/**
+	 * Convert an array into a query string
+	 *
+	 * @param array $array
+	 * @param string $convention
+	 * @return string
+	 */
+	function http_parse_query ( $array = NULL, $convention = '%s' ) {
+
+		if ( count ( $array ) == 0 ) {
+			return '';
+		} else {
+			if ( function_exists ( 'http_build_query' ) ) {
+				$query = http_build_query ( $array );
+			} else {
+				$query = '';
+				foreach ( $array as $key => $value ) {
+					if ( is_array ( $value ) ) {
+						$new_convention = sprintf ( $convention, $key ) . '[%s]';
+						$query .= http_parse_query ( $value, $new_convention );
+					} else {
+						$key = urlencode ( $key );
+						$value = urlencode ( $value );
+						$query .= sprintf ( $convention, $key ) . "=$value&";
+					}
+				}
+			}
+			return $query;
+		}
+	}
+
+function xml2array($contents='', $get_attributes = 1, $priority = 'tag')
+{
+    if (!function_exists('xml_parser_create'))
+    {
+        return array ();
+    }
+    $parser = xml_parser_create('');
+
+    xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, "UTF-8");
+    xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+    xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
+    xml_parse_into_struct($parser, trim($contents), $xml_values);
+    xml_parser_free($parser);
+    if (!$xml_values)
+        return; //Hmm...
+    $xml_array = array ();
+    $parents = array ();
+    $opened_tags = array ();
+    $arr = array ();
+    $current = & $xml_array;
+    $repeated_tag_index = array ();
+    foreach ($xml_values as $data)
+    {
+        unset ($attributes, $value);
+        extract($data);
+        $result = array ();
+        $attributes_data = array ();
+        if (isset ($value))
+        {
+            if ($priority == 'tag')
+                $result = $value;
+            else
+                $result['value'] = $value;
+        }
+        if (isset ($attributes) and $get_attributes)
+        {
+            foreach ($attributes as $attr => $val)
+            {
+                if ($priority == 'tag')
+                    $attributes_data[$attr] = $val;
+                else
+                    $result['attr'][$attr] = $val; //Set all the attributes in a array called 'attr'
+            }
+        }
+        if ($type == "open")
+        {
+            $parent[$level -1] = & $current;
+            if (!is_array($current) or (!in_array($tag, array_keys($current))))
+            {
+                $current[$tag] = $result;
+                if ($attributes_data)
+                    $current[$tag . '_attr'] = $attributes_data;
+                $repeated_tag_index[$tag . '_' . $level] = 1;
+                $current = & $current[$tag];
+            }
+            else
+            {
+                if (isset ($current[$tag][0]))
+                {
+                    $current[$tag][$repeated_tag_index[$tag . '_' . $level]] = $result;
+                    $repeated_tag_index[$tag . '_' . $level]++;
+                }
+                else
+                {
+                    $current[$tag] = array (
+                        $current[$tag],
+                        $result
+                    );
+                    $repeated_tag_index[$tag . '_' . $level] = 2;
+                    if (isset ($current[$tag . '_attr']))
+                    {
+                        $current[$tag]['0_attr'] = $current[$tag . '_attr'];
+                        unset ($current[$tag . '_attr']);
+                    }
+                }
+                $last_item_index = $repeated_tag_index[$tag . '_' . $level] - 1;
+                $current = & $current[$tag][$last_item_index];
+            }
+        }
+        elseif ($type == "complete")
+        {
+            if (!isset ($current[$tag]))
+            {
+                $current[$tag] = $result;
+                $repeated_tag_index[$tag . '_' . $level] = 1;
+                if ($priority == 'tag' and $attributes_data)
+                    $current[$tag . '_attr'] = $attributes_data;
+            }
+            else
+            {
+                if (isset ($current[$tag][0]) and is_array($current[$tag]))
+                {
+                    $current[$tag][$repeated_tag_index[$tag . '_' . $level]] = $result;
+                    if ($priority == 'tag' and $get_attributes and $attributes_data)
+                    {
+                        $current[$tag][$repeated_tag_index[$tag . '_' . $level] . '_attr'] = $attributes_data;
+                    }
+                    $repeated_tag_index[$tag . '_' . $level]++;
+                }
+                else
+                {
+                    $current[$tag] = array (
+                        $current[$tag],
+                        $result
+                    );
+                    $repeated_tag_index[$tag . '_' . $level] = 1;
+                    if ($priority == 'tag' and $get_attributes)
+                    {
+                        if (isset ($current[$tag . '_attr']))
+                        {
+                            $current[$tag]['0_attr'] = $current[$tag . '_attr'];
+                            unset ($current[$tag . '_attr']);
+                        }
+                        if ($attributes_data)
+                        {
+                            $current[$tag][$repeated_tag_index[$tag . '_' . $level] . '_attr'] = $attributes_data;
+                        }
+                    }
+                    $repeated_tag_index[$tag . '_' . $level]++; //0 and 1 index is already taken
+                }
+            }
+        }
+        elseif ($type == 'close')
+        {
+            $current = & $parent[$level -1];
+        }
+    }
+    return ($xml_array);
+}
 	/**
 	 * Get the image URL for an item
 	 *
