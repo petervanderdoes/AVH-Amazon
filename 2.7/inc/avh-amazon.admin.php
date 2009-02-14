@@ -395,23 +395,6 @@ jQuery(document).ready(function() {
 			$this->resetToDefaultOptions();
 		}
 
-		$this->wsdlcachefolder = $this->info['install_dir'] . '/cache/';
-		if ( ! is_dir( $this->wsdlcachefolder ) ) {
-			$this->message = "Can't find the cache folder. This plugin will not work unless " . $this->wsdlcachefolder . "is present and writeable";
-			$this->displayMessage();
-			$this->removePlugin( trim( $_GET['plugin'] ) );
-
-		} else {
-			$cache = new nusoap_wsdlcache( $this->wsdlcachefolder, 0 ); // Cache it indefinitely
-			$this->wsdl = $cache->get( $this->wsdlurl );
-			if ( is_null( $this->wsdl ) ) {
-				$this->wsdl = new wsdl( $this->wsdlurl );
-				$cache->put( $this->wsdl );
-			} else {
-				$this->wsdl->debug_str = '';
-				$this->wsdl->debug( 'Retrieved from cache' );
-			}
-		}
 	}
 
 	############## WP Options ##############

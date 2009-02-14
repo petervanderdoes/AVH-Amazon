@@ -272,16 +272,10 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		if ( 'avh-amazon-20' == $associatedid ) {
 			$associatedid = $this->getAssociateId ( $locale );
 		}
-		$time_start = microtime(true);
 
 		$list_result = $this->getListResults ( $ListID );
 		$total_items = count ( $list_result['Lists']['List']['ListItem'] );
-$time_end = microtime(true);
-$time = $time_end - $time_start;
 
-echo "$time seconds\n";
-
-		die;
 		echo $before_widget;
 		echo '<!-- AVH Amazon version ' . $this->version . ' | http://blog.avirtualhome.com/wordpress-plugins/ -->';
 		echo '<div id="avhamazon-widget">';
@@ -292,7 +286,7 @@ echo "$time seconds\n";
 
 		foreach ( $Item_keys as $value ) {
 			$Item = $list_result['Lists']['List']['ListItem'][$value];
-			$item_result = $proxy->ItemLookup ( $this->getSoapItemLookupParams ( $Item['Item']['ASIN'], $associatedid ) );
+			$item_result = $this->restCall( $this->getRestItemLookupParams ( $Item['Item']['ASIN'], $associatedid ) );
 
 			$imgsrc = $this->getImageUrl ( $imagesize, $item_result );
 

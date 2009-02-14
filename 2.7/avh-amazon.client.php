@@ -1,10 +1,6 @@
 <?php
-// SOAP Class
-require (dirname ( __FILE__ ) . '/../inc/nusoap/nusoap.php');
-require (dirname ( __FILE__ ) . '/../inc/nusoap/class.wsdlcache.php');
 
 class AVHAmazonCore {
-
 	/**
 	 * Amazon WSDl URL Array
 	 *
@@ -34,6 +30,30 @@ class AVHAmazonCore {
 	var $wsdlcachefolder;
 
 	/**
+	 * Amazon endpoint URL Array
+	 *
+	 * @var array
+	 * @since 2.4
+	 */
+	var $amazon_endpoint_table;
+
+	/**
+	 * Amazon endpoint URL
+	 *
+	 * @var string
+	 * @since 2.4
+	 */
+	var $amazon_endpoint;
+
+	/**
+	 * Amazon Service Name
+	 *
+	 * @var string
+	 * @since 2.4
+	 */
+	var $amazon_servicename;
+
+	/**
 	 * Amazon Webservices Accesskey ID
 	 *
 	 * @var string
@@ -45,6 +65,7 @@ class AVHAmazonCore {
 	 *
 	 */
 	var $locale_table;
+
 	/**
 	 * The Associated ID table
 	 */
@@ -109,15 +130,26 @@ class AVHAmazonCore {
 	 */
 	function __construct () {
 
-		$this->version = "2.3";
+		$this->version = "2.4-rc";
 		$this->wsdlurl_table = array (
-				'US' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/AWSECommerceService.wsdl',
-				'CA' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/CA/AWSECommerceService.wsdl',
-				'DE' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/DE/AWSECommerceService.wsdl',
-				'UK' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/UK/AWSECommerceService.wsdl'
+			'US' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/AWSECommerceService.wsdl',
+			'CA' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/CA/AWSECommerceService.wsdl',
+			'DE' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/DE/AWSECommerceService.wsdl',
+			'UK' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/UK/AWSECommerceService.wsdl'
 		);
 		$this->wsdlurl = $this->wsdlurl_table['US'];
 
+		// Set class property for the WSDl cache folder
+		$this->wsdlcachefolder = str_replace ( '/2.7', '', $this->info['install_dir'] ) . '/cache/';
+
+		$this->amazon_endpoint_Table = array (
+				'US' => 'http://ecs.amazonaws.com/onca/xml',
+				'CA' => 'http://ecs.amazonaws.ca/onca/xml',
+				'DE' => 'http://ecs.amazonaws.de/onca/xml',
+				'UK' => 'http://ecs.amazonaws.co.uk/onca/xml'
+		);
+		$this->amazon_endpoint = $this->amazon_endpoint_table['US'];
+		$this->amazon_servicename = 'AWSECommerceService';
 		$this->accesskeyid = '1MPCC36EZ827YJQ02AG2';
 
 		$this->locale_table = array (
@@ -197,9 +229,6 @@ class AVHAmazonCore {
 				'install_dir' => $info['install_dir'],
 				'graphics_url' => $info['install_url'] . '/images',
 				'wordpress_version' => $this->getWordpressVersion() );
-
-		// Set class property for the WSDl cache folder
-		$this->wsdlcachefolder = str_replace ( '/2.5', '', $this->info['install_dir'] ) . '/cache/';
 
 		// Set class property to use WP Object Cache? Or not ?
 		global $wp_object_cache;
@@ -376,10 +405,9 @@ class AVHAmazonCore {
 	 * Get all the items from the list
 	 *
 	 * @param string $ListID The Wish List ID of the list to get
-	 * @param class $proxy
 	 * @return array Items
 	 */
-	function getListResults ( $ListID, &$proxy='' ) {
+	function getListResults ( $ListID ) {
 
 		$list = $this->restCall($this->getRestListLookupParams ( $ListID ));
 
@@ -420,30 +448,46 @@ class AVHAmazonCore {
 	 *
 	 * @param array $query_array
 	 * @return array
+	 * @since 2.4
 	 */
 	function restCall($query_array) {
 		$xml_array=array();
 
-		$querystring= $this->http_parse_query($query_array);
+		$querystring= $this->BuildQuery($query_array);
 		$response = wp_remote_request ('http://ecs.amazonaws.com/onca/xml?'.$querystring);
 		$xml_array = $this->xml2array($response['body']);
 
-		return ($xml_array['ListLookupResponse']);
+		switch ($query_array['Operation']) {
+			case 'ListLookup':
+				$return_array=$xml_array['ListLookupResponse'];
+				break;
+			case 'ItemLookup':
+				$return_array=$xml_array['ItemLookupResponse'];
+				break;
+			default:
+				print_r('Unknown Operation in rest Call');
+				die;
+		}
+
+		return ($return_array);
 	}
+
 	/**
 	 * Rest Request - ListLookup
 	 *
 	 * @param string $ListID
 	 * @param string $WhatList
 	 * @param integer $page
-	 * @return string
+	 * @return array
+	 * @since 2.4
 	 */
 	function getRestListLookupParams ( $ListID, $WhatList = null, $page = null ) {
 
 		$WhatList = (is_null ( $WhatList ) ? 'WishList' : $WhatList);
 		$page = (is_null ( $page ) ? 1 : $page);
 
-		$listLookup = array ('Service' => 'AWSECommerceService',
+		$listLookup = array (
+				'Service' => $this->amazon_servicename,
 				'Operation' => 'ListLookup',
 				'AWSAccessKeyId' => $this->accesskeyid,
 				'ListId' => $ListID,
@@ -455,51 +499,27 @@ class AVHAmazonCore {
 
 		return $listLookup;
 	}
-	/**
-	 * SOAP Find the List parameters
-	 *
-	 * @param string $ListID
-	 * @param string $WhatList
-	 * @return array
-	 */
-	function getSoapListLookupParams ( $ListID, $WhatList = null, $page = null ) {
-
-		$WhatList = (is_null ( $WhatList ) ? 'WishList' : $WhatList);
-		$page = (is_null ( $page ) ? 1 : $page);
-
-		$listLookupRequest[] = array (
-				'ListId' => $ListID,
-				'ListType' => $WhatList,
-				'ResponseGroup' => 'ListFull',
-				'IsOmitPurchasedItems' => '1',
-				'ProductPage' => ( string ) $page,
-				'Sort' => 'LastUpdated' );
-
-		$listLookup = array (
-				'AWSAccessKeyId' => $this->accesskeyid,
-				'Request' => $listLookupRequest );
-		return $listLookup;
-	}
 
 	/**
-	 * SOAP Get Item Details
+	 * Rest Request - ItemLookup
 	 *
 	 * @param string $Itemid
 	 * @param string $associatedid
 	 * @return array
+	 * @since 2.4
 	 */
-	function getSoapItemLookupParams ( $Itemid, $associatedid ) {
+	function getRestItemLookupParams ( $Itemid, $associatedid ) {
 
-		$itemLookupRequest[] = array (
+		$itemLookUp = array (
+				'Service' => $this->amazon_servicename,
+				'Operation' => 'ItemLookup',
+				'AWSAccessKeyId' => $this->accesskeyid,
 				'ItemId' => $Itemid,
 				'IdType' => 'ASIN',
 				'Condition' => 'All',
-				'ResponseGroup' => 'Medium' );
-
-		$itemLookUp = array (
-				'AWSAccessKeyId' => $this->accesskeyid,
-				'Request' => $itemLookupRequest,
+				'ResponseGroup' => 'Medium',
 				'AssociateTag' => $associatedid );
+
 		return $itemLookUp;
 	}
 
@@ -509,8 +529,9 @@ class AVHAmazonCore {
 	 * @param array $array
 	 * @param string $convention
 	 * @return string
+	 * @since 2.4
 	 */
-	function http_parse_query ( $array = NULL, $convention = '%s' ) {
+	function BuildQuery ( $array = NULL, $convention = '%s' ) {
 
 		if ( count ( $array ) == 0 ) {
 			return '';
@@ -522,7 +543,7 @@ class AVHAmazonCore {
 				foreach ( $array as $key => $value ) {
 					if ( is_array ( $value ) ) {
 						$new_convention = sprintf ( $convention, $key ) . '[%s]';
-						$query .= http_parse_query ( $value, $new_convention );
+						$query .= BuildQuery ( $value, $new_convention );
 					} else {
 						$key = urlencode ( $key );
 						$value = urlencode ( $value );
@@ -534,135 +555,140 @@ class AVHAmazonCore {
 		}
 	}
 
-function xml2array($contents='', $get_attributes = 1, $priority = 'tag')
-{
-    if (!function_exists('xml_parser_create'))
-    {
-        return array ();
-    }
-    $parser = xml_parser_create('');
+	/**
+	 * Convert XML into an array
+	 *
+	 * @param string $contents
+	 * @param integer $get_attributes
+	 * @param string $priority
+	 * @return array
+	 * @since 2.4
+	 * @see http://www.bin-co.com/php/scripts/xml2array/
+	 */
+	function xml2array ( $contents = '', $get_attributes = 1, $priority = 'tag' ) {
 
-    xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, "UTF-8");
-    xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
-    xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
-    xml_parse_into_struct($parser, trim($contents), $xml_values);
-    xml_parser_free($parser);
-    if (!$xml_values)
-        return; //Hmm...
-    $xml_array = array ();
-    $parents = array ();
-    $opened_tags = array ();
-    $arr = array ();
-    $current = & $xml_array;
-    $repeated_tag_index = array ();
-    foreach ($xml_values as $data)
-    {
-        unset ($attributes, $value);
-        extract($data);
-        $result = array ();
-        $attributes_data = array ();
-        if (isset ($value))
-        {
-            if ($priority == 'tag')
-                $result = $value;
-            else
-                $result['value'] = $value;
-        }
-        if (isset ($attributes) and $get_attributes)
-        {
-            foreach ($attributes as $attr => $val)
-            {
-                if ($priority == 'tag')
-                    $attributes_data[$attr] = $val;
-                else
-                    $result['attr'][$attr] = $val; //Set all the attributes in a array called 'attr'
-            }
-        }
-        if ($type == "open")
-        {
-            $parent[$level -1] = & $current;
-            if (!is_array($current) or (!in_array($tag, array_keys($current))))
-            {
-                $current[$tag] = $result;
-                if ($attributes_data)
-                    $current[$tag . '_attr'] = $attributes_data;
-                $repeated_tag_index[$tag . '_' . $level] = 1;
-                $current = & $current[$tag];
-            }
-            else
-            {
-                if (isset ($current[$tag][0]))
-                {
-                    $current[$tag][$repeated_tag_index[$tag . '_' . $level]] = $result;
-                    $repeated_tag_index[$tag . '_' . $level]++;
-                }
-                else
-                {
-                    $current[$tag] = array (
-                        $current[$tag],
-                        $result
-                    );
-                    $repeated_tag_index[$tag . '_' . $level] = 2;
-                    if (isset ($current[$tag . '_attr']))
-                    {
-                        $current[$tag]['0_attr'] = $current[$tag . '_attr'];
-                        unset ($current[$tag . '_attr']);
-                    }
-                }
-                $last_item_index = $repeated_tag_index[$tag . '_' . $level] - 1;
-                $current = & $current[$tag][$last_item_index];
-            }
-        }
-        elseif ($type == "complete")
-        {
-            if (!isset ($current[$tag]))
-            {
-                $current[$tag] = $result;
-                $repeated_tag_index[$tag . '_' . $level] = 1;
-                if ($priority == 'tag' and $attributes_data)
-                    $current[$tag . '_attr'] = $attributes_data;
-            }
-            else
-            {
-                if (isset ($current[$tag][0]) and is_array($current[$tag]))
-                {
-                    $current[$tag][$repeated_tag_index[$tag . '_' . $level]] = $result;
-                    if ($priority == 'tag' and $get_attributes and $attributes_data)
-                    {
-                        $current[$tag][$repeated_tag_index[$tag . '_' . $level] . '_attr'] = $attributes_data;
-                    }
-                    $repeated_tag_index[$tag . '_' . $level]++;
-                }
-                else
-                {
-                    $current[$tag] = array (
-                        $current[$tag],
-                        $result
-                    );
-                    $repeated_tag_index[$tag . '_' . $level] = 1;
-                    if ($priority == 'tag' and $get_attributes)
-                    {
-                        if (isset ($current[$tag . '_attr']))
-                        {
-                            $current[$tag]['0_attr'] = $current[$tag . '_attr'];
-                            unset ($current[$tag . '_attr']);
-                        }
-                        if ($attributes_data)
-                        {
-                            $current[$tag][$repeated_tag_index[$tag . '_' . $level] . '_attr'] = $attributes_data;
-                        }
-                    }
-                    $repeated_tag_index[$tag . '_' . $level]++; //0 and 1 index is already taken
-                }
-            }
-        }
-        elseif ($type == 'close')
-        {
-            $current = & $parent[$level -1];
-        }
-    }
-    return ($xml_array);
-}
+		$xml_values = '';
+		$return_array = array ();
+		$tag='';
+		$type='';
+		$level=0;
+		$attributes=array();
+		if ( function_exists ( 'xml_parser_create' ) ) {
+			$parser = xml_parser_create ( 'UTF-8' );
+
+			xml_parser_set_option ( $parser, XML_OPTION_TARGET_ENCODING, "UTF-8" );
+			xml_parser_set_option ( $parser, XML_OPTION_CASE_FOLDING, 0 );
+			xml_parser_set_option ( $parser, XML_OPTION_SKIP_WHITE, 1 );
+			xml_parse_into_struct ( $parser, trim ( $contents ), $xml_values );
+			xml_parser_free ( $parser );
+
+			//Initializations
+			$xml_array = array ();
+			$parent = array ();
+
+			$current = & $xml_array; // Reference
+
+			// Go through the tags.
+			$repeated_tag_index = array ();
+
+			// Multiple tags with same name will be turned into an array
+			foreach ( $xml_values as $data ) {
+				unset ( $attributes, $value ); //Remove existing values, or there will be trouble
+
+				// This command will extract these variables into the foreach scope
+				// tag(string), type(string), level(int), attributes(array).
+				extract ( $data ); //We could use the array by itself, but this cooler.
+
+				$result = array ();
+				$attributes_data = array ();
+
+				if ( isset ( $value ) ) {
+					if ( $priority == 'tag' ) {
+						$result = $value;
+					} else {
+						$result['value'] = $value; //Put the value in an associate array if we are in the 'Attribute' mode
+					}
+				}
+
+				// Set the attributes too
+				if ( isset ( $attributes ) and $get_attributes ) {
+					foreach ( $attributes as $attr => $val ) {
+						if ( $priority == 'tag' )
+							$attributes_data[$attr] = $val;
+						else
+							$result['attr'][$attr] = $val; //Set all the attributes in a array called 'attr'
+					}
+				}
+
+				// See tag status and do what's needed
+				if ( $type == "open" ) { // The starting of the tag '<tag>'
+					$parent[$level - 1] = & $current;
+
+					if ( ! is_array ( $current ) or (! in_array ( $tag, array_keys ( $current ) )) ) { //Insert New tag
+						$current[$tag] = $result;
+						if ( $attributes_data )
+							$current[$tag . '_attr'] = $attributes_data;
+						$repeated_tag_index[$tag . '_' . $level] = 1;
+
+						$current = & $current[$tag];
+
+					} else { // There was another element with the same tag name
+
+						if ( isset ( $current[$tag][0] ) ) { //If there is a 0th element it is already an array
+							$current[$tag][$repeated_tag_index[$tag . '_' . $level]] = $result;
+							$repeated_tag_index[$tag . '_' . $level] ++;
+						} else { //This section will make the value an array if multiple tags with the same name appear together
+							$current[$tag] = array ( $current[$tag], $result );
+							//This will combine the existing item and the new item together to make an array
+							$repeated_tag_index[$tag . '_' . $level] = 2;
+
+							if ( isset ( $current[$tag . '_attr'] ) ) { // The attribute of the last(0th) tag must be moved as well
+								$current[$tag]['0_attr'] = $current[$tag . '_attr'];
+								unset ( $current[$tag . '_attr'] );
+							}
+						}
+						$last_item_index = $repeated_tag_index[$tag . '_' . $level] - 1;
+						$current = & $current[$tag][$last_item_index];
+					}
+				} elseif ( $type == "complete" ) { //Tags that ends in 1 line '<tag />'
+					//See if the key is already taken.
+					if ( ! isset ( $current[$tag] ) ) { // New key
+						$current[$tag] = $result;
+						$repeated_tag_index[$tag . '_' . $level] = 1;
+						if ( $priority == 'tag' and $attributes_data )
+							$current[$tag . '_attr'] = $attributes_data;
+					} else { //If taken, put all things inside a list(array)
+						if ( isset ( $current[$tag][0] ) and is_array ( $current[$tag] ) ) {
+							//This will combine the existing item and the new item together to make an array
+							$current[$tag][$repeated_tag_index[$tag . '_' . $level]] = $result;
+							if ( $priority == 'tag' and $get_attributes and $attributes_data ) {
+								$current[$tag][$repeated_tag_index[$tag . '_' . $level] . '_attr'] = $attributes_data;
+							}
+							$repeated_tag_index[$tag . '_' . $level] ++;
+						} else { //If it is not an array...
+							$current[$tag] = array ( $current[$tag], $result ); //...Make it an array using using the existing value and the new value
+							$repeated_tag_index[$tag . '_' . $level] = 1;
+							if ( $priority == 'tag' and $get_attributes ) {
+								if ( isset ( $current[$tag . '_attr'] ) ) { //The attribute of the last(0th) tag must be moved as well
+									$current[$tag]['0_attr'] = $current[$tag . '_attr'];
+									unset ( $current[$tag . '_attr'] );
+								}
+								if ( $attributes_data ) {
+									$current[$tag][$repeated_tag_index[$tag . '_' . $level] . '_attr'] = $attributes_data;
+								}
+							}
+							$repeated_tag_index[$tag . '_' . $level] ++; //0 and 1 index is already taken
+						}
+					}
+				} elseif ( $type == 'close' ) { //End of tag '</tag>'
+					$current = & $parent[$level - 1];
+				}
+			}
+			$return_array = $xml_array;
+		}
+		return ($return_array);
+	}
+
 	/**
 	 * Get the image URL for an item
 	 *
