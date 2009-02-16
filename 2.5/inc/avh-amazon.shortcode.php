@@ -86,7 +86,7 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 		 * Create SOAP Client
 		 */
 		$client = new nusoap_client ( $this->wsdl, true );
-		$client->soap_defencoding = 'UTF-8';
+		$client->decode_utf8 = FALSE;
 		$proxy = $client->getProxy ();
 
 		if ( $attrs['wishlist'] ) {
@@ -317,7 +317,7 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 		 * Create SOAP Client
 		 */
 		$client = new nusoap_client ( $this->wsdl, true );
-		$client->soap_defencoding = 'UTF-8';
+		$client->decode_utf8 = FALSE;
 		$proxy = $client->getProxy ();
 
 		$list_result = $this->getListResults ( $wishlist, $proxy );
@@ -368,7 +368,7 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 		 * Create SOAP Client
 		 */
 		$client = new nusoap_client ( $wsdlurl, true );
-		$client->soap_defencoding = 'UTF-8';
+		$client->decode_utf8 = FALSE;
 		$proxy = $client->getProxy ();
 		$item_result = $proxy->ItemLookup ( $this->getSoapItemLookupParams ( $asin, '' ) );
 		if ( $item_result['Items']['Request']['Errors'] ) {

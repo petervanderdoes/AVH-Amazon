@@ -290,7 +290,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		 * Create SOAP Client
 		 */
 		$client = new nusoap_client ( $this->wsdl, true );
-		$client->soap_defencoding = 'UTF-8';
+		$client->decode_utf8 = FALSE;
 		$proxy = $client->getProxy ();
 
 		$list_result = $this->getListResults ( $ListID, $proxy );
