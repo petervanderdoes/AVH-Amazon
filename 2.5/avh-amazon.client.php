@@ -142,7 +142,7 @@ class AVHAmazonCore {
 		// Set class property for the WSDl cache folder
 		$this->wsdlcachefolder = str_replace ( '/2.5', '', $this->info['install_dir'] ) . '/cache/';
 
-		$this->amazon_endpoint_Table = array (
+		$this->amazon_endpoint_table = array (
 				'US' => 'http://ecs.amazonaws.com/onca/xml',
 				'CA' => 'http://ecs.amazonaws.ca/onca/xml',
 				'DE' => 'http://ecs.amazonaws.de/onca/xml',
@@ -455,7 +455,7 @@ class AVHAmazonCore {
 		$xml_array = array ();
 
 		$querystring = $this->BuildQuery ( $query_array );
-		$url = $this->amazon_endpoint.'?' . $querystring;
+		$url = $this->amazon_endpoint . '?' . $querystring;
 
 		// Starting with WordPress 2.7 we'll use the HTPP class.
 		if ( function_exists ( wp_remote_request ) ) {

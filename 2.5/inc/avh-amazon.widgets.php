@@ -272,6 +272,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		if ( 'avh-amazon-20' == $associatedid ) {
 			$associatedid = $this->getAssociateId ( $locale );
 		}
+		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
 
 		$list_result = $this->getListResults ( $ListID );
 		$total_items = count ( $list_result['Lists']['List']['ListItem'] );
