@@ -69,28 +69,12 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 		$associatedid = $this->getAssociateId ( $locale );
 
 		/**
-		 * Set up WSDL Cache
+		 * Set up Endpoint
 		 */
-		$this->wsdlurl = $this->wsdlurl_table[$locale];
-		$cache = new wsdlcache ( $this->wsdlcachefolder, 0 ); // Cache it indefinitely
-		$this->wsdl = $cache->get ( $this->wsdlurl );
-		if ( is_null ( $this->wsdl ) ) {
-			$this->wsdl = new wsdl ( $this->wsdlurl );
-			$cache->put ( $this->wsdl );
-		} else {
-			$this->wsdl->debug_str = '';
-			$this->wsdl->debug ( 'Retrieved from cache' );
-		}
-
-		/**
-		 * Create SOAP Client
-		 */
-		$client = new nusoap_client ( $this->wsdl, true );
-		$client->decode_utf8 = FALSE;
-		$proxy = $client->getProxy ();
+		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
 
 		if ( $attrs['wishlist'] ) {
-			$list_result = $this->getListResults ( $attrs['wishlist'], $proxy );
+			$list_result = $this->getListResults ( $attrs['wishlist'] );
 			if ( $list_result['Lists']['Request']['Errors'] ) {
 				$error = 'WishList ' . $attrs['wishlist'] . ' doesn\'t exists';
 				$attrs['asin'] = null;
@@ -109,13 +93,13 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 		if ( 'all' == strtolower($attrs['asin'])) {
 			foreach ($list_result['Lists']['List']['ListItem'] as $key => $value) {
 				$attrs['asin'] = $value['Item']['ASIN'];
-				list ( $oneresult, $error ) = $this->shortcodeAsin ( $proxy, $attrs, $content, $associatedid );
+				list ( $oneresult, $error ) = $this->shortcodeAsin ( $attrs, $content, $associatedid );
 				$result .= $oneresult.'<br />';
 			}
 			$attrs['asin'] = null;
 		}
 		if ( $attrs['asin'] ) {
-			list ( $result, $error ) = $this->shortcodeAsin ( $proxy, $attrs, $content, $associatedid );
+			list ( $result, $error ) = $this->shortcodeAsin ( $attrs, $content, $associatedid );
 		}
 
 		if ( $error ) {
@@ -129,16 +113,15 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 	/**
 	 * Create the output for the shortcode
 	 *
-	 * @param array $proxy
 	 * @param array $attrs
 	 * @param string $content
 	 * @param string $associatedid
 	 * @return array $return and $error, if and error occurs the error variable is used and return will be empty.
 	 */
-	function shortcodeAsin ( & $proxy, $attrs, $content, $associatedid ) {
+	function shortcodeAsin ( $attrs, $content, $associatedid ) {
 
 		$error = '';
-		$item_result = $proxy->ItemLookup ( $this->getSoapItemLookupParams ( $attrs['asin'], $associatedid ) );
+		$item_result = $this->handleRESTcall ( $this->getRestItemLookupParams ( $attrs['asin'], $associatedid ) );
 		if ( $item_result['Items']['Request']['Errors'] ) {
 			$return = '';
 			$error = 'Item with ASIN ' . $attrs['asin'] . ' doesn\'t exist';
@@ -300,34 +283,18 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 		$locale = $values[1];
 
 		/**
-		 * Set up WSDL Cache
+		 * Set up endpoint
 		 */
-		$this->wsdlurl = $this->wsdlurl_table[$locale];
-		$cache = new wsdlcache ( $this->wsdlcachefolder, 0 ); // Cache it indefinitely
-		$this->wsdl = $cache->get ( $this->wsdlurl );
-		if ( is_null ( $this->wsdl ) ) {
-			$this->wsdl = new wsdl ( $this->wsdlurl );
-			$cache->put ( $this->wsdl );
-		} else {
-			$this->wsdl->debug_str = '';
-			$this->wsdl->debug ( 'Retrieved from cache' );
-		}
+		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
 
-		/**
-		 * Create SOAP Client
-		 */
-		$client = new nusoap_client ( $this->wsdl, true );
-		$client->decode_utf8 = FALSE;
-		$proxy = $client->getProxy ();
-
-		$list_result = $this->getListResults ( $wishlist, $proxy );
+		$list_result = $this->getListResults ( $wishlist );
 		$total_items = count ( $list_result['Lists']['List']['ListItem'] );
 		if ( $total_items > 0 ) {
 			$this->metaboxTabOutputHeader ();
 			$listitem = $list_result['Lists']['List']['ListItem'];
 			foreach ( $listitem as $key => $value ) {
 				$Item = $value;
-				$item_result = $proxy->ItemLookup ( $this->getSoapItemLookupParams ( $Item['Item']['ASIN'], '' ) );
+				$item_result = $this->handleRESTcall ( $this->getRestItemLookupParams ( $Item['Item']['ASIN'], '' ) );
 				$this->metaboxTabOutputItem ( $item_result['Items']['Item']['ItemAttributes']['Title'], $Item['Item']['ASIN'], 'avhamazon_scwishlist_asin-' . $key, 'avhamazon_scwishlist_asin', '', ('0' == $key) ? TRUE : FALSE );
 			}
 			// Display the last row as a randomizing option
@@ -348,29 +315,14 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 
 		$asin = $values[0];
 		$locale = $values[1];
-		$wsdlurl = $this->wsdlurl_table[$locale];
 
 		/**
-		 * Set up WSDL Cache
+		 * Set up endpoint
 		 */
-		$this->wsdlurl = $this->wsdlurl_table[$locale];
-		$cache = new wsdlcache ( $this->wsdlcachefolder, 0 ); // Cache it indefinitely
-		$this->wsdl = $cache->get ( $this->wsdlurl );
-		if ( is_null ( $this->wsdl ) ) {
-			$this->wsdl = new wsdl ( $this->wsdlurl );
-			$cache->put ( $this->wsdl );
-		} else {
-			$this->wsdl->debug_str = '';
-			$this->wsdl->debug ( 'Retrieved from cache' );
-		}
+		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
 
-		/**
-		 * Create SOAP Client
-		 */
-		$client = new nusoap_client ( $wsdlurl, true );
-		$client->decode_utf8 = FALSE;
-		$proxy = $client->getProxy ();
-		$item_result = $proxy->ItemLookup ( $this->getSoapItemLookupParams ( $asin, '' ) );
+
+		$item_result = $this->handleRESTcall ( $this->getRestItemLookupParams ( $asin, '' ) );
 		if ( $item_result['Items']['Request']['Errors'] ) {
 			echo '<strong>' . __ ( 'Can\'t find the given item', 'avhamazon' ) . '</strong>';
 		} else {

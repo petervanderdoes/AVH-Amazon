@@ -272,28 +272,8 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		if ( 'avh-amazon-20' == $associatedid ) {
 			$associatedid = $this->getAssociateId ( $locale );
 		}
-		/**
-		 * Set up WSDL Cache
-		 */
-		$this->wsdlurl = $this->wsdlurl_table[$locale];
-		$cache = new wsdlcache ( $this->wsdlcachefolder, 0 ); // Cache it indefinitely
-		$this->wsdl = $cache->get ( $this->wsdlurl );
-		if ( is_null ( $this->wsdl ) ) {
-			$this->wsdl = new wsdl ( $this->wsdlurl );
-			$cache->put ( $this->wsdl );
-		} else {
-			$this->wsdl->debug_str = '';
-			$this->wsdl->debug ( 'Retrieved from cache' );
-		}
 
-		/**
-		 * Create SOAP Client
-		 */
-		$client = new nusoap_client ( $this->wsdl, true );
-		$client->decode_utf8 = FALSE;
-		$proxy = $client->getProxy ();
-
-		$list_result = $this->getListResults ( $ListID, $proxy );
+		$list_result = $this->getListResults ( $ListID );
 		$total_items = count ( $list_result['Lists']['List']['ListItem'] );
 
 		echo $before_widget;
@@ -301,43 +281,29 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		echo '<div id="avhamazon-widget">';
 		echo $before_title . $title . $after_title;
 
-		// Check for a fault
-		if ( $proxy->fault ) {
-			echo 'Fault<br/><pre>';
-			print_r ( $list_result );
-			echo '</pre>';
-		} else {
-			// Check for errors
-			$err = $proxy->getError ();
-			if ( $err ) {
-				// Display the error
-				echo 'Error<br/><pre>' . $err . '</pre>';
-			} else {
-				// Display the result
-				$Item_keys = $this->getItemKeys ( $list_result['Lists']['List']['ListItem'], $nr_of_items );
+		// Display the result
+		$Item_keys = $this->getItemKeys ( $list_result['Lists']['List']['ListItem'], $nr_of_items );
 
-				foreach ( $Item_keys as $value ) {
-					$Item = $list_result['Lists']['List']['ListItem'][$value];
-					$item_result = $proxy->ItemLookup ( $this->getSoapItemLookupParams ( $Item['Item']['ASIN'], $associatedid ) );
+		foreach ( $Item_keys as $value ) {
+			$Item = $list_result['Lists']['List']['ListItem'][$value];
+			$item_result = $this->handleRESTcall( $this->getRestItemLookupParams ( $Item['Item']['ASIN'], $associatedid ) );
 
-					$imgsrc = $this->getImageUrl ( $imagesize, $item_result );
+			$imgsrc = $this->getImageUrl ( $imagesize, $item_result );
 
-					$pos = strpos ( $item_result['Items']['Item']['DetailPageURL'], $Item['Item']['ASIN'] );
-					$myurl = substr ( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen ( $Item['Item']['ASIN'] ) );
-					$myurl .= '/ref=wl_it_dp?ie=UTF8&colid=' . $ListID;
-					$myurl .= '&tag=' . $associatedid;
+			$pos = strpos ( $item_result['Items']['Item']['DetailPageURL'], $Item['Item']['ASIN'] );
+			$myurl = substr ( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen ( $Item['Item']['ASIN'] ) );
+			$myurl .= '/ref=wl_it_dp?ie=UTF8&colid=' . $ListID;
+			$myurl .= '&tag=' . $associatedid;
 
-					echo '<a title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" src="' . $imgsrc . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a><br/>';
-					echo '<div class="wishlistcaption">' . $Item['Item']['ItemAttributes']['Title'] . '</div>';
-					echo '<BR />';
-				}
-				if ( $show_footer ) {
-					$footer = str_replace ( '%nr_of_items%', $total_items, $footer_template );
-					$myurl = $list_result['Lists']['List']['ListURL'];
-					$myurl .= '?tag=' . $associatedid;
-					echo '<div class="footer"><a title="Show all on Wishlist" href="' . $myurl . '">' . $footer . '</a></div><br />';
-				}
-			}
+			echo '<a title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" src="' . $imgsrc . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a><br/>';
+			echo '<div class="wishlistcaption">' . $Item['Item']['ItemAttributes']['Title'] . '</div>';
+			echo '<BR />';
+		}
+		if ( $show_footer ) {
+			$footer = str_replace ( '%nr_of_items%', $total_items, $footer_template );
+			$myurl = $list_result['Lists']['List']['ListURL'];
+			$myurl .= '?tag=' . $associatedid;
+			echo '<div class="footer"><a title="Show all on Wishlist" href="' . $myurl . '">' . $footer . '</a></div><br />';
 		}
 		echo "</div>";
 		echo $after_widget;

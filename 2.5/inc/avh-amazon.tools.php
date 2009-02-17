@@ -49,7 +49,7 @@ function avh_tools_findID($email,$locale) {
 	 * Create SOAP Client
 	 */
 	$client = new nusoap_client( $wsdlurl, true );
-	$client->decode_utf8 = FALSE;
+	$client->soap_defencoding = 'UTF-8';
 	$result = array ();
 	$result = $client->call( 'ListSearch', array (avh_tools_getSoapListSearchParams( $email )) );
 	$Total = $result['Lists']['TotalResults'];
