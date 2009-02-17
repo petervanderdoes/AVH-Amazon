@@ -80,7 +80,9 @@ None
 
 == Arbitrary section ==
 * Version 2.4
-	* When used in conjuction with WordPress 2.7 speed is improved.
+	* Moved from SOAP to REST to improve speed.
+* Version 2.3.1
+	* Bugfix: Certain character were not displayed correctly (Characters with Umlauts for example)
 * Version 2.3
 	* RFC: When calling the widget directly the array parameter can hold the widget options.
 	* Updated WDSL
