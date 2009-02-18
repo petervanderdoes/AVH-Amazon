@@ -132,7 +132,8 @@ jQuery(document).ready(function() {
 		echo _e( 'AVH Amazon: Tools', 'avhamazon' );
 		echo '</h2>';
 		echo '<h3>Find Wish List ID</h3>';
-		echo '<form id="findid" action=' . $this->info['install_url'] . '/inc/avh-amazon.tools.php method="post" autocomplete="on"><input type="hidden" value="hiddenValue" name="Hidden" autocomplete="on"/>';
+		echo '<form id="findid" action=' . $this->info['install_url'] . '/inc/avh-amazon.tools.php method="post" autocomplete="on">';
+		echo '<input type="hidden" value="'.ABSPATH.'" name="abs" autocomplete="on"/>';
 		echo '<table class="form-table"><tbody><tr><td>';
 		echo '<p>Select the Amazon locale.</p>';
 		echo '<p><select id="locale" name="locale" />';
