@@ -46,19 +46,12 @@ class AVHAmazonCore {
 	var $amazon_endpoint;
 
 	/**
-	 * Amazon Service Name
+	 * Amazon Standard Request
 	 *
-	 * @var string
+	 * @var array
 	 * @since 2.4
 	 */
-	var $amazon_servicename;
-
-	/**
-	 * Amazon Webservices Accesskey ID
-	 *
-	 * @var string
-	 */
-	var $accesskeyid;
+	var $amazon_standard_request;
 
 	/**
 	 * The Locale Table
@@ -131,6 +124,11 @@ class AVHAmazonCore {
 	function __construct () {
 
 		$this->version = "2.4-rc";
+
+		/**
+		 * Amazon SOAP initialization (legacy)
+		 *
+		 */
 		$this->wsdlurl_table = array (
 			'US' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/AWSECommerceService.wsdl',
 			'CA' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/CA/AWSECommerceService.wsdl',
@@ -142,6 +140,10 @@ class AVHAmazonCore {
 		// Set class property for the WSDl cache folder
 		$this->wsdlcachefolder = str_replace ( '/2.5', '', $this->info['install_dir'] ) . '/cache/';
 
+		/**
+		 * Amazon RESTful initialization
+		 *
+		 */
 		$this->amazon_endpoint_table = array (
 				'US' => 'http://ecs.amazonaws.com/onca/xml',
 				'CA' => 'http://ecs.amazonaws.ca/onca/xml',
@@ -149,9 +151,14 @@ class AVHAmazonCore {
 				'UK' => 'http://ecs.amazonaws.co.uk/onca/xml'
 		);
 		$this->amazon_endpoint = $this->amazon_endpoint_table['US'];
-		$this->amazon_servicename = 'AWSECommerceService';
-		$this->accesskeyid = '1MPCC36EZ827YJQ02AG2';
+		$this->amazon_standard_request = array (
+				'Service' => 'AWSECommerceService',
+				'Version' => '2009-01-06',
+				'AWSAccessKeyId' => '1MPCC36EZ827YJQ02AG2');
 
+		/**
+		 * Amazon general options
+		 */
 		$this->locale_table = array (
 				'US' => 'Amazon.com',
 				'CA' => 'Amazon.ca',
@@ -500,9 +507,7 @@ class AVHAmazonCore {
 		$page = (is_null ( $page ) ? 1 : $page);
 
 		$listLookup = array (
-				'Service' => $this->amazon_servicename,
 				'Operation' => 'ListLookup',
-				'AWSAccessKeyId' => $this->accesskeyid,
 				'ListId' => $ListID,
 				'ListType' => $WhatList,
 				'ResponseGroup' => 'ListFull',
@@ -510,7 +515,9 @@ class AVHAmazonCore {
 				'ProductPage' => ( string ) $page,
 				'Sort' => 'LastUpdated' );
 
-		return $listLookup;
+		$request = array_merge($this->amazon_standard_request, $listLookup);
+
+		return $request;
 	}
 
 	/**
@@ -524,16 +531,16 @@ class AVHAmazonCore {
 	function getRestItemLookupParams ( $Itemid, $associatedid ) {
 
 		$itemLookUp = array (
-				'Service' => $this->amazon_servicename,
 				'Operation' => 'ItemLookup',
-				'AWSAccessKeyId' => $this->accesskeyid,
 				'ItemId' => $Itemid,
 				'IdType' => 'ASIN',
 				'Condition' => 'All',
 				'ResponseGroup' => 'Medium',
 				'AssociateTag' => $associatedid );
 
-		return $itemLookUp;
+		$request = array_merge($this->amazon_standard_request, $itemLookUp);
+
+		return $request;
 	}
 
 	/**
