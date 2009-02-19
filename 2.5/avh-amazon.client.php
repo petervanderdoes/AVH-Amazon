@@ -3,13 +3,6 @@
 class AVHAmazonCore {
 
 	/**
-	 * Complete patch to the cached wsdl file
-	 *
-	 * @var string
-	 */
-	var $wsdlcachefolder;
-
-	/**
 	 * Amazon endpoint URL Array
 	 *
 	 * @var array
@@ -83,12 +76,6 @@ class AVHAmazonCore {
 	var $db_options_name_core;
 	var $db_options_name_widget_wishlist;
 
-	/**
-	 * Dateformat used in the plugin
-	 *
-	 * @var unknown_type
-	 */
-	var $dateformat;
 
 	/**
 	 * PHP5 constructor
@@ -193,10 +180,6 @@ class AVHAmazonCore {
 				'install_dir' => $info['install_dir'],
 				'graphics_url' => $info['install_url'] . '/images',
 				'wordpress_version' => $this->getWordpressVersion() );
-
-
-		// Set class property for dateformat
-		$this->dateformat = get_option ( 'date_format' );
 
 		/**
 		 * TODO Localization
