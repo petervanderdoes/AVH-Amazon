@@ -98,9 +98,6 @@ class AVHAmazonCore {
 
 		$this->version = "2.4-rc";
 
-		// Set class property for the WSDl cache folder
-		$this->wsdlcachefolder = str_replace ( '/2.5', '', $this->info['install_dir'] ) . '/cache/';
-
 		/**
 		 * Amazon RESTful initialization
 		 *
@@ -251,12 +248,14 @@ class AVHAmazonCore {
 		if ( empty ( $options_from_table ) ) {
 			$options_from_table = $this->default_options; // New installation
 		} else {
+
 			// As of version 2.2 I changed the way I store the default options.
 			// I need to upgrade the options before setting the options but we don't update the version yet.
 			if (! $options_from_table['general']) {
 				$this->upgradeDefaultOptions_2_2();
 				$options_from_table = get_option ( $this->db_options_name_core ); // Get the new options
 			}
+
 			// Update default options by getting not empty values from options table
 			foreach ( $default_options as $section_key => $section_array ) {
 				foreach ( $section_array as $name => $value ) {
@@ -272,15 +271,17 @@ class AVHAmazonCore {
 					}
 				}
 			}
+
 			// If a newer version is running do upgrades if neccesary and update the database.
 			if ( $this->version > $options_from_table['general']['version'] ) {
 				// Starting with version 2.1 I switched to a new way of storing the widget options in the database. We need to convert these.
-				if ( $options_from_table['general']['version'] < "2.1" ) {
+				if ( ( float ) $options_from_table['general']['version'] < 2.1 ) {
 					$this->upgradeWidgetOptions_2_1 ();
 				}
 
-				// Clear the cache folder from all WSDL Cache
-				$this->clearCacheFolder();
+				if ( ( float ) $options_from_table['general']['version'] < 2.4 ) {
+					$this->removeCacheFolder ();
+				}
 				// Write the new default options and the proper version to the database
 				$default_options['general']['version'] = $this->version;
 				update_option ( $this->db_options_name_core, $default_options );
@@ -291,18 +292,20 @@ class AVHAmazonCore {
 	} // End handleOptions()
 
 	/**
-	 * Clear all files in the cache folder except the readme file.
+	 * Remove Cache folder as it's no longer needed
 	 *
-	 * @since 2.2
+	 * @since 2.4
 	 *
 	 */
-	function clearCacheFolder () {
-		if ( ! $dirhandle = @opendir ( $this->wsdlcachefolder ) ) return;
-		while ( false !== ($filename = readdir ( $dirhandle )) ) {
-			if ( $filename != "." && $filename != ".." && $filename != "readme" ) {
-				$filename = $this->wsdlcachefolder . $filename;
+	function removeCacheFolder () {
+		$wsdlcachefolder = str_replace ( '/2.5', '', $this->info['install_dir'] ) . '/cache/';
+		if ( $dirhandle = @opendir ( $wsdlcachefolder ) ) {
+			while ( false !== ($filename = readdir ( $dirhandle )) ) {
+				$filename = $wsdlcachefolder . $filename;
 				@unlink ( $filename );
 			}
+			closedir($dirhandle);
+			rmdir($wsdlcachefolder);
 		}
 	} // end clearCacheFolder
 
@@ -364,8 +367,6 @@ class AVHAmazonCore {
 		add_option ( $this->db_options_name_core, $newvalues );
 	} // end upgradeDefaultOptions
 
-
-	function upgradeRemoveCacheFolder ()
 	/**
 	 * Get all the items from the list
 	 *
