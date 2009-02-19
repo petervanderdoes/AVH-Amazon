@@ -255,11 +255,11 @@ class AVHAmazonCore {
 			// If a newer version is running do upgrades if neccesary and update the database.
 			if ( $this->version > $options_from_table['general']['version'] ) {
 				// Starting with version 2.1 I switched to a new way of storing the widget options in the database. We need to convert these.
-				if ( ( float ) $options_from_table['general']['version'] < 2.1 ) {
+				if ( $options_from_table['general']['version'] < '2.1' ) {
 					$this->upgradeWidgetOptions_2_1 ();
 				}
 
-				if ( ( float ) $options_from_table['general']['version'] < 2.4 ) {
+				if ( $options_from_table['general']['version'] < '2.4' ) {
 					$this->removeCacheFolder ();
 				}
 				// Write the new default options and the proper version to the database
@@ -366,7 +366,7 @@ class AVHAmazonCore {
 		$list = $this->handleRESTcall ( $this->getRestListLookupParams ( $ListID ) );
 
 		if ( 1 == $list['Lists']['List']['TotalItems'] ) {
-			$list['Lists']['List']['ListItem'] = array ( '0' => $list['Lists']['List']['ListItem'] ); // If one item in the list we need to make it a multi array
+			$list['Lists']['List']['ListItem'] = array ('0' => $list['Lists']['List']['ListItem'] ); // If one item in the list we need to make it a multi array
 		} else {
 			if ( $list['Lists']['List']['TotalPages'] > 1 ) { // If the list contains over 10 items we need to process the other pages.
 				$page = 2;
