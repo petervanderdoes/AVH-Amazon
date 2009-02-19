@@ -103,7 +103,7 @@ function handleRESTcall ( $query_array, $amazon_endpoint, $abs ) {
 	$url = $amazon_endpoint . '?' . $querystring;
 
 	// Starting with WordPress 2.7 we'll use the HTPP class.
-	if ( function_exists ( wp_remote_request ) ) {
+	if ( function_exists ( 'wp_remote_request' ) ) {
 		$response = wp_remote_request ( $url );
 		$xml_array = xml2array ( $response['body'] );
 	} else { // Prior to WordPress 2.7 we'll use the Snoopy Class.

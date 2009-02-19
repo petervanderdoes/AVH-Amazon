@@ -464,8 +464,8 @@ class AVHAmazonCore {
 		$querystring = $this->BuildQuery ( $query_array );
 		$url = $this->amazon_endpoint . '?' . $querystring;
 
-		// Starting with WordPress 2.7 we'll use the HTPP class.
-		if ( function_exists ( wp_remote_request ) ) {
+		// Starting with WordPress 2.7 we'll use the HTTP class.
+		if ( function_exists ( 'wp_remote_request' ) ) {
 			$response = wp_remote_request ( $url );
 			$xml_array = $this->xml2array ( $response['body'] );
 		} else { // Prior to WordPress 2.7 we'll use the Snoopy Class.
@@ -485,7 +485,7 @@ class AVHAmazonCore {
 				$return_array = $xml_array['ItemLookupResponse'];
 				break;
 			default :
-				print_r ( 'Unknown Operation in rest Call' );
+				echo 'Unknown Operation in rest Call';
 				die ();
 		}
 
@@ -719,15 +719,15 @@ class AVHAmazonCore {
 	function getImageUrl ( $imagesize, $item_result ) {
 		$imageurl = $this->info['graphics_url'];
 		switch ( strtolower ( $imagesize ) ) {
-			case small :
+			case 'small' :
 				$imgsrc = $item_result['Items']['Item']['SmallImage']['URL'];
 				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . '/no-image-75.gif';
 				break;
-			case medium :
+			case 'medium' :
 				$imgsrc = $item_result['Items']['Item']['MediumImage']['URL'];
 				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . '/no-image-160.gif';
 				break;
-			case large :
+			case 'large' :
 				$imgsrc = $item_result['Items']['Item']['LargeImage']['URL'];
 				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . '/no-image-500.gif';
 				break;
