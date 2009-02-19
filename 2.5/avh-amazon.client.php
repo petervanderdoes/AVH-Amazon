@@ -76,7 +76,6 @@ class AVHAmazonCore {
 	var $db_options_name_core;
 	var $db_options_name_widget_wishlist;
 
-
 	/**
 	 * PHP5 constructor
 	 *
@@ -93,13 +92,12 @@ class AVHAmazonCore {
 				'US' => 'http://ecs.amazonaws.com/onca/xml',
 				'CA' => 'http://ecs.amazonaws.ca/onca/xml',
 				'DE' => 'http://ecs.amazonaws.de/onca/xml',
-				'UK' => 'http://ecs.amazonaws.co.uk/onca/xml'
-		);
+				'UK' => 'http://ecs.amazonaws.co.uk/onca/xml' );
 		$this->amazon_endpoint = $this->amazon_endpoint_table['US'];
 		$this->amazon_standard_request = array (
 				'Service' => 'AWSECommerceService',
 				'Version' => '2009-01-06',
-				'AWSAccessKeyId' => '1MPCC36EZ827YJQ02AG2');
+				'AWSAccessKeyId' => '1MPCC36EZ827YJQ02AG2' );
 
 		/**
 		 * Amazon general options
@@ -108,14 +106,12 @@ class AVHAmazonCore {
 				'US' => 'Amazon.com',
 				'CA' => 'Amazon.ca',
 				'DE' => 'Amazon.de',
-				'UK' => 'Amazon.co.uk'
-		);
+				'UK' => 'Amazon.co.uk' );
 		$this->associate_table = array (
 				'US' => 'avh-amazon-20',
 				'CA' => 'avh-amazon-ca-20',
 				'DE' => 'avh-amazon-de-21',
-				'UK' => 'avh-amazon-uk-21'
-		);
+				'UK' => 'avh-amazon-uk-21' );
 
 		$this->db_options_name_core = 'avhamazon';
 		$this->db_options_name_widget_wishlist = 'widget_avhamazon_wishlist';
@@ -123,8 +119,7 @@ class AVHAmazonCore {
 		// Default Options
 		$this->default_general_options = array (
 				'version' => $this->version,
-				'associated_id' => 'avh-amazon-20'
-		);
+				'associated_id' => 'avh-amazon-20' );
 
 		$this->default_widget_wishlist_options = array (
 				'title' => 'Amazon Wish List',
@@ -133,17 +128,14 @@ class AVHAmazonCore {
 				'locale' => 'US',
 				'nr_of_items' => 1,
 				'show_footer' => 0,
-				'footer_template' => 'Show all %nr_of_items% items'
-		);
+				'footer_template' => 'Show all %nr_of_items% items' );
 		$this->default_shortcode_options = array (
 				'wishlist_id' => '',
-				'locale' => 'US'
-		);
+				'locale' => 'US' );
 		$this->default_options = array (
 				'general' => $this->default_general_options,
 				'widget_wishlist' => $this->default_widget_wishlist_options,
-				'shortcode' => $this->default_shortcode_options
-		);
+				'shortcode' => $this->default_shortcode_options );
 
 		$this->handleOptions ();
 
@@ -167,7 +159,7 @@ class AVHAmazonCore {
 			if ( $path != 'plugins' ) {
 				$info['install_url'] .= '/' . $path;
 				$info['install_dir'] .= '/' . $path;
-				$info['install_uri'] = '/wp-content/plugins/'. $path;
+				$info['install_uri'] = '/wp-content/plugins/' . $path;
 			}
 		}
 
@@ -179,7 +171,7 @@ class AVHAmazonCore {
 				'install_uri' => $info['install_uri'],
 				'install_dir' => $info['install_dir'],
 				'graphics_url' => $info['install_url'] . '/images',
-				'wordpress_version' => $this->getWordpressVersion() );
+				'wordpress_version' => $this->getWordpressVersion () );
 
 		/**
 		 * TODO Localization
@@ -191,16 +183,19 @@ class AVHAmazonCore {
 		//	load_textdomain('avhamazon', $mofile);
 		//}
 
+
 		return;
 
 	}
+
 	/**
 	 * PHP4 constructor - Initialize the Core
 	 *
 	 * @return
 	 */
 	function AVHAmazonCore () {
-		$this->__construct();
+
+		$this->__construct ();
 	}
 
 	/**
@@ -209,6 +204,7 @@ class AVHAmazonCore {
 	 * @return boolean
 	 */
 	function isMuPlugin () {
+
 		if ( strpos ( dirname ( __FILE__ ), 'mu-plugins' ) ) {
 			return true;
 		}
@@ -234,8 +230,8 @@ class AVHAmazonCore {
 
 			// As of version 2.2 I changed the way I store the default options.
 			// I need to upgrade the options before setting the options but we don't update the version yet.
-			if (! $options_from_table['general']) {
-				$this->upgradeDefaultOptions_2_2();
+			if ( ! $options_from_table['general'] ) {
+				$this->upgradeDefaultOptions_2_2 ();
 				$options_from_table = get_option ( $this->db_options_name_core ); // Get the new options
 			}
 
@@ -248,7 +244,8 @@ class AVHAmazonCore {
 						} else {
 							$default_options[$section_key][$name] = $options_from_table[$section_key][$name];
 							if ( 'associated_id' == $name ) {
-								if ( 'blogavirtualh-20' == $options_from_table[$section_key][$name] ) $default_options[$section_key][$name] = 'avh-amazon-20';
+								if ( 'blogavirtualh-20' == $options_from_table[$section_key][$name] )
+									$default_options[$section_key][$name] = 'avh-amazon-20';
 							}
 						}
 					}
@@ -274,6 +271,7 @@ class AVHAmazonCore {
 		$this->options = $default_options;
 	} // End handleOptions()
 
+
 	/**
 	 * Remove Cache folder as it's no longer needed
 	 *
@@ -281,16 +279,18 @@ class AVHAmazonCore {
 	 *
 	 */
 	function removeCacheFolder () {
+
 		$wsdlcachefolder = str_replace ( '/2.5', '', $this->info['install_dir'] ) . '/cache/';
 		if ( $dirhandle = @opendir ( $wsdlcachefolder ) ) {
 			while ( false !== ($filename = readdir ( $dirhandle )) ) {
 				$filename = $wsdlcachefolder . $filename;
 				@unlink ( $filename );
 			}
-			closedir($dirhandle);
-			rmdir($wsdlcachefolder);
+			closedir ( $dirhandle );
+			rmdir ( $wsdlcachefolder );
 		}
 	} // end clearCacheFolder
+
 
 	/**
 	 * Upgrade the the way the widgets data is stored
@@ -302,6 +302,7 @@ class AVHAmazonCore {
 	 *
 	 */
 	function upgradeWidgetOptions_2_1 () {
+
 		//  Keep hardcoded name, in case we change the name at a later stage
 		$oldvalues = get_option ( 'widget_avhamazon_wishlist' );
 		$all_options = array ();
@@ -325,6 +326,7 @@ class AVHAmazonCore {
 
 	} // End upgradeWidgetOptions_2_1
 
+
 	/**
 	 * Since version 2.2 the default options are stored in a multidimensional array.
 	 * This function will convert the pre 2.2 settings to the new standard.
@@ -333,11 +335,13 @@ class AVHAmazonCore {
 	 *
 	 */
 	function upgradeDefaultOptions_2_2 () {
+
 		// Keep hardcoded name, in case we change the name at a later stage
 		$oldvalues = get_option ( 'avhamazon' );
 		$newvalues = array (
 				'general' => array (),
 				'widget_wishlist' => array () );
+
 		foreach ( $oldvalues as $name => $value ) {
 			if ( array_key_exists ( $name, $this->default_options['general'] ) ) {
 				$newvalues['general'][$name] = $value;
@@ -350,6 +354,7 @@ class AVHAmazonCore {
 		add_option ( $this->db_options_name_core, $newvalues );
 	} // end upgradeDefaultOptions
 
+
 	/**
 	 * Get all the items from the list
 	 *
@@ -358,16 +363,15 @@ class AVHAmazonCore {
 	 */
 	function getListResults ( $ListID ) {
 
-		$list = $this->handleRESTcall($this->getRestListLookupParams ( $ListID ));
+		$list = $this->handleRESTcall ( $this->getRestListLookupParams ( $ListID ) );
 
 		if ( 1 == $list['Lists']['List']['TotalItems'] ) {
-			$list['Lists']['List']['ListItem'] = array (
-					'0' => $list['Lists']['List']['ListItem'] ); // If one item in the list we need to make it a multi array
+			$list['Lists']['List']['ListItem'] = array ( '0' => $list['Lists']['List']['ListItem'] ); // If one item in the list we need to make it a multi array
 		} else {
 			if ( $list['Lists']['List']['TotalPages'] > 1 ) { // If the list contains over 10 items we need to process the other pages.
 				$page = 2;
 				while ( $page <= $list['Lists']['List']['TotalPages'] ) {
-					$result = $this->handleRESTcall( $this->getRestListLookupParams ( $ListID, null, $page ) );
+					$result = $this->handleRESTcall ( $this->getRestListLookupParams ( $ListID, null, $page ) );
 					foreach ( $result['Lists']['List']['ListItem'] as $key => $value ) {
 						$newkey = 10 * ($page - 1) + $key;
 						$list['Lists']['List']['ListItem'][$newkey] = $result['Lists']['List']['ListItem'][$key]; //Add the items from the remaining pages to the lists.
@@ -387,8 +391,10 @@ class AVHAmazonCore {
 	 * @return array Associative array where the value is the Keys
 	 */
 	function getItemKeys ( $list, $nr_of_items = 1 ) {
+
 		$total_items = count ( $list );
-		if ( $nr_of_items > $total_items ) $nr_of_items = $total_items;
+		if ( $nr_of_items > $total_items )
+			$nr_of_items = $total_items;
 		return (( array ) array_rand ( $list, $nr_of_items ));
 	}
 
@@ -457,7 +463,7 @@ class AVHAmazonCore {
 				'ProductPage' => ( string ) $page,
 				'Sort' => 'LastUpdated' );
 
-		$request = array_merge($this->amazon_standard_request, $listLookup);
+		$request = array_merge ( $this->amazon_standard_request, $listLookup );
 
 		return $request;
 	}
@@ -480,7 +486,7 @@ class AVHAmazonCore {
 				'ResponseGroup' => 'Medium',
 				'AssociateTag' => $associatedid );
 
-		$request = array_merge($this->amazon_standard_request, $itemLookUp);
+		$request = array_merge ( $this->amazon_standard_request, $itemLookUp );
 
 		return $request;
 	}
@@ -531,10 +537,10 @@ class AVHAmazonCore {
 
 		$xml_values = '';
 		$return_array = array ();
-		$tag='';
-		$type='';
-		$level=0;
-		$attributes=array();
+		$tag = '';
+		$type = '';
+		$level = 0;
+		$attributes = array ();
 		if ( function_exists ( 'xml_parser_create' ) ) {
 			$parser = xml_parser_create ( 'UTF-8' );
 
@@ -550,6 +556,7 @@ class AVHAmazonCore {
 
 			$current = & $xml_array; // Reference
 
+
 			// Go through the tags.
 			$repeated_tag_index = array ();
 
@@ -557,9 +564,11 @@ class AVHAmazonCore {
 			foreach ( $xml_values as $data ) {
 				unset ( $attributes, $value ); //Remove existing values, or there will be trouble
 
+
 				// This command will extract these variables into the foreach scope
 				// tag(string), type(string), level(int), attributes(array).
 				extract ( $data ); //We could use the array by itself, but this cooler.
+
 
 				$result = array ();
 				$attributes_data = array ();
@@ -596,11 +605,14 @@ class AVHAmazonCore {
 
 					} else { // There was another element with the same tag name
 
+
 						if ( isset ( $current[$tag][0] ) ) { //If there is a 0th element it is already an array
 							$current[$tag][$repeated_tag_index[$tag . '_' . $level]] = $result;
 							$repeated_tag_index[$tag . '_' . $level] ++;
 						} else { //This section will make the value an array if multiple tags with the same name appear together
-							$current[$tag] = array ( $current[$tag], $result );
+							$current[$tag] = array (
+									$current[$tag],
+									$result );
 							//This will combine the existing item and the new item together to make an array
 							$repeated_tag_index[$tag . '_' . $level] = 2;
 
@@ -628,7 +640,9 @@ class AVHAmazonCore {
 							}
 							$repeated_tag_index[$tag . '_' . $level] ++;
 						} else { //If it is not an array...
-							$current[$tag] = array ( $current[$tag], $result ); //...Make it an array using using the existing value and the new value
+							$current[$tag] = array (
+									$current[$tag],
+									$result ); //...Make it an array using using the existing value and the new value
 							$repeated_tag_index[$tag . '_' . $level] = 1;
 							if ( $priority == 'tag' and $get_attributes ) {
 								if ( isset ( $current[$tag . '_attr'] ) ) { //The attribute of the last(0th) tag must be moved as well
@@ -659,23 +673,28 @@ class AVHAmazonCore {
 	 * @return string URL of the image
 	 */
 	function getImageUrl ( $imagesize, $item_result ) {
+
 		$imageurl = $this->info['graphics_url'];
 		switch ( strtolower ( $imagesize ) ) {
 			case 'small' :
 				$imgsrc = $item_result['Items']['Item']['SmallImage']['URL'];
-				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . '/no-image-75.gif';
+				if ( empty ( $imgsrc ) )
+					$imgsrc = $imageurl . '/no-image-75.gif';
 				break;
 			case 'medium' :
 				$imgsrc = $item_result['Items']['Item']['MediumImage']['URL'];
-				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . '/no-image-160.gif';
+				if ( empty ( $imgsrc ) )
+					$imgsrc = $imageurl . '/no-image-160.gif';
 				break;
 			case 'large' :
 				$imgsrc = $item_result['Items']['Item']['LargeImage']['URL'];
-				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . '/no-image-500.gif';
+				if ( empty ( $imgsrc ) )
+					$imgsrc = $imageurl . '/no-image-500.gif';
 				break;
 			default :
 				$imgsrc = $item_result['Items']['Item']['MediumImage']['URL'];
-				if ( empty ( $imgsrc ) ) $imgsrc = $imageurl . '/no-image-160.gif';
+				if ( empty ( $imgsrc ) )
+					$imgsrc = $imageurl . '/no-image-160.gif';
 				break;
 		}
 		return ($imgsrc);
@@ -689,13 +708,14 @@ class AVHAmazonCore {
 	 * @param string $widget Which widget to get the values from. Defined in the options variable.
 	 * @return mixed
 	 */
-	function getWidgetOptions ( $a, $key, $widget='widget_wishlist' ) {
+	function getWidgetOptions ( $a, $key, $widget = 'widget_wishlist' ) {
+
 		$return = '';
 
 		if ( $a[$key] ) {
 			$return = $a[$key]; // From widget
 		} else {
-			$return = $this->getOption($key,$widget); // From Admin Page or Default value
+			$return = $this->getOption ( $key, $widget ); // From Admin Page or Default value
 		}
 		return ($return);
 	}
@@ -707,7 +727,8 @@ class AVHAmazonCore {
 	 * @param string $option
 	 * @return mixed
 	 */
-	function getOption($key,$option) {
+	function getOption ( $key, $option ) {
+
 		if ( $this->options[$option][$key] ) {
 			$return = $this->options[$option][$key]; // From Admin Page
 		} else {
@@ -742,6 +763,7 @@ class AVHAmazonCore {
 	 *
 	 */
 	function getBaseDirectory ( $directory ) {
+
 		//get public directory structure eg "/top/second/third"
 		$public_directory = dirname ( $directory );
 		//place each directory into array
@@ -760,6 +782,7 @@ class AVHAmazonCore {
 	 * @since 2.3
 	 */
 	function getWordpressVersion () {
+
 		global $wp_version;
 		$version = ( float ) $wp_version;
 		return $version;
@@ -774,6 +797,7 @@ class AVHAmazonCore {
 	 * @since 2.3
 	 */
 	function handleCssFile ( $handle, $cssfile ) {
+
 		wp_register_style ( $handle, $this->info['install_uri'] . $cssfile, array (), $this->version, 'all' );
 		if ( did_action ( 'wp_print_styles' ) ) { // we already printed the style queue.  Print this one immediately
 			wp_print_styles ( $handle );
@@ -805,7 +829,6 @@ function avhamazon_init () {
 	// Include the widgets code
 	require (dirname ( __FILE__ ) . '/inc/avh-amazon.widgets.php');
 	$avhamazon_widget = & new AVHAmazonWidget ( );
-
 
 } // End avhamazon_init()
 
