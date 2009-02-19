@@ -1,26 +1,6 @@
 <?php
 
 class AVHAmazonCore {
-	/**
-	 * Amazon WSDl URL Array
-	 *
-	 * @var array
-	 */
-	var $wsdlurl_table;
-
-	/**
-	 * Amazon WSDl URL
-	 *
-	 * @var string
-	 */
-	var $wsdlurl;
-
-	/**
-	 * Amazon Cached WSDL File
-	 *
-	 * @var string
-	 */
-	var $wsdl;
 
 	/**
 	 * Complete patch to the cached wsdl file
@@ -117,18 +97,6 @@ class AVHAmazonCore {
 	function __construct () {
 
 		$this->version = "2.4-rc";
-
-		/**
-		 * Amazon SOAP initialization (legacy)
-		 *
-		 */
-		$this->wsdlurl_table = array (
-			'US' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/AWSECommerceService.wsdl',
-			'CA' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/CA/AWSECommerceService.wsdl',
-			'DE' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/DE/AWSECommerceService.wsdl',
-			'UK' => 'http://ecs.amazonaws.com/AWSECommerceService/2009-01-06/UK/AWSECommerceService.wsdl'
-		);
-		$this->wsdlurl = $this->wsdlurl_table['US'];
 
 		// Set class property for the WSDl cache folder
 		$this->wsdlcachefolder = str_replace ( '/2.5', '', $this->info['install_dir'] ) . '/cache/';
@@ -397,6 +365,7 @@ class AVHAmazonCore {
 	} // end upgradeDefaultOptions
 
 
+	function upgradeRemoveCacheFolder ()
 	/**
 	 * Get all the items from the list
 	 *
