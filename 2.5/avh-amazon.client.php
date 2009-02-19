@@ -111,13 +111,6 @@ class AVHAmazonCore {
 	var $dateformat;
 
 	/**
-	 * WP Object cache
-	 *
-	 * @var boolean
-	 */
-	var $use_cache;
-
-	/**
 	 * PHP5 constructor
 	 *
 	 */
@@ -174,7 +167,6 @@ class AVHAmazonCore {
 
 		$this->db_options_name_core = 'avhamazon';
 		$this->db_options_name_widget_wishlist = 'widget_avhamazon_wishlist';
-		$this->use_cache = false;
 
 		// Default Options
 		$this->default_general_options = array (
@@ -237,9 +229,6 @@ class AVHAmazonCore {
 				'graphics_url' => $info['install_url'] . '/images',
 				'wordpress_version' => $this->getWordpressVersion() );
 
-		// Set class property to use WP Object Cache? Or not ?
-		global $wp_object_cache;
-		$this->use_cache = ($wp_object_cache->cache_enabled === true) ? true : false;
 
 		// Set class property for dateformat
 		$this->dateformat = get_option ( 'date_format' );
