@@ -269,7 +269,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		$footer_template = isset($footer_template) ? $footer_template : $this->getWidgetOptions ( $options[$number], 'footer_template', 'widget_wishlist' );
 
 		// Check default assiociate ID and change it for the Locale
-		if ( 'avh-amazon-20' == $associatedid ) {
+		if ($this->associate_table['US'] == $associatedid ) {
 			$associatedid = $this->getAssociateId ( $locale );
 		}
 		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];

@@ -66,7 +66,10 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 		$locale = $attrs['locale'];
 
 		// Get the associate ID
-		$associatedid = $this->getAssociateId ( $locale );
+		$associatedid = $this->getOption ( 'associated_id', 'general' );
+		if ($this->associate_table['US'] == $associatedid){
+			$this->getAssociateId($locale);
+		}
 
 		/**
 		 * Set up Endpoint
