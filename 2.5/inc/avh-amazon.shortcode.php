@@ -61,7 +61,8 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 				'asin' => '',
 				'locale' => $locale,
 				'linktype' => 'text',
-				'wishlist' => '' ), $atts );
+				'wishlist' => '',
+				'picsize' => 'small' ), $atts );
 
 		$locale = $attrs['locale'];
 
@@ -146,11 +147,11 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 					$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
 					break;
 				case 'pic' :
-					$imgsrc = $this->getImageUrl('small', $item_result);
+					$imgsrc = $this->getImageUrl($attrs['picsize'], $item_result);
 					$return = '<div class="wp-caption alignleft"><a title="' . $content . '" href="' . $myurl . '"><img src="' . $imgsrc . '" alt="' . $content . '"/></a><p class="wp-caption-text">'.$content .'</p></div>';
 					break;
 				case 'pic-text' :
-					$imgsrc = $this->getImageUrl('small', $item_result);
+					$imgsrc = $this->getImageUrl($attrs['picsize'], $item_result);
 					$return = '<table style=" border: none; cellpadding: 2px; align: left"><tr><td><a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" src="' . $imgsrc . '" alt="' . $content . '"/></a></td><td><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a></td></tr></table>';
 					break;
 				default :
@@ -372,6 +373,13 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 		echo '<label><input type="radio" value="text" id="avhamazon_sc' . $tabid . '_linktypet" checked="checked" name="avhamazon_sc' . $tabid . '_linktype"/> ' . __ ( 'Text', 'avhamazon' ) . '</label><br />';
 		echo '<label><input type="radio" value="pic" id="avhamazon_sc' . $tabid . '_linktypep" name="avhamazon_sc' . $tabid . '_linktype"/> ' . __ ( 'Picture', 'avhamazon' ) . '</label><br />';
 		echo '<label><input type="radio" value="pic-text" id="avhamazon_sc' . $tabid . '_linktypept" name="avhamazon_sc' . $tabid . '_linktype"/> ' . __ ( 'Picture and Text', 'avhamazon' ) . '</label></p>';
+		echo '<p><strong>' . __('Picture Size:', 'avhamazon').'</strong><br/>';
+		echo '<label>';
+		echo '<select id="avhamazon_sc' . $tabid . '_picsize" name="avhamazon_sc' . $tabid . '_picsize" autocomplete="on">';
+		echo '<option selected="selected" value="small">Small</option>';
+		echo '<option value="medium">Medium</option>';
+		echo '<option value="large">Large</option>';
+		echo '</select></p>';
 		echo '<p><label><strong>' . __ ( 'Content:', 'avhamazon' ) . '</strong>';
 		echo '<input type="text" style="width: 98%" id="avhamazon_sc' . $tabid . '_content" name="avhamazon_sc' . $tabid . '_content"/></p>';
 	}
