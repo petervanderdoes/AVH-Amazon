@@ -85,7 +85,7 @@ class AVHAmazonCore {
 		$this->version = "2.4-rc";
 
 		/**
-		 * Amazon RESTful initialization
+		 * Amazon RESTful properties
 		 *
 		 */
 		$this->amazon_endpoint_table = array (
@@ -116,11 +116,16 @@ class AVHAmazonCore {
 		$this->db_options_name_core = 'avhamazon';
 		$this->db_options_name_widget_wishlist = 'widget_avhamazon_wishlist';
 
-		// Default Options
+		/**
+		 * Default options - General Purpose
+		 */
 		$this->default_general_options = array (
 				'version' => $this->version,
 				'associated_id' => 'avh-amazon-20' );
 
+		/**
+		 * Default options - Widget Wishlist
+		 */
 		$this->default_widget_wishlist_options = array (
 				'title' => 'Amazon Wish List',
 				'wishlist_id' => '2CC2KKW02870',
@@ -129,14 +134,26 @@ class AVHAmazonCore {
 				'nr_of_items' => 1,
 				'show_footer' => 0,
 				'footer_template' => 'Show all %nr_of_items% items' );
+
+		/**
+		 * Default options - Shortcode
+		 */
 		$this->default_shortcode_options = array (
 				'wishlist_id' => '',
 				'locale' => 'US' );
+
+		/**
+		 * Default Options - All as stored in the DB
+		 */
 		$this->default_options = array (
 				'general' => $this->default_general_options,
 				'widget_wishlist' => $this->default_widget_wishlist_options,
 				'shortcode' => $this->default_shortcode_options );
 
+		/**
+		 * Set the options for the program
+		 *
+		 */
 		$this->handleOptions ();
 
 		// Determine installation path & url
@@ -212,7 +229,8 @@ class AVHAmazonCore {
 	}
 
 	/**
-	 * Sets the class options to the default options and checks if upgrades are necessary.
+	 * Sets the class property "options" to the options stored in the DB and if they do not exists set them to the default options
+	 * Checks if upgrades are necessary based on the version number
 	 *
 	 * @since 2.1
 	 *
@@ -289,11 +307,11 @@ class AVHAmazonCore {
 			closedir ( $dirhandle );
 			rmdir ( $wsdlcachefolder );
 		}
-	} // end clearCacheFolder
+	} // end removeCacheFolder
 
 
 	/**
-	 * Upgrade the the way the widgets data is stored
+	 * Upgrade the way the widgets data is stored
 	 *
 	 * Because of the the way I handle multiple widgets since version 2.1, the way the widget data is stored
 	 * in the WordPress database has changed. This function will handle the conversion.
@@ -738,7 +756,7 @@ class AVHAmazonCore {
 	}
 
 	/**
-	 * Find the associate id based on the locale and locale_table
+	 * Get the associate id based on the locale and locale_table
 	 *
 	 * @param string $locale
 	 *
@@ -776,6 +794,7 @@ class AVHAmazonCore {
 
 	/**
 	 * Returns the wordpress version
+	 * Note: 2.7.x will return 2.7
 	 *
 	 * @return float
 	 *
@@ -814,7 +833,7 @@ class AVHAmazonCore {
  */
 function avhamazon_init () {
 
-	// Admin and XML-RPC
+	// Admin
 	if ( is_admin () ) {
 		require (dirname ( __FILE__ ) . '/inc/avh-amazon.admin.php');
 		$avhamazon_admin = & new AVHAmazonAdmin ( );
