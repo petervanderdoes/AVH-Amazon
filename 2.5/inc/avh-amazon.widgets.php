@@ -275,36 +275,47 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
 
 		$list_result = $this->getListResults ( $ListID );
-		$total_items = count ( $list_result['Lists']['List']['ListItem'] );
 
 		echo $before_widget;
 		echo '<!-- AVH Amazon version ' . $this->version . ' | http://blog.avirtualhome.com/wordpress-plugins/ -->';
 		echo '<div id="avhamazon-widget">';
 		echo $before_title . $title . $after_title;
 
-		// Display the result
-		$Item_keys = $this->getItemKeys ( $list_result['Lists']['List']['ListItem'], $nr_of_items );
+		if ( $list_result['Error'] ) {
+			echo $this->getHttpError ( $list_result['Error'] );
+		} else {
+			// Display the result
+			$total_items = count ( $list_result['Lists']['List']['ListItem'] );
+			$Item_keys = $this->getItemKeys ( $list_result['Lists']['List']['ListItem'], $nr_of_items );
 
-		foreach ( $Item_keys as $value ) {
-			$Item = $list_result['Lists']['List']['ListItem'][$value];
-			$item_result = $this->handleRESTcall( $this->getRestItemLookupParams ( $Item['Item']['ASIN'], $associatedid ) );
+			foreach ( $Item_keys as $value ) {
+				$Item = $list_result['Lists']['List']['ListItem'][$value];
+				$item_result = $this->handleRESTcall ( $this->getRestItemLookupParams ( $Item['Item']['ASIN'], $associatedid ) );
+				if ( $item_result['Error'] ) {
+					echo $this->getHttpError ( $item_result['Error'] );
+				} else {
+					if ( $item_result['Items']['Request']['Errors'] ) {
+						echo 'Item with ASIN ' . $Item['Item']['ASIN'] . ' doesn\'t exist';
+					} else {
+						$imgsrc = $this->getImageUrl ( $imagesize, $item_result );
 
-			$imgsrc = $this->getImageUrl ( $imagesize, $item_result );
+						$pos = strpos ( $item_result['Items']['Item']['DetailPageURL'], $Item['Item']['ASIN'] );
+						$myurl = substr ( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen ( $Item['Item']['ASIN'] ) );
+						$myurl .= '/ref=wl_it_dp?ie=UTF8&colid=' . $ListID;
+						$myurl .= '&tag=' . $associatedid;
 
-			$pos = strpos ( $item_result['Items']['Item']['DetailPageURL'], $Item['Item']['ASIN'] );
-			$myurl = substr ( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen ( $Item['Item']['ASIN'] ) );
-			$myurl .= '/ref=wl_it_dp?ie=UTF8&colid=' . $ListID;
-			$myurl .= '&tag=' . $associatedid;
-
-			echo '<a title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" src="' . $imgsrc . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a><br/>';
-			echo '<div class="wishlistcaption">' . $Item['Item']['ItemAttributes']['Title'] . '</div>';
-			echo '<BR />';
-		}
-		if ( $show_footer ) {
-			$footer = str_replace ( '%nr_of_items%', $total_items, $footer_template );
-			$myurl = $list_result['Lists']['List']['ListURL'];
-			$myurl .= '?tag=' . $associatedid;
-			echo '<div class="footer"><a title="Show all on Wishlist" href="' . $myurl . '">' . $footer . '</a></div><br />';
+						echo '<a title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" src="' . $imgsrc . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a><br/>';
+						echo '<div class="wishlistcaption">' . $Item['Item']['ItemAttributes']['Title'] . '</div>';
+						echo '<BR />';
+					}
+				}
+			}
+			if ( $show_footer ) {
+				$footer = str_replace ( '%nr_of_items%', $total_items, $footer_template );
+				$myurl = $list_result['Lists']['List']['ListURL'];
+				$myurl .= '?tag=' . $associatedid;
+				echo '<div class="footer"><a title="Show all on Wishlist" href="' . $myurl . '">' . $footer . '</a></div><br />';
+			}
 		}
 		echo "</div>";
 		echo $after_widget;

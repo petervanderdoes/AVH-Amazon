@@ -107,7 +107,7 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 		}
 
 		if ( $error ) {
-			$return = '<strong>avhamazon error:' . $error . '</strong>';
+			$return = $error;
 		} else {
 			$return = $result;
 		}
@@ -126,37 +126,42 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 
 		$error = '';
 		$item_result = $this->handleRESTcall ( $this->getRestItemLookupParams ( $attrs['asin'], $associatedid ) );
-		if ( $item_result['Items']['Request']['Errors'] ) {
+		if ( $item_result['Error'] ) {
 			$return = '';
-			$error = 'Item with ASIN ' . $attrs['asin'] . ' doesn\'t exist';
+			$error = $this->getHttpError ( $item_result['Error'] );
 		} else {
-			$pos = strpos ( $item_result['Items']['Item']['DetailPageURL'], $attrs['asin'] );
+			if ( $item_result['Items']['Request']['Errors'] ) {
+				$return = '';
+				$error = 'Item with ASIN ' . $attrs['asin'] . ' doesn\'t exist';
+			} else {
+				$pos = strpos ( $item_result['Items']['Item']['DetailPageURL'], $attrs['asin'] );
 
-			$myurl = substr ( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen ( $attrs['asin'] ) );
-			// If a wishlist is given, make sure when somebody clicks on the link, Amazon knows the List owner.
-			if ( $attrs['wishlist'] ) {
-				$myurl .= '/ref=wl_it_dp?ie=UTF8&colid=' . $attrs['wishlist'];
-			}
-			$myurl .= '&tag=' . $associatedid;
+				$myurl = substr ( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen ( $attrs['asin'] ) );
+				// If a wishlist is given, make sure when somebody clicks on the link, Amazon knows the List owner.
+				if ( $attrs['wishlist'] ) {
+					$myurl .= '/ref=wl_it_dp?ie=UTF8&colid=' . $attrs['wishlist'];
+				}
+				$myurl .= '&tag=' . $associatedid;
 
-			// If no content is given we use the Title from Amazon.
-			$content = ($content) ? $content : $item_result['Items']['Item']['ItemAttributes']['Title'];
+				// If no content is given we use the Title from Amazon.
+				$content = ($content) ? $content : $item_result['Items']['Item']['ItemAttributes']['Title'];
 
-			switch ( $attrs['linktype'] ) {
-				case 'text' :
-					$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
-					break;
-				case 'pic' :
-					$imgsrc = $this->getImageUrl($attrs['picsize'], $item_result);
-					$return = '<div class="wp-caption alignleft"><a title="' . $content . '" href="' . $myurl . '"><img src="' . $imgsrc . '" alt="' . $content . '"/></a><p class="wp-caption-text">'.$content .'</p></div>';
-					break;
-				case 'pic-text' :
-					$imgsrc = $this->getImageUrl($attrs['picsize'], $item_result);
-					$return = '<table style=" border: none; cellpadding: 2px; align: left"><tr><td><a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" src="' . $imgsrc . '" alt="' . $content . '"/></a></td><td><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a></td></tr></table>';
-					break;
-				default :
-					$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
-					break;
+				switch ( $attrs['linktype'] ) {
+					case 'text' :
+						$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
+						break;
+					case 'pic' :
+						$imgsrc = $this->getImageUrl ( $attrs['picsize'], $item_result );
+						$return = '<div class="wp-caption alignleft"><a title="' . $content . '" href="' . $myurl . '"><img src="' . $imgsrc . '" alt="' . $content . '"/></a><p class="wp-caption-text">' . $content . '</p></div>';
+						break;
+					case 'pic-text' :
+						$imgsrc = $this->getImageUrl ( $attrs['picsize'], $item_result );
+						$return = '<table style=" border: none; cellpadding: 2px; align: left"><tr><td><a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" src="' . $imgsrc . '" alt="' . $content . '"/></a></td><td><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a></td></tr></table>';
+						break;
+					default :
+						$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
+						break;
+				}
 			}
 		}
 		return array (

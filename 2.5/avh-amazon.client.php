@@ -433,7 +433,11 @@ class AVHAmazonCore {
 		// Starting with WordPress 2.7 we'll use the HTTP class.
 		if ( function_exists ( 'wp_remote_request' ) ) {
 			$response = wp_remote_request ( $url );
-			$xml_array = $this->xml2array ( $response['body'] );
+			if (!is_wp_error($response)) {
+				$xml_array = $this->xml2array ( $response['body'] );
+			} else {
+				$return_array = array('Error' => $response->errors);
+			}
 		} else { // Prior to WordPress 2.7 we'll use the Snoopy Class.
 			require_once (ABSPATH . 'wp-includes/class-snoopy.php');
 			$snoopy = new Snoopy ( );
@@ -443,21 +447,30 @@ class AVHAmazonCore {
 		}
 
 		// Depending on the Operation called we'll return the right array back.
-		switch ( $query_array['Operation'] ) {
-			case 'ListLookup' :
-				$return_array = $xml_array['ListLookupResponse'];
-				break;
-			case 'ItemLookup' :
-				$return_array = $xml_array['ItemLookupResponse'];
-				break;
-			default :
-				echo 'Unknown Operation in rest Call';
-				die ();
+		if (!empty($xml_array)){
+			switch ( $query_array['Operation'] ) {
+				case 'ListLookup' :
+					$return_array = $xml_array['ListLookupResponse'];
+					break;
+				case 'ItemLookup' :
+					$return_array = $xml_array['ItemLookupResponse'];
+					break;
+				default :
+					echo 'Unknown Operation in rest Call';
+					die ();
+			}
 		}
 
 		return ($return_array);
 	}
 
+	function getHttpError($error) {
+		foreach ($error as $key => $value) {
+			$error_short = $key;
+			$error_long = $value[0];
+		}
+		return '<strong>avhamazon error:' . $error_short . ' - '.$error_long . '</strong>';
+	}
 	/**
 	 * Rest Request - ListLookup
 	 *
