@@ -456,8 +456,9 @@ class AVHAmazonCore {
 			$xml_array = $this->xml2array ( $response );
 		}
 
-		// Depending on the Operation called we'll return the right array back.
+		// It will be empty if we had an error.
 		if (!empty($xml_array)){
+		// Depending on the Operation called we'll return the right array back.
 			switch ( $query_array['Operation'] ) {
 				case 'ListLookup' :
 					$return_array = $xml_array['ListLookupResponse'];
@@ -474,6 +475,14 @@ class AVHAmazonCore {
 		return ($return_array);
 	}
 
+	/**
+	 * Format an error message from the WP_Error response by wp_remote_request
+	 *
+	 * @param array $error
+	 * @return string
+	 * @since 2.4
+	 *
+	 */
 	function getHttpError($error) {
 		foreach ($error as $key => $value) {
 			$error_short = $key;
