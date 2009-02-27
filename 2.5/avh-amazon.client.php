@@ -82,7 +82,7 @@ class AVHAmazonCore {
 	 */
 	function __construct () {
 
-		$this->version = "2.4-rc";
+		$this->version = "2.4-rc2";
 
 		/**
 		 * Amazon RESTful properties
