@@ -452,8 +452,13 @@ class AVHAmazonCore {
 			require_once (ABSPATH . 'wp-includes/class-snoopy.php');
 			$snoopy = new Snoopy ( );
 			$snoopy->fetch ( $url );
-			$response = $snoopy->results;
-			$xml_array = $this->xml2array ( $response );
+			if (!$snoopy->error) {
+				$response = $snoopy->results;
+				$xml_array = $this->xml2array ( $response );
+			} else {
+				$response = array ($snoopy->error => array(0 => $url));
+				$return_array = array ('Error' => $response);
+			}
 		}
 
 		// It will be empty if we had an error.
