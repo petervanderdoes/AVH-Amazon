@@ -54,6 +54,7 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 	 */
 	function handleShortcode ( $atts, $content = null ) {
 
+		$return = $this->comment_begin;
 		$result = '';
 		$error = '';
 		$locale = $this->getOption('locale','shortcode');
@@ -107,10 +108,11 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 		}
 
 		if ( $error ) {
-			$return = $error;
+			$return .= $error;
 		} else {
-			$return = $result;
+			$return .= $result;
 		}
+		$return .= $this->comment_end;
 		return ($return);
 	}
 
@@ -164,9 +166,7 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 				}
 			}
 		}
-		return array (
-				$return,
-				$error );
+		return array ( $return, $error );
 	}
 
 	/**

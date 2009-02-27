@@ -277,7 +277,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		$list_result = $this->getListResults ( $ListID );
 
 		echo $before_widget;
-		echo '<!-- AVH Amazon version ' . $this->version . ' | http://blog.avirtualhome.com/wordpress-plugins/ -->';
+		echo $this->comment_begin;
 		echo '<div id="avhamazon-widget">';
 		echo $before_title . $title . $after_title;
 
@@ -318,6 +318,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 			}
 		}
 		echo "</div>";
+		echo $this->comment_end;
 		echo $after_widget;
 	}
 

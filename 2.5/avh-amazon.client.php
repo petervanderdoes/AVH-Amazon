@@ -45,6 +45,14 @@ class AVHAmazonCore {
 	var $version;
 
 	/**
+	 * Comments used in HTML do identify the plugin
+	 *
+	 * @var string
+	 */
+	var $comment_begin;
+	var $comment_end;
+
+	/**
 	 * Paths and URI's of the WordPress information, 'home', 'siteurl', 'install_url', 'install_dir'
 	 *
 	 * @var array
@@ -83,6 +91,8 @@ class AVHAmazonCore {
 	function __construct () {
 
 		$this->version = "2.4-rc2";
+		$this->comment_begin = '<!-- AVH Amazon version ' . $this->version . ' Begin -->';
+		$this->comment_end = '<!-- AVH Amazon version ' . $this->version . ' End -->';
 
 		/**
 		 * Amazon RESTful properties
