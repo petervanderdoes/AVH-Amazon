@@ -42,7 +42,6 @@ In the plugin reference is made to Wishlist only but you can use your Baby Regis
 The avh-amazon plugin can be installed in 3 easy steps:
 
 1. Unzip the "avh-amazon" archive and put the directory "avh-amazon" into your "plugins" folder (wp-content/plugins).
-1. Make the directory cache (wp-content/plugins/avh-amazon/cache) writeable for the webserver. (In Linux set the rights to 777)
 1. Activate the plugin.
 
 == Frequently Asked Questions ==
@@ -56,9 +55,6 @@ I created a support site at http://forums.avirtualhome.com where you can ask que
 
 = Is the plug in available in my language? =
 Maybe, maybe not, I don't really know what your language is, but you can find out in the directory languages. If it's not available feel free to translate it, it's only a few lines of text :). Send your translation to me and I will add it and give you credit for it.
-
-= When I click activate WordPress displays the messages the plugin is activated but it isn't? =
-This means the cache directory isn't writeable. At the moment I am unable to display a message stating this problem but to stop your blog from throwing ugly messages I simple deactivate the plugin upon this error.
 
 = Where is the Baby/Wedding Registry widget? =
 There is no separate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.
