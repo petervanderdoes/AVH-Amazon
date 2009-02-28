@@ -70,7 +70,7 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 		// Get the associate ID
 		$associatedid = $this->getOption ( 'associated_id', 'general' );
 		if ($this->associate_table['US'] == $associatedid){
-			$this->getAssociateId($locale);
+			$associatedid = $this->getAssociateId($locale);
 		}
 
 		/**
