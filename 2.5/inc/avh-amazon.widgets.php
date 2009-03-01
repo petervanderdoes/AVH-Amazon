@@ -281,7 +281,7 @@ class AVHAmazonWidget extends AVHAmazonCore {
 		echo '<div id="avhamazon-widget">';
 		echo $before_title . $title . $after_title;
 
-		if ( $list_result['Error'] ) {
+		if ( isset ( $list_result['Error'] ) ) {
 			echo $this->getHttpError ( $list_result['Error'] );
 		} else {
 			// Display the result
@@ -291,10 +291,10 @@ class AVHAmazonWidget extends AVHAmazonCore {
 			foreach ( $Item_keys as $value ) {
 				$Item = $list_result['Lists']['List']['ListItem'][$value];
 				$item_result = $this->handleRESTcall ( $this->getRestItemLookupParams ( $Item['Item']['ASIN'], $associatedid ) );
-				if ( $item_result['Error'] ) {
+				if ( isset ( $item_result['Error'] ) ) {
 					echo $this->getHttpError ( $item_result['Error'] );
 				} else {
-					if ( $item_result['Items']['Request']['Errors'] ) {
+					if ( isset ( $item_result['Items']['Request']['Errors'] ) ) {
 						echo 'Item with ASIN ' . $Item['Item']['ASIN'] . ' doesn\'t exist';
 					} else {
 						$imgsrc = $this->getImageUrl ( $imagesize, $item_result );

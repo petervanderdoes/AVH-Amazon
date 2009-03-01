@@ -767,7 +767,8 @@ class AVHAmazonCore {
 
 		$return = '';
 
-		if ( $a[$key] ) {
+		if ( isset ( $a[$key] ) && (! empty ( $a[$key] )) )
+		{
 			$return = $a[$key]; // From widget
 		} else {
 			$return = $this->getOption ( $key, $widget ); // From Admin Page or Default value

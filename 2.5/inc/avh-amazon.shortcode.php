@@ -128,11 +128,11 @@ class AVHAmazonShortcode extends AVHAmazonCore {
 
 		$error = '';
 		$item_result = $this->handleRESTcall ( $this->getRestItemLookupParams ( $attrs['asin'], $associatedid ) );
-		if ( $item_result['Error'] ) {
+		if ( isset ( $item_result['Error'] ) ) {
 			$return = '';
 			$error = $this->getHttpError ( $item_result['Error'] );
 		} else {
-			if ( $item_result['Items']['Request']['Errors'] ) {
+			if ( isset ( $item_result['Items']['Request']['Errors'] ) ) {
 				$return = '';
 				$error = 'Item with ASIN ' . $attrs['asin'] . ' doesn\'t exist';
 			} else {
