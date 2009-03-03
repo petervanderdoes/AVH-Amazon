@@ -77,6 +77,10 @@ None
 == Arbitrary section ==
 * Version 2.4
 	* Moved from SOAP to REST to improve speed.
+* Version 2.3.3
+	* Bugfix: In the shortcode the default associate ID wasn't set to the right one when using a a non US locale.
+* Version 2.3.2
+	* Bugfix: The shortcode didn't retrieve the assiocated ID set in the admin page.
 * Version 2.3.1
 	* Bugfix: Certain character were not displayed correctly (Characters with Umlauts for example)
 * Version 2.3
