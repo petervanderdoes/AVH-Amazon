@@ -10,7 +10,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	{
 
 		parent::__construct ();
-		
+
 		// Set the actions, filters and shortcode.
 		add_action ( 'admin_menu', array (&$this, 'handleAdminMenu' ) );
 		add_action ( 'wp_ajax_avhamazon_metabox', array (&$this, 'on_wp_ajax_avhamazon_metabox' ) ); // New function for AJAX calls from the submit button.
@@ -66,20 +66,20 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		$error = '';
 		$locale = $this->getOption ( 'locale', 'shortcode' );
 		$attrs = shortcode_atts ( array ('asin' => '', 'locale' => $locale, 'linktype' => 'text', 'wishlist' => '', 'picsize' => 'small' ), $atts );
-		
+
 		$locale = $attrs['locale'];
-		
+
 		// Get the associate ID
 		$associatedid = $this->getOption ( 'associated_id', 'general' );
 		if ( $this->associate_table['US'] == $associatedid ) {
 			$associatedid = $this->getAssociateId ( $locale );
 		}
-		
+
 		/**
 		 * Set up Endpoint
 		 */
 		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
-		
+
 		if ( $attrs['wishlist'] ) {
 			$list_result = $this->getListResults ( $attrs['wishlist'] );
 			if ( $list_result['Lists']['Request']['Errors'] ) {
@@ -87,7 +87,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 				$attrs['asin'] = null;
 			}
 		}
-		
+
 		// If a random item is wanted, fill $attrs['asin'] with an ASIN from the wishlist
 		if ( 'random' == strtolower ( $attrs['asin'] ) ) {
 			$Item_keys = $this->getItemKeys ( $list_result['Lists']['List']['ListItem'] );
@@ -96,9 +96,9 @@ class AVHAmazonShortcode extends AVHAmazonCore
 			}
 			$attrs['asin'] = $Item['Item']['ASIN'];
 		}
-		
+
 		if ( 'all' == strtolower ( $attrs['asin'] ) ) {
-			foreach ( $list_result['Lists']['List']['ListItem'] as $key => $value ) {
+			foreach ( $list_result['Lists']['List']['ListItem'] as $value ) {
 				$attrs['asin'] = $value['Item']['ASIN'];
 				list ( $oneresult, $error ) = $this->shortcodeAsin ( $attrs, $content, $associatedid );
 				$result .= $oneresult . '<br />';
@@ -108,7 +108,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		if ( $attrs['asin'] ) {
 			list ( $result, $error ) = $this->shortcodeAsin ( $attrs, $content, $associatedid );
 		}
-		
+
 		if ( $error ) {
 			$return .= $error;
 		} else {
@@ -140,17 +140,17 @@ class AVHAmazonShortcode extends AVHAmazonCore
 				$error = 'Item with ASIN ' . $attrs['asin'] . ' doesn\'t exist';
 			} else {
 				$pos = strpos ( $item_result['Items']['Item']['DetailPageURL'], $attrs['asin'] );
-				
+
 				$myurl = substr ( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen ( $attrs['asin'] ) );
 				// If a wishlist is given, make sure when somebody clicks on the link, Amazon knows the List owner.
 				if ( $attrs['wishlist'] ) {
 					$myurl .= '/ref=wl_it_dp?ie=UTF8&colid=' . $attrs['wishlist'];
 				}
 				$myurl .= '&tag=' . $associatedid;
-				
+
 				// If no content is given we use the Title from Amazon.
 				$content = ($content) ? $content : $item_result['Items']['Item']['ItemAttributes']['Title'];
-				
+
 				switch ( $attrs['linktype'] ) {
 					case 'text' :
 						$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
@@ -182,14 +182,14 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		//@todo Use of the nonce field for security
 		//wp_nonce_field( 'avhamazon-metabox', '_ajax_nonce', false );
 		$locale = $this->getOption ( 'locale', 'shortcode' );
-		
+
 		echo '<ul id="avhamazon_tabs" class="ui-tabs-nav">';
 		echo '<input name="avhamazon_mb_url" id="avhamazon_mb_url" value="' . $this->info['siteurl'] . '" type="hidden" />';
-		
+
 		// The tabs
 		echo '<li class="ui-tabs-selected"><a href="#avhamazon_tab_wishlist">' . __ ( 'Wishlist', 'avhamazon' ) . '</a></li>';
 		echo '<li class=""><a href="#avhamazon_tab_asin">' . __ ( 'ASIN', 'avhamazon' ) . '</a></li></ul>';
-		
+
 		$this->metaboxTabWishlist ( $locale );
 		$this->metaboxTabAsin ( $locale );
 	}
@@ -277,7 +277,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		echo '</script>';
 		$action = $_POST['avhamazon_mb_action'];
 		$values = $_POST['avhamazon_mb_values'];
-		
+
 		switch ( $action ) {
 			case 'wishlist' :
 				$this->metaboxTabWishlistOutput ( $values );
@@ -298,12 +298,12 @@ class AVHAmazonShortcode extends AVHAmazonCore
 
 		$wishlist = $values[0];
 		$locale = $values[1];
-		
+
 		/**
 		 * Set up endpoint
 		 */
 		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
-		
+
 		$list_result = $this->getListResults ( $wishlist );
 		$total_items = count ( $list_result['Lists']['List']['ListItem'] );
 		if ( $total_items > 0 ) {
@@ -333,12 +333,12 @@ class AVHAmazonShortcode extends AVHAmazonCore
 
 		$asin = $values[0];
 		$locale = $values[1];
-		
+
 		/**
 		 * Set up endpoint
 		 */
 		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
-		
+
 		$item_result = $this->handleRESTcall ( $this->getRestItemLookupParams ( $asin, '' ) );
 		if ( $item_result['Items']['Request']['Errors'] ) {
 			echo '<strong>' . __ ( 'Can\'t find the given item', 'avhamazon' ) . '</strong>';

@@ -284,7 +284,7 @@ class AVHAmazonCore
 	{
 
 		$wsdlcachefolder = str_replace ( '/2.5', '', $this->info['install_dir'] ) . '/cache/';
-		if ( $dirhandle = @opendir ( $wsdlcachefolder ) ) {
+		if ( ($dirhandle = @opendir ( $wsdlcachefolder )) ) {
 			while ( false !== ($filename = readdir ( $dirhandle )) ) {
 				$filename = $wsdlcachefolder . $filename;
 				@unlink ( $filename );
@@ -378,7 +378,7 @@ class AVHAmazonCore
 					$result = $this->handleRESTcall ( $this->getRestListLookupParams ( $ListID, null, $page ) );
 					foreach ( $result['Lists']['List']['ListItem'] as $key => $value ) {
 						$newkey = 10 * ($page - 1) + $key;
-						$list['Lists']['List']['ListItem'][$newkey] = $result['Lists']['List']['ListItem'][$key]; //Add the items from the remaining pages to the lists.
+						$list['Lists']['List']['ListItem'][$newkey] = $value; //Add the items from the remaining pages to the lists.
 					}
 					$page ++;
 				}
@@ -851,7 +851,7 @@ function avhamazon_init ()
 		require (dirname ( __FILE__ ) . '/inc/avh-amazon.admin.php');
 		$avhamazon_admin = & new AVHAmazonAdmin ( );
 		// Installation
-		register_activation_hook ( __FILE__, array (& $avhamazon_admin, 'installPlugin' ) );
+		register_activation_hook ( __FILE__, array (&$avhamazon_admin, 'installPlugin' ) );
 	}
 
 	// Include shortcode class

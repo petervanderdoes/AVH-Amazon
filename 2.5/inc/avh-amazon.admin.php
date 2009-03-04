@@ -1,7 +1,7 @@
 <?php
 class AVHAmazonAdmin extends AVHAmazonCore
 {
-	
+
 	/**
 	 * Message management
 	 *
@@ -13,22 +13,22 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	{
 
 		parent::__construct ();
-		
+
 		// Admin URL and Pagination
 		$this->admin_base_url = $this->info['siteurl'] . '/wp-admin/admin.php?page=';
 		if ( isset ( $_GET['pagination'] ) ) {
 			$this->actual_page = ( int ) $_GET['pagination'];
 		}
-		
+
 		// Admin Capabilities
 		add_action ( 'init', array (&$this, 'initRoles' ) );
-		
+
 		// Admin menu
 		add_action ( 'admin_menu', array (&$this, 'adminMenu' ) );
-		
+
 		// CSS Helper
 		add_action ( 'admin_head', array (&$this, 'helperCSS' ) );
-		
+
 		// Helper JS & jQuery & Prototype
 		$avhamazon_pages = array ('avhamazon_options', 'avhamazon_tools' );
 		/**
@@ -69,7 +69,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 			}
 			// Clean var
 			unset ( $role );
-			
+
 			$role = get_role ( 'editor' );
 			if ( $role != null && ! $role->has_cap ( 'avh_amazon' ) ) {
 				$role->add_cap ( 'avh_amazon' );
@@ -99,7 +99,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	{
 
 		static $this_plugin;
-		
+
 		if ( ! $this_plugin )
 			$this_plugin = $this->getBaseDirectory ( plugin_basename ( $this->info['install_dir'] ) );
 		if ( $file )
@@ -110,14 +110,14 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		//$links = array_merge ( array (	$settings_link ), $links ); // before other links
 		}
 		return $links;
-	
+
 	}
 
 	/**
 	 * WP Page Manage - AVH Amazon Find Wishlist ID
 	 *
 	 */
-	
+
 	function pageAVHAmazonTools ()
 	{
 
@@ -128,7 +128,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 jQuery(document).ready(function() {
 	var searchoptions = {
-		target:		'#avhamazonwishlistoutputsearch',	// target element(s) to be updated with server response
+		target:		'#avhamazonwishlistoutputsearch'	// target element(s) to be updated with server response
 	};
 
 	jQuery('#findid').submit(function() {
@@ -163,7 +163,7 @@ jQuery(document).ready(function() {
 		echo '</tbody></table>';
 		echo '<div id="avhamazonwishlistoutputsearch"></div>';
 		echo '</form>';
-		
+
 		$this->printAdminFooter ();
 		echo '</div>';
 	}
@@ -175,14 +175,89 @@ jQuery(document).ready(function() {
 	function pageOptions ()
 	{
 
-		$option_data = array ('general' => array (array ('avhamazon[general][associated_id]', 'Associated ID:', 'text', 16, 'Use this Associated ID when clicking on the wishlist' ) ), 'widget_wishlist' => array (array ('avhamazon[widget_wishlist][wishlist_id]', 'Default wishlist ID:', 'text', 16, 'This is the default wishlist ID, if you don\'t fill out a Wishlist ID in the widget this one will be used.' ), array ('avhamazon[widget_wishlist][locale]', 'Locale Amazon:', 'dropdown', 'US/CA/DE/UK', // Locale Value
-'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk' ), // Locale Text
-array ('avhamazon[widget_wishlist][wishlist_imagesize]', 'Size of thumbnail:', 'dropdown', 'Small/Medium/Large', // Value
-'Small/Medium/Large' ), // Text
-array ('avhamazon[widget_wishlist][nr_of_items]', 'Number of items:', 'text', 3, 'Amount of items of your Wish List to show in the widget.' ), array ('avhamazon[widget_wishlist][footer_template]', 'Footer template:', 'text', 30, 'The display of the footer is controlled in the widget options<BR />%nr_of_items% is replaced by the actual number of items in the wishlist.' ) ), 'shortcode' => array (array ('avhamazon[shortcode][wishlist_id]', 'Default wishlist ID:', 'text', 16, 'This value will be automatically be entered in the AVH Amazon Short Code - wishlist metabox.' ), array ('avhamazon[shortcode][locale]', 'Locale Amazon:', 'dropdown', 'US/CA/DE/UK', // Locale Value
-'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk' ) ), // Locale Text
-'faq' => array (array ('text-helper', 'text-helper', 'helper', '', '<b>Can I use this plugin if I don\'t have a widget enabled theme?</b><br />' . 'Yes you can, you can use the following code to display the wishlist:<br />' . '<&#63;php $avhwidget=& new AVHAmazonWidget();$avhwidget->widgetWishlist(array,1 , FALSE); ?> <br />' . 'array is in the following format<br />' . 'array( [ option => value [, option => value ] ])<br />' . 'Overview of options and values<br />' . '\'title\' => string<br />' . '\'ListID\' => string<br />' . '\'associatedid\' => string<br />' . '\'imagesize\' => Small/Medium/Large<br />' . '\'locale\' => US/CA/DE/UK<br />' . '\'nr_of_items\' => number<br />' . '\'show_footer\' => 0/1<br />' . '\'footer_template\' => string (%nr_of_items% is replaced by the actual number of items in the wishlist.)<br /><br />' . '<i>Important</i>:There is no validity check for the values, entering wrong values can lead to unexpected results.<br /><br >' . '<b>Where is the Baby/Wedding Registry widget?</b><br />' . 'There is no seperate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.<br /><br />' . '<b>How do I find my Baby Registry and/or Wedding Registry ID?</b><br />' . 'When you create either registry Amazon sends you an email with the direct link to access your registry. The ID is the last part of the URL.<br />' . 'Example:<br />' . 'http://www.amazon.com/gp/registry/1234567890ABC<br/>' . 'The ID is 1234567890ABC<br /><br />' . '<b>What is an ASIN?</b><br />' . 'ASIN stands for Amazon Standard Identification Number.<br />' . 'Every product has its own ASIN--a unique code they use to identify it. For books, the ASIN is the same as the 10-digit ISBN number.<br />' . 'You will find an item\'s ASIN on the product detail page.<br /><br />' ) ), 'about' => array (array ('text-helper', 'text-helper', 'helper', '', '<p>The AVH Amazon plugin gives you the ability to add multiple widgets which will display one or more random item(s) from your Amazon wishlist, baby registry and/or wedding registry. It also has the ability to show items with their link, in posts and pages by use of shortcode.<br />' . 'In the plugin reference is made to Wishlist only but you can use your Baby Registry ID or Wedding Registry ID as well.</p>' . '<b>General</b>' . '<ul>' . '<li>Works with amazon.com, and locales amazon.ca, amazon.de and amazon.co.uk.<br /><br />' . '</ul>' . '<b>Wishlist</b>' . '<ul>' . '<li>Add Associated ID.' . '<li>Choice of thumbnail size, Small/Medium/Large.' . '<li>Option to use up to unlimited widgets.' . '<li>Multiple items from the same Wish List can be displayed in the widget.' . '<li>A configurable footer can be displayed on the bottom of the widget linking to the list on Amazon.' . '</ul>' . '<b>Shortcode</b>' . '<ul>' . '<li>Create the shortcode with the help of a metabox' . '<li>In the metabox you can select an item or select to randomize the items from your wishlist or search for an item by ASIN.' . '<li>The shortcode creates text, picture or text & picture links.' . '<li>If a text link or text & picture links is used, the default text is the item description from Amazon but the text of the link can be changed.' . '<li>The value all for the ASIN option will show all items from your wishlist. In combination with a text & picture link type you can create a wishlist page.' . '</ul>' . '<b>Tools</b>' . '<ul>' . '<li>Look up your wishlist ID.' . '</ul>' . '<b>Support</b><br />' . 'For support visit the AVH support forums at <a href="http://forums.avirtualhome.com/">http://forums.avirtualhome.com/</a><br /><br />' . '<b>Developer</b><br />' . 'Peter van der Does' ) ) );
-		
+		$option_data = array (
+			'general' => array (
+				array (
+					'avhamazon[general][associated_id]',
+					'Associated ID:',
+					'text',
+					16,
+					'Use this Associated ID when clicking on the wishlist'
+				)
+			),
+			'widget_wishlist' => array (
+				array (
+					'avhamazon[widget_wishlist][wishlist_id]',
+					'Default wishlist ID:',
+					'text',
+					16,
+					'This is the default wishlist ID, if you don\'t fill out a Wishlist ID in the widget this one will be used.'
+				),
+				array (
+					'avhamazon[widget_wishlist][locale]',
+					'Locale Amazon:',
+					'dropdown',
+					'US/CA/DE/UK',  // Locale Value
+					'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk'
+				),  // Locale Text
+				array (
+					'avhamazon[widget_wishlist][wishlist_imagesize]',
+					'Size of thumbnail:',
+					'dropdown',
+					'Small/Medium/Large',  // Value
+					'Small/Medium/Large'
+				),  // Text
+				array (
+					'avhamazon[widget_wishlist][nr_of_items]',
+					'Number of items:',
+					'text',
+					3,
+					'Amount of items of your Wish List to show in the widget.'
+				),
+				array (
+					'avhamazon[widget_wishlist][footer_template]',
+					'Footer template:',
+					'text',
+					30,
+					'The display of the footer is controlled in the widget options<BR />%nr_of_items% is replaced by the actual number of items in the wishlist.'
+				)
+			),
+			'shortcode' => array (
+				array (
+					'avhamazon[shortcode][wishlist_id]',
+					'Default wishlist ID:',
+					'text',
+					16,
+					'This value will be automatically be entered in the AVH Amazon Short Code - wishlist metabox.'
+				),
+				array (
+					'avhamazon[shortcode][locale]',
+					'Locale Amazon:',
+					'dropdown',
+					'US/CA/DE/UK',  // Locale Value
+					'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk'
+				)
+			),  // Locale Text
+			'faq' => array (
+				array (
+					'text-helper',
+					'text-helper',
+					'helper',
+					'',
+					'<b>Can I use this plugin if I don\'t have a widget enabled theme?</b><br />' . 'Yes you can, you can use the following code to display the wishlist:<br />' . '<&#63;php $avhwidget=& new AVHAmazonWidget();$avhwidget->widgetWishlist(array,1 , FALSE); ?> <br />' . 'array is in the following format<br />' . 'array( [ option => value [, option => value ] ])<br />' . 'Overview of options and values<br />' . '\'title\' => string<br />' . '\'ListID\' => string<br />' . '\'associatedid\' => string<br />' . '\'imagesize\' => Small/Medium/Large<br />' . '\'locale\' => US/CA/DE/UK<br />' . '\'nr_of_items\' => number<br />' . '\'show_footer\' => 0/1<br />' . '\'footer_template\' => string (%nr_of_items% is replaced by the actual number of items in the wishlist.)<br /><br />' . '<i>Important</i>:There is no validity check for the values, entering wrong values can lead to unexpected results.<br /><br >' . '<b>Where is the Baby/Wedding Registry widget?</b><br />' . 'There is no seperate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.<br /><br />' . '<b>How do I find my Baby Registry and/or Wedding Registry ID?</b><br />' . 'When you create either registry Amazon sends you an email with the direct link to access your registry. The ID is the last part of the URL.<br />' . 'Example:<br />' . 'http://www.amazon.com/gp/registry/1234567890ABC<br/>' . 'The ID is 1234567890ABC<br /><br />' . '<b>What is an ASIN?</b><br />' . 'ASIN stands for Amazon Standard Identification Number.<br />' . 'Every product has its own ASIN--a unique code they use to identify it. For books, the ASIN is the same as the 10-digit ISBN number.<br />' . 'You will find an item\'s ASIN on the product detail page.<br /><br />'
+				)
+			),
+			'about' => array (
+				array (
+					'text-helper',
+					'text-helper',
+					'helper',
+					'',
+					'<p>The AVH Amazon plugin gives you the ability to add multiple widgets which will display one or more random item(s) from your Amazon wishlist, baby registry and/or wedding registry. It also has the ability to show items with their link, in posts and pages by use of shortcode.<br />' . 'In the plugin reference is made to Wishlist only but you can use your Baby Registry ID or Wedding Registry ID as well.</p>' . '<b>General</b>' . '<ul>' . '<li>Works with amazon.com, and locales amazon.ca, amazon.de and amazon.co.uk.<br /><br />' . '</ul>' . '<b>Wishlist</b>' . '<ul>' . '<li>Add Associated ID.' . '<li>Choice of thumbnail size, Small/Medium/Large.' . '<li>Option to use up to unlimited widgets.' . '<li>Multiple items from the same Wish List can be displayed in the widget.' . '<li>A configurable footer can be displayed on the bottom of the widget linking to the list on Amazon.' . '</ul>' . '<b>Shortcode</b>' . '<ul>' . '<li>Create the shortcode with the help of a metabox' . '<li>In the metabox you can select an item or select to randomize the items from your wishlist or search for an item by ASIN.' . '<li>The shortcode creates text, picture or text & picture links.' . '<li>If a text link or text & picture links is used, the default text is the item description from Amazon but the text of the link can be changed.' . '<li>The value all for the ASIN option will show all items from your wishlist. In combination with a text & picture link type you can create a wishlist page.' . '</ul>' . '<b>Tools</b>' . '<ul>' . '<li>Look up your wishlist ID.' . '</ul>' . '<b>Support</b><br />' . 'For support visit the AVH support forums at <a href="http://forums.avirtualhome.com/">http://forums.avirtualhome.com/</a><br /><br />' . '<b>Developer</b><br />' . 'Peter van der Does'
+				)
+			)
+		);
+
 		// Update or reset options
 		if ( isset ( $_POST['updateoptions'] ) ) {
 			// Set all checkboxes unset
@@ -216,7 +291,7 @@ array ('avhamazon[widget_wishlist][nr_of_items]', 'Number of items:', 'text', 3,
 			$this->resetToDefaultOptions ();
 			$this->message = 'AVH Amazon options resetted to default options!';
 		}
-		
+
 		$this->displayMessage ();
 		?>
 <script type="text/javascript">
@@ -238,8 +313,7 @@ array ('avhamazon[widget_wishlist][nr_of_items]', 'Number of items:', 'text', 3,
 <p><input type="submit" name="updateoptions"
 	value="<?php
 		_e ( 'Update Options &raquo;', 'avhamazon' );
-		?>" /> <input
-	type="submit" name="reset_options"
+		?>" /> <input type="submit" name="reset_options"
 	onclick="return confirm('<?php
 		_e ( 'Do you really want to restore the default options?', 'avhamazon' );
 		?>');"
@@ -291,7 +365,7 @@ array ('avhamazon[widget_wishlist][nr_of_items]', 'Number of items:', 'text', 3,
 		if ( ! $options_from_table ) {
 			$this->resetToDefaultOptions ();
 		}
-	
+
 	}
 
 	############## WP Options ##############
@@ -383,7 +457,7 @@ array ('avhamazon[widget_wishlist][nr_of_items]', 'Number of items:', 'text', 3,
 			$status = $this->status;
 			$this->message = $this->status = ''; // Reset
 		}
-		
+
 		if ( $message ) {
 			?>
 <div id="message"
@@ -424,7 +498,7 @@ array ('avhamazon[widget_wishlist][nr_of_items]', 'Number of items:', 'text', 3,
 
 		// Get actual options
 		$option_actual = ( array ) $this->options;
-		
+
 		// Generate output
 		$output = '';
 		$checkbox = '|';
@@ -433,20 +507,20 @@ array ('avhamazon[widget_wishlist][nr_of_items]', 'Number of items:', 'text', 3,
 			foreach ( ( array ) $options as $option ) {
 				$option_key = rtrim ( $option[0], ']' );
 				$option_key = substr ( $option_key, strpos ( $option_key, '][' ) + 2 );
-				
+
 				// Helper
 				if ( $option[2] == 'helper' ) {
 					$output .= '<tr style="vertical-align: top;"><td class="helper" colspan="2">' . $option[4] . '</td></tr>' . "\n";
 					continue;
 				}
-				
+
 				switch ( $option[2] ) {
 					case 'checkbox' :
 						$input_type = '<input type="checkbox" id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape ( $option[3] ) . '" ' . checked ( '1', $option_actual[$section][$option_key] ) . ' />' . "\n";
 						$checkbox .= $option[0] . '|';
 						$explanation = $option[4];
 						break;
-					
+
 					case 'dropdown' :
 						$selvalue = explode ( '/', $option[3] );
 						$seltext = explode ( '/', $option[4] );
@@ -457,25 +531,25 @@ array ('avhamazon[widget_wishlist][nr_of_items]', 'Number of items:', 'text', 3,
 						$input_type = '<select id="' . $option[0] . '" name="' . $option[0] . '">' . $seldata . '</select>' . "\n";
 						$explanation = $option[5];
 						break;
-					
+
 					case 'text-color' :
 						$input_type = '<input type="text" ' . (($option[3] > 50) ? ' style="width: 95%" ' : '') . 'id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape ( $option_actual[$section][$option_key] ) . '" size="' . $option[3] . '" /><div class="box_color ' . $option[0] . '"></div>' . "\n";
 						$explanation = $option[4];
 						break;
-					
+
 					case 'text' :
 					default :
 						$input_type = '<input type="text" ' . (($option[3] > 50) ? ' style="width: 95%" ' : '') . 'id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape ( $option_actual[$section][$option_key] ) . '" size="' . $option[3] . '" />' . "\n";
 						$explanation = $option[4];
 						break;
 				}
-				
+
 				// Additional Information
 				$extra = '';
 				if ( $explanation ) {
 					$extra = '<div class="avhamazon_explain">' . __ ( $explanation ) . '</div>' . "\n";
 				}
-				
+
 				// Output
 				$output .= '<tr style="vertical-align: top;"><th scope="row"><label for="' . $option[0] . '">' . __ ( $option[1] ) . '</label></th><td>' . $input_type . '	' . $extra . '</td></tr>' . "\n";
 			}
