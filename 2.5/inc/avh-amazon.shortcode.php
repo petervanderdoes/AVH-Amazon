@@ -180,7 +180,6 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	{
 
 		//@todo Use of the nonce field for security
-		//wp_nonce_field( 'avhamazon-metabox', '_ajax_nonce', false );
 		$locale = $this->getOption ( 'locale', 'shortcode' );
 
 		echo '<ul id="avhamazon_tabs" class="ui-tabs-nav">';
@@ -202,7 +201,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function metaboxTabWishlist ( $locale )
 	{
-
+		wp_nonce_field( 'avhamazon-metabox', 'avhamazon_ajax_nonce', false );
 		$wishlist_id = $this->getOption ( 'wishlist_id', 'shortcode' );
 		echo '<div id="avhamazon_tab_wishlist" class="ui-tabs-panel">';
 		echo '	<div id="avhamazon-wishlist-show" style="display:block">';
@@ -219,6 +218,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		echo $seldata;
 		echo '			</select></label>';
 		echo '			<br />';
+
 		echo '			<input class="button-secondary" type="submit" value="Show Items" id="avhamazon_submit_wishlist" name="avhamazon_submit_wishlist" />';
 		echo '		</p>';
 		echo '	</div>';
@@ -270,13 +270,12 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	function on_wp_ajax_avhamazon_metabox ()
 	{
 
-		//@todo Use of the nonce for security
-		//check_ajax_referer ( 'avhamazon-metabox', '_ajax_nonce' );
+		check_ajax_referer ( 'avhamazon-metabox', 'avhamazon_ajax_nonce' );
 		echo '<script type="text/javascript">';
 		echo 'var avhamazon = new avhamazonmetabox();';
 		echo '</script>';
-		$action = $_POST['avhamazon_mb_action'];
-		$values = $_POST['avhamazon_mb_values'];
+		$action = attribute_escape($_POST['avhamazon_mb_action']);
+		$values = attribute_escape($_POST['avhamazon_mb_values']);
 
 		switch ( $action ) {
 			case 'wishlist' :

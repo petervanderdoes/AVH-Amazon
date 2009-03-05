@@ -338,7 +338,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 			$formoptions = $_POST['avhamazon'];
 			foreach ( $this->options as $key => $value ) {
 				foreach ( $value as $key2 => $value2 ) {
-					$newval = (isset ( $formoptions[$key][$key2] )) ? stripslashes ( $formoptions[$key][$key2] ) : '0';
+					$newval = (isset ( $formoptions[$key][$key2] )) ? attribute_escape ( $formoptions[$key][$key2] ) : '0';
 					if ( 'nr_of_items' == $key2 ) {
 						if ( ! is_numeric ( $formoptions[$key][$key2] ) ) {
 							$newval = 1;

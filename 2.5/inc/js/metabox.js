@@ -66,10 +66,12 @@ jQuery(document).ready(function() {
 
 function avhamazon_metabox_submit_wishlist() {
 	var values= new Array;
+	var nonce;
 	values[0] = jQuery('#avhamazon_scwishlist_wishlist').attr('value');
 	values[1] = jQuery('#avhamazon_scwishlist_locale').attr('value');
+	nonce     = jQuery('#avhamazon_ajax_nonce').attr('value');
 	if (values[0]) {
-		avhamazon_metabox_submit('wishlist','#avhamazon_wishlist_output','#avhamazon_wishlist_loading', values);
+		avhamazon_metabox_submit('wishlist','#avhamazon_wishlist_output','#avhamazon_wishlist_loading', values, nonce);
 	} else {
 		alert ('No Wish List ID given');
 	}
@@ -86,11 +88,13 @@ function avhamazon_metabox_wishlist( event ) {
 		
 function avhamazon_metabox_submit_asin( event ) {
 	var values = new Array;
+	var nonce;
 	event.preventDefault;
 	values[0] = jQuery('#avhamazon_asin_nr').attr('value');
 	values[1] = jQuery('#avhamazon_scasin_locale').attr('value');
+	nonce     = jQuery('#avhamazon_ajax_nonce').attr('value');
 	if (values[0]) {
-		avhamazon_metabox_submit('asin','#avhamazon_asin_output','#avhamazon_asin_loading',values);
+		avhamazon_metabox_submit('asin','#avhamazon_asin_output','#avhamazon_asin_loading',values,nonce);
 	} else {
 		alert ('No ASIN given');
 	}
@@ -105,13 +109,13 @@ function avhamazon_metabox_asin( event ) {
 	return true;
 }
 	
-function avhamazon_metabox_submit(avhamazon_action, avhamazon_output, avhamazon_loading, avhamazon_values) {
+function avhamazon_metabox_submit(avhamazon_action, avhamazon_output, avhamazon_loading, avhamazon_values, avhamazon_nonce) {
 	jQuery(avhamazon_output).hide();
 	jQuery(avhamazon_loading).show();
 	jQuery('avhamazon_wishlist_loading_pic').css('visibility','visible')
 	jQuery.post(
 		jQuery('#avhamazon_mb_url').attr("value")+"/wp-admin/admin-ajax.php",
-		{ action: 'avhamazon_metabox', 'cookie': encodeURIComponent(document.cookie), 'avhamazon_mb_action': avhamazon_action, 'avhamazon_mb_values[]': avhamazon_values }, 
+		{ action: 'avhamazon_metabox', 'cookie': encodeURIComponent(document.cookie), 'avhamazon_mb_action': avhamazon_action, 'avhamazon_mb_values[]': avhamazon_values,'avhamazon_ajax_nonce': avhamazon_nonce }, 
 		function(data, textStatus) {
 			jQuery(avhamazon_loading).hide();
 			jQuery(avhamazon_output).html(data.substr(0,data.length-1));
