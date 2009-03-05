@@ -358,55 +358,34 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		}
 
 		$this->displayMessage ();
-		?>
-<script type="text/javascript">
-		jQuery(document).ready( function() {
-			jQuery('#printOptions').tabs({fxSlide: true});
-		});
 
-  </script>
+		echo '<script type="text/javascript">';
+		echo 'jQuery(document).ready( function() {';
+		echo 'jQuery(\'#printOptions\').tabs({fxSlide: true});';
+		echo '});';
+		echo '</script>';
 
-<div class="wrap avh_wrap">
-<h2><?php
+		echo '<div class="wrap avh_wrap">';
+		echo '<h2>';
 		_e ( 'AVH Amazon: Options', 'avhamazon' );
-		?></h2>
-<form
-	action="<?php
-		echo $this->admin_base_url . 'avhamazon_options';
-		?>"
-	method="post">
-<div id="printOptions">
-<ul class="avhamazon_submenu">
-			<?php
+		echo '</h2>';
+		echo '<form	action="'. $this->admin_base_url . 'avhamazon_options' .'"method="post">';
+		echo '<div id="printOptions">';
+		echo '<ul class="avhamazon_submenu">';
 		foreach ( $option_data as $key => $value ) {
 			echo '<li><a href="#' . sanitize_title ( $key ) . '">' . $this->getNiceTitleOptions ( $key ) . '</a></li>';
 		}
-		?>
-			</ul>
-
-		<?php
+		echo '</ul>';
 		echo $this->printOptions ( $option_data );
-		?>
-				</div>
+		echo '</div>';
 
-<p class="submit"><input class="<?php echo ($this->info['wordpress_version'] < 2.7) ? '' : 'button-primary' ?>" type="submit" name="updateoptions"
-	value="<?php
-		_e ( 'Save Changes', 'avhamazon' );
-		?>" /> <input class="<?php echo ($this->info['wordpress_version'] < 2.7) ? '' : 'button-secondary' ?>"" type="submit" name="reset_options"
-	onclick="return confirm('<?php
-		_e ( 'Do you really want to restore the default options?', 'avhamazon' );
-		?>');"
-	value="<?php
-		_e ( 'Reset Options', 'avhamazon' );
-		?>" /></p>
-</form>
-		<?php
+		$buttonprimary = ($this->info['wordpress_version'] < 2.7) ? '' : 'button-primary';
+		$buttonsecondary = ($this->info['wordpress_version'] < 2.7) ? '' : 'button-secondary';
+		echo '<p class="submit"><input	class="'.$buttonprimary .'"	type="submit" name="updateoptions" value="'. __ ( 'Save Changes', 'avhamazon' ) .'" />';
+		echo '<input class="'.$buttonsecondary.'" type="submit" name="reset_options" onclick="return confirm(\''. __ ( 'Do you really want to restore the default options?', 'avhamazon' ).'\' value="'. __ ( 'Reset Options', 'avhamazon' ).'" /></p>';
+		echo '</form>';
 		$this->printAdminFooter ();
-		?>
-		</div>
-
-
-<?php
+		echo '</div>';
 	}
 
 	/**
@@ -493,11 +472,9 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	function printAdminFooter ()
 	{
 
-		?>
-<p class="footer_avhamazon"><?php
+		echo '<p class="footer_avhamazon">';
 		printf ( __ ( '&copy; Copyright 2009 <a href="http://blog.avirtualhome.com/" title="My Thoughts">Peter van der Does</a> | AVH Amazon Version %s', 'avhamazon' ), $this->version );
-		?></p>
-<?php
+		echo '</p>';
 	}
 
 	/**
@@ -514,16 +491,9 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		}
 
 		if ( $message ) {
-			?>
-<div id="message"
-	class="<?php
-			echo ($status != '') ? $status : 'updated';
-			?> fade">
-<p><strong><?php
-			echo $message;
-			?></strong></p>
-</div>
-<?php
+			$status = ($status != '') ? $status : 'updated';
+			echo '<div id="message"	class="'. $status .' fade">';
+			echo '<p><strong>'. $message .'</strong></p></div>';
 		}
 	}
 
