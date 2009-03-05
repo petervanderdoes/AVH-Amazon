@@ -274,8 +274,8 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		echo '<script type="text/javascript">';
 		echo 'var avhamazon = new avhamazonmetabox();';
 		echo '</script>';
-		$action = attribute_escape($_POST['avhamazon_mb_action']);
-		$values = attribute_escape($_POST['avhamazon_mb_values']);
+		$action = attribute_escape ( $_POST['avhamazon_mb_action'] );
+		$values = $_POST['avhamazon_mb_values'];
 
 		switch ( $action ) {
 			case 'wishlist' :
@@ -295,8 +295,8 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	function metaboxTabWishlistOutput ( $values )
 	{
 
-		$wishlist = $values[0];
-		$locale = $values[1];
+		$wishlist = attribute_escape ( $values[0] );
+		$locale = attribute_escape ( $values[1] );
 
 		/**
 		 * Set up endpoint
@@ -330,8 +330,8 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	function metaboxTabAsinOutput ( $values )
 	{
 
-		$asin = $values[0];
-		$locale = $values[1];
+		$asin = attribute_escape ( $values[0] );
+		$locale = attribute_escape ( $values[1] );
 
 		/**
 		 * Set up endpoint
