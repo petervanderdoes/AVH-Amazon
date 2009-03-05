@@ -198,23 +198,41 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		echo '</div>';
 	}
 
+	/**
+	 * Displays the table head for the tools page
+	 *
+	 * @since 2.4
+	 */
 	function toolsTableHead ()
 	{
 
 		echo '<table class="widefat"><thead><tr><th style="text-align: center;" scope="col">ID</th><th scope="col">Name</th><th scope="col">URL</th></th></thead><tbody>';
 	}
 
+	/**
+	 * Display the table footer for the tools page
+	 *
+	 * @since 2.4
+	 */
 	function toolsTableFooter ()
 	{
 
 		echo '</tbody></table>';
 	}
 
+	/**
+	 * Display the table row for the tools page
+	 *
+	 * @param array $list
+	 * @param string $class
+	 * @since 2.4
+	 */
 	function toolsTableRow ( $list, $class )
 	{
 
 		echo '<tr class="' . $class . '"><th style="text-align: center;" scope="row">' . $list['ListId'] . '</th><td>' . $list['ListName'] . '</td><td><a href="' . $list['ListURL'] . '"  target="_blank">' . $list['ListURL'] . '</td></tr>';
 	}
+
 	/**
 	 * WP Page Options- AVH Amazon options
 	 *
