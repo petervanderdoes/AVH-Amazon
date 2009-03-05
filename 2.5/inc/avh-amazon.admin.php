@@ -495,7 +495,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 		?>
 <p class="footer_avhamazon"><?php
-		printf ( __ ( '&copy; Copyright 2008 <a href="http://blog.avirtualhome.com/" title="My Thoughts">Peter van der Does</a> | AVH Amazon Version %s', 'avhamazon' ), $this->version );
+		printf ( __ ( '&copy; Copyright 2009 <a href="http://blog.avirtualhome.com/" title="My Thoughts">Peter van der Does</a> | AVH Amazon Version %s', 'avhamazon' ), $this->version );
 		?></p>
 <?php
 	}

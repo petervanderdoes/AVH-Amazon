@@ -7,7 +7,7 @@ Version: 2.4-rc2
 Author: Peter van der Does
 Author URI: http://blog.avirtualhome.com/
 
-Copyright 2008  Peter van der Does  (email : peter@avirtualhome.com)
+Copyright 2009  Peter van der Does  (email : peter@avirtualhome.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
