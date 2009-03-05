@@ -8,14 +8,13 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function __construct ()
 	{
-
-		parent::__construct ();
+		parent::__construct();
 
 		// Set the actions, filters and shortcode.
-		add_action ( 'admin_menu', array (&$this, 'handleAdminMenu' ) );
-		add_action ( 'wp_ajax_avhamazon_metabox', array (&$this, 'on_wp_ajax_avhamazon_metabox' ) ); // New function for AJAX calls from the submit button.
-		add_filter ( 'admin_print_scripts', array (&$this, 'adminHead' ) ); // Runs in the HTML header so a plugin can add JavaScript scripts to all admin pages.
-		add_shortcode ( 'avhamazon', array (&$this, 'handleShortcode' ) );
+		add_action( 'admin_menu', array (&$this, 'handleAdminMenu' ) );
+		add_action( 'wp_ajax_avhamazon_metabox', array (&$this, 'on_wp_ajax_avhamazon_metabox' ) ); // New function for AJAX calls from the submit button.
+		add_filter( 'admin_print_scripts', array (&$this, 'adminHead' ) ); // Runs in the HTML header so a plugin can add JavaScript scripts to all admin pages.
+		add_shortcode( 'avhamazon', array (&$this, 'handleShortcode' ) );
 	}
 
 	/**
@@ -24,8 +23,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function AVHAmazonShortcode ()
 	{
-
-		$this->__construct ();
+		$this->__construct();
 	}
 
 	/**
@@ -34,9 +32,8 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function handleAdminMenu ()
 	{
-
-		add_meta_box ( 'avhamazonmetabox01', 'AVH Amazon Short Code', array (&$this, 'createMetabox' ), 'post', 'normal' );
-		add_meta_box ( 'avhamazonmetabox01', 'AVH Amazon Short Code', array (&$this, 'createMetabox' ), 'page', 'normal' );
+		add_meta_box( 'avhamazonmetabox01', 'AVH Amazon Short Code', array (&$this, 'createMetabox' ), 'post', 'normal' );
+		add_meta_box( 'avhamazonmetabox01', 'AVH Amazon Short Code', array (&$this, 'createMetabox' ), 'page', 'normal' );
 	}
 
 	/**
@@ -45,10 +42,9 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function adminHead ()
 	{
-
 		if ( $GLOBALS['editing'] ) { //@todo Check if there's a better solution for this.
-			wp_enqueue_script ( 'avhamazonmetabox', $this->info['install_url'] . '/inc/js/metabox.js', array ('jquery' ), $this->version );
-			wp_enqueue_script ( 'jquery-ui-tabs' );
+			wp_enqueue_script( 'avhamazonmetabox', $this->info['install_url'] . '/inc/js/metabox.js', array ('jquery' ), $this->version );
+			wp_enqueue_script( 'jquery-ui-tabs' );
 		}
 	}
 
@@ -60,19 +56,18 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function handleShortcode ( $atts, $content = null )
 	{
-
 		$return = $this->comment_begin;
 		$result = '';
 		$error = '';
-		$locale = $this->getOption ( 'locale', 'shortcode' );
-		$attrs = shortcode_atts ( array ('asin' => '', 'locale' => $locale, 'linktype' => 'text', 'wishlist' => '', 'picsize' => 'small' ), $atts );
+		$locale = $this->getOption( 'locale', 'shortcode' );
+		$attrs = shortcode_atts( array ('asin' => '', 'locale' => $locale, 'linktype' => 'text', 'wishlist' => '', 'picsize' => 'small' ), $atts );
 
 		$locale = $attrs['locale'];
 
 		// Get the associate ID
-		$associatedid = $this->getOption ( 'associated_id', 'general' );
+		$associatedid = $this->getOption( 'associated_id', 'general' );
 		if ( $this->associate_table['US'] == $associatedid ) {
-			$associatedid = $this->getAssociateId ( $locale );
+			$associatedid = $this->getAssociateId( $locale );
 		}
 
 		/**
@@ -81,7 +76,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
 
 		if ( $attrs['wishlist'] ) {
-			$list_result = $this->getListResults ( $attrs['wishlist'] );
+			$list_result = $this->getListResults( $attrs['wishlist'] );
 			if ( $list_result['Lists']['Request']['Errors'] ) {
 				$error = 'WishList ' . $attrs['wishlist'] . ' doesn\'t exists';
 				$attrs['asin'] = null;
@@ -89,24 +84,24 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		}
 
 		// If a random item is wanted, fill $attrs['asin'] with an ASIN from the wishlist
-		if ( 'random' == strtolower ( $attrs['asin'] ) ) {
-			$Item_keys = $this->getItemKeys ( $list_result['Lists']['List']['ListItem'] );
+		if ( 'random' == strtolower( $attrs['asin'] ) ) {
+			$Item_keys = $this->getItemKeys( $list_result['Lists']['List']['ListItem'] );
 			foreach ( $Item_keys as $value ) {
 				$Item = $list_result['Lists']['List']['ListItem'][$value];
 			}
 			$attrs['asin'] = $Item['Item']['ASIN'];
 		}
 
-		if ( 'all' == strtolower ( $attrs['asin'] ) ) {
+		if ( 'all' == strtolower( $attrs['asin'] ) ) {
 			foreach ( $list_result['Lists']['List']['ListItem'] as $value ) {
 				$attrs['asin'] = $value['Item']['ASIN'];
-				list ( $oneresult, $error ) = $this->shortcodeAsin ( $attrs, $content, $associatedid );
+				list ( $oneresult, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid );
 				$result .= $oneresult . '<br />';
 			}
 			$attrs['asin'] = null;
 		}
 		if ( $attrs['asin'] ) {
-			list ( $result, $error ) = $this->shortcodeAsin ( $attrs, $content, $associatedid );
+			list ( $result, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid );
 		}
 
 		if ( $error ) {
@@ -128,20 +123,19 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function shortcodeAsin ( $attrs, $content, $associatedid )
 	{
-
 		$error = '';
-		$item_result = $this->handleRESTcall ( $this->getRestItemLookupParams ( $attrs['asin'], $associatedid ) );
-		if ( isset ( $item_result['Error'] ) ) {
+		$item_result = $this->handleRESTcall( $this->getRestItemLookupParams( $attrs['asin'], $associatedid ) );
+		if ( isset( $item_result['Error'] ) ) {
 			$return = '';
-			$error = $this->getHttpError ( $item_result['Error'] );
+			$error = $this->getHttpError( $item_result['Error'] );
 		} else {
-			if ( isset ( $item_result['Items']['Request']['Errors'] ) ) {
+			if ( isset( $item_result['Items']['Request']['Errors'] ) ) {
 				$return = '';
 				$error = 'Item with ASIN ' . $attrs['asin'] . ' doesn\'t exist';
 			} else {
-				$pos = strpos ( $item_result['Items']['Item']['DetailPageURL'], $attrs['asin'] );
+				$pos = strpos( $item_result['Items']['Item']['DetailPageURL'], $attrs['asin'] );
 
-				$myurl = substr ( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen ( $attrs['asin'] ) );
+				$myurl = substr( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen( $attrs['asin'] ) );
 				// If a wishlist is given, make sure when somebody clicks on the link, Amazon knows the List owner.
 				if ( $attrs['wishlist'] ) {
 					$myurl .= '/ref=wl_it_dp?ie=UTF8&colid=' . $attrs['wishlist'];
@@ -156,11 +150,11 @@ class AVHAmazonShortcode extends AVHAmazonCore
 						$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
 						break;
 					case 'pic' :
-						$imgsrc = $this->getImageUrl ( $attrs['picsize'], $item_result );
+						$imgsrc = $this->getImageUrl( $attrs['picsize'], $item_result );
 						$return = '<div class="wp-caption alignleft"><a title="' . $content . '" href="' . $myurl . '"><img src="' . $imgsrc . '" alt="' . $content . '"/></a><p class="wp-caption-text">' . $content . '</p></div>';
 						break;
 					case 'pic-text' :
-						$imgsrc = $this->getImageUrl ( $attrs['picsize'], $item_result );
+						$imgsrc = $this->getImageUrl( $attrs['picsize'], $item_result );
 						$return = '<table style=" border: none; cellpadding: 2px; align: left"><tr><td><a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" src="' . $imgsrc . '" alt="' . $content . '"/></a></td><td><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a></td></tr></table>';
 						break;
 					default :
@@ -178,19 +172,17 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function createMetabox ()
 	{
-
-		//@todo Use of the nonce field for security
-		$locale = $this->getOption ( 'locale', 'shortcode' );
+		$locale = $this->getOption( 'locale', 'shortcode' );
 
 		echo '<ul id="avhamazon_tabs" class="ui-tabs-nav">';
 		echo '<input name="avhamazon_mb_url" id="avhamazon_mb_url" value="' . $this->info['siteurl'] . '" type="hidden" />';
 
 		// The tabs
-		echo '<li class="ui-tabs-selected"><a href="#avhamazon_tab_wishlist">' . __ ( 'Wishlist', 'avhamazon' ) . '</a></li>';
-		echo '<li class=""><a href="#avhamazon_tab_asin">' . __ ( 'ASIN', 'avhamazon' ) . '</a></li></ul>';
+		echo '<li class="ui-tabs-selected"><a href="#avhamazon_tab_wishlist">' . __( 'Wishlist', 'avhamazon' ) . '</a></li>';
+		echo '<li class=""><a href="#avhamazon_tab_asin">' . __( 'ASIN', 'avhamazon' ) . '</a></li></ul>';
 
-		$this->metaboxTabWishlist ( $locale );
-		$this->metaboxTabAsin ( $locale );
+		$this->metaboxTabWishlist( $locale );
+		$this->metaboxTabAsin( $locale );
 	}
 
 	/**
@@ -202,14 +194,14 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	function metaboxTabWishlist ( $locale )
 	{
 		wp_nonce_field( 'avhamazon-metabox', 'avhamazon_ajax_nonce', false );
-		$wishlist_id = $this->getOption ( 'wishlist_id', 'shortcode' );
+		$wishlist_id = $this->getOption( 'wishlist_id', 'shortcode' );
 		echo '<div id="avhamazon_tab_wishlist" class="ui-tabs-panel">';
 		echo '	<div id="avhamazon-wishlist-show" style="display:block">';
 		echo '		<p>';
-		echo '			<label style="display:block">' . __ ( 'Wish List ID:', 'avhamazon' );
+		echo '			<label style="display:block">' . __( 'Wish List ID:', 'avhamazon' );
 		echo '			<input style="width: 13em" type="text" value="' . $wishlist_id . '" id="avhamazon_scwishlist_wishlist" name="avhamazon_scwishlist_wishlist" autocomplete="on"/>';
 		echo '			</label>';
-		echo '			<label style="display:block">' . __ ( 'Locale Amazon:', 'avhamazon' );
+		echo '			<label style="display:block">' . __( 'Locale Amazon:', 'avhamazon' );
 		echo '			<select id="avhamazon_scwishlist_locale" name="avhamazon_scwishlist_locale" />';
 		$seldata = '';
 		foreach ( $this->locale_table as $key => $value ) {
@@ -237,14 +229,13 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function metaboxTabAsin ( $locale )
 	{
-
 		echo '<div id="avhamazon_tab_asin" class="ui-tabs-panel">';
 		echo '	<div id="avhamazon_asin_show">';
 		echo '		<p>';
-		echo '			<label style="display:block">' . __ ( 'ASIN', 'avhamazon' );
+		echo '			<label style="display:block">' . __( 'ASIN', 'avhamazon' );
 		echo '			<input type="text" value="" style="style="width: 13em";" id ="avhamazon_asin_nr" name="avhamazon_asin_nr" autocomplete="on"/>';
 		echo '			</label>';
-		echo '			<label style="display:block">' . __ ( 'Locale Amazon:', 'avhamazon' );
+		echo '			<label style="display:block">' . __( 'Locale Amazon:', 'avhamazon' );
 		echo '			<select id="avhamazon_scasin_locale" name="avhamazon_scasin_locale" />';
 		$seldata = '';
 		foreach ( $this->locale_table as $key => $value ) {
@@ -269,20 +260,19 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function on_wp_ajax_avhamazon_metabox ()
 	{
-
-		check_ajax_referer ( 'avhamazon-metabox', 'avhamazon_ajax_nonce' );
+		check_ajax_referer( 'avhamazon-metabox', 'avhamazon_ajax_nonce' );
 		echo '<script type="text/javascript">';
 		echo 'var avhamazon = new avhamazonmetabox();';
 		echo '</script>';
-		$action = attribute_escape ( $_POST['avhamazon_mb_action'] );
+		$action = attribute_escape( $_POST['avhamazon_mb_action'] );
 		$values = $_POST['avhamazon_mb_values'];
 
 		switch ( $action ) {
 			case 'wishlist' :
-				$this->metaboxTabWishlistOutput ( $values );
+				$this->metaboxTabWishlistOutput( $values );
 				break;
 			case 'asin' :
-				$this->metaboxTabAsinOutput ( $values );
+				$this->metaboxTabAsinOutput( $values );
 				break;
 		}
 	}
@@ -294,31 +284,30 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function metaboxTabWishlistOutput ( $values )
 	{
-
-		$wishlist = attribute_escape ( $values[0] );
-		$locale = attribute_escape ( $values[1] );
+		$wishlist = attribute_escape( $values[0] );
+		$locale = attribute_escape( $values[1] );
 
 		/**
 		 * Set up endpoint
 		 */
 		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
 
-		$list_result = $this->getListResults ( $wishlist );
-		$total_items = count ( $list_result['Lists']['List']['ListItem'] );
+		$list_result = $this->getListResults( $wishlist );
+		$total_items = count( $list_result['Lists']['List']['ListItem'] );
 		if ( $total_items > 0 ) {
-			$this->metaboxTabOutputHeader ();
+			$this->metaboxTabOutputHeader();
 			$listitem = $list_result['Lists']['List']['ListItem'];
 			foreach ( $listitem as $key => $value ) {
 				$Item = $value;
-				$item_result = $this->handleRESTcall ( $this->getRestItemLookupParams ( $Item['Item']['ASIN'], '' ) );
-				$this->metaboxTabOutputItem ( $item_result['Items']['Item']['ItemAttributes']['Title'], $Item['Item']['ASIN'], 'avhamazon_scwishlist_asin-' . $key, 'avhamazon_scwishlist_asin', '', ('0' == $key) ? TRUE : FALSE );
+				$item_result = $this->handleRESTcall( $this->getRestItemLookupParams( $Item['Item']['ASIN'], '' ) );
+				$this->metaboxTabOutputItem( $item_result['Items']['Item']['ItemAttributes']['Title'], $Item['Item']['ASIN'], 'avhamazon_scwishlist_asin-' . $key, 'avhamazon_scwishlist_asin', '', ('0' == $key) ? TRUE : FALSE );
 			}
 			// Display the last row as a randomizing option
-			$this->metaboxTabOutputItem ( __ ( 'Randomize the items', 'avhamazon' ), 'random', 'avhamazon_scwishlist_asin-random', 'avhamazon_scwishlist_asin', '', FALSE );
-			$this->metaboxTabOutputOptions ( 'wishlist' );
-			$this->metaboxTabOutputSendtoeditor ( 'wishlist' );
+			$this->metaboxTabOutputItem( __( 'Randomize the items', 'avhamazon' ), 'random', 'avhamazon_scwishlist_asin-random', 'avhamazon_scwishlist_asin', '', FALSE );
+			$this->metaboxTabOutputOptions( 'wishlist' );
+			$this->metaboxTabOutputSendtoeditor( 'wishlist' );
 		} else {
-			echo '<strong>' . __ ( 'Can\'t find the given wish list', 'avhamazon' ) . '</strong>';
+			echo '<strong>' . __( 'Can\'t find the given wish list', 'avhamazon' ) . '</strong>';
 		}
 	}
 
@@ -329,23 +318,22 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function metaboxTabAsinOutput ( $values )
 	{
-
-		$asin = attribute_escape ( $values[0] );
-		$locale = attribute_escape ( $values[1] );
+		$asin = attribute_escape( $values[0] );
+		$locale = attribute_escape( $values[1] );
 
 		/**
 		 * Set up endpoint
 		 */
 		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
 
-		$item_result = $this->handleRESTcall ( $this->getRestItemLookupParams ( $asin, '' ) );
+		$item_result = $this->handleRESTcall( $this->getRestItemLookupParams( $asin, '' ) );
 		if ( $item_result['Items']['Request']['Errors'] ) {
-			echo '<strong>' . __ ( 'Can\'t find the given item', 'avhamazon' ) . '</strong>';
+			echo '<strong>' . __( 'Can\'t find the given item', 'avhamazon' ) . '</strong>';
 		} else {
-			$this->metaboxTabOutputHeader ();
-			$this->metaboxTabOutputItem ( $item_result['Items']['Item']['ItemAttributes']['Title'], $asin, 'avhamazon_scasin_asin', 'avhamazon_scasin_asin', '', TRUE );
-			$this->metaboxTabOutputOptions ( 'asin' );
-			$this->metaboxTabOutputSendtoeditor ( 'asin' );
+			$this->metaboxTabOutputHeader();
+			$this->metaboxTabOutputItem( $item_result['Items']['Item']['ItemAttributes']['Title'], $asin, 'avhamazon_scasin_asin', 'avhamazon_scasin_asin', '', TRUE );
+			$this->metaboxTabOutputOptions( 'asin' );
+			$this->metaboxTabOutputSendtoeditor( 'asin' );
 		}
 	}
 
@@ -355,8 +343,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function metaboxTabOutputHeader ()
 	{
-
-		echo '<strong>' . __ ( 'Select item', 'avhamazon' ) . '</strong><br />';
+		echo '<strong>' . __( 'Select item', 'avhamazon' ) . '</strong><br />';
 	}
 
 	/**
@@ -371,7 +358,6 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function metaboxTabOutputItem ( $title, $asin, $id, $name, $class = '', $checked = FALSE )
 	{
-
 		$class = ($class) ? 'class="' . $class . '"' : '';
 		echo '<label ' . $class . '><input type="radio" value="' . $asin . '" id="' . $id . '" name="' . $name . '"' . ($checked ? ' checked="checked" ' : "") . ' /> ' . $title . '</label><br />';
 	}
@@ -383,19 +369,18 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function metaboxTabOutputOptions ( $tabid )
 	{
-
-		echo '<p><strong>' . __ ( 'Link type:', 'avhamazon' ) . '</strong><br/>';
-		echo '<label><input type="radio" value="text" id="avhamazon_sc' . $tabid . '_linktypet" checked="checked" name="avhamazon_sc' . $tabid . '_linktype"/> ' . __ ( 'Text', 'avhamazon' ) . '</label><br />';
-		echo '<label><input type="radio" value="pic" id="avhamazon_sc' . $tabid . '_linktypep" name="avhamazon_sc' . $tabid . '_linktype"/> ' . __ ( 'Picture', 'avhamazon' ) . '</label><br />';
-		echo '<label><input type="radio" value="pic-text" id="avhamazon_sc' . $tabid . '_linktypept" name="avhamazon_sc' . $tabid . '_linktype"/> ' . __ ( 'Picture and Text', 'avhamazon' ) . '</label></p>';
-		echo '<p><strong>' . __ ( 'Picture Size:', 'avhamazon' ) . '</strong><br/>';
+		echo '<p><strong>' . __( 'Link type:', 'avhamazon' ) . '</strong><br/>';
+		echo '<label><input type="radio" value="text" id="avhamazon_sc' . $tabid . '_linktypet" checked="checked" name="avhamazon_sc' . $tabid . '_linktype"/> ' . __( 'Text', 'avhamazon' ) . '</label><br />';
+		echo '<label><input type="radio" value="pic" id="avhamazon_sc' . $tabid . '_linktypep" name="avhamazon_sc' . $tabid . '_linktype"/> ' . __( 'Picture', 'avhamazon' ) . '</label><br />';
+		echo '<label><input type="radio" value="pic-text" id="avhamazon_sc' . $tabid . '_linktypept" name="avhamazon_sc' . $tabid . '_linktype"/> ' . __( 'Picture and Text', 'avhamazon' ) . '</label></p>';
+		echo '<p><strong>' . __( 'Picture Size:', 'avhamazon' ) . '</strong><br/>';
 		echo '<label>';
 		echo '<select id="avhamazon_sc' . $tabid . '_picsize" name="avhamazon_sc' . $tabid . '_picsize" autocomplete="on">';
 		echo '<option selected="selected" value="small">Small</option>';
 		echo '<option value="medium">Medium</option>';
 		echo '<option value="large">Large</option>';
 		echo '</select></p>';
-		echo '<p><label><strong>' . __ ( 'Content:', 'avhamazon' ) . '</strong>';
+		echo '<p><label><strong>' . __( 'Content:', 'avhamazon' ) . '</strong>';
 		echo '<input type="text" style="width: 98%" id="avhamazon_sc' . $tabid . '_content" name="avhamazon_sc' . $tabid . '_content"/></p>';
 	}
 
@@ -406,9 +391,8 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function metaboxTabOutputSendtoeditor ( $tabid )
 	{
-
 		echo '<p class="submit">';
-		echo '<input type="button" id="avhamazon_sendtoeditor" name="' . $tabid . '" value="' . __ ( 'Send to Editor', 'avhamazon' ) . '" />';
+		echo '<input type="button" id="avhamazon_sendtoeditor" name="' . $tabid . '" value="' . __( 'Send to Editor', 'avhamazon' ) . '" />';
 		echo '</p>';
 	}
 }

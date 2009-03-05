@@ -11,32 +11,31 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 	function __construct ()
 	{
-
-		parent::__construct ();
+		parent::__construct();
 
 		// Admin URL and Pagination
 		$this->admin_base_url = $this->info['siteurl'] . '/wp-admin/admin.php?page=';
-		if ( isset ( $_GET['pagination'] ) ) {
+		if ( isset( $_GET['pagination'] ) ) {
 			$this->actual_page = ( int ) $_GET['pagination'];
 		}
 
 		// Admin Capabilities
-		add_action ( 'init', array (&$this, 'initRoles' ) );
+		add_action( 'init', array (&$this, 'initRoles' ) );
 
 		// Admin menu
-		add_action ( 'admin_menu', array (&$this, 'adminMenu' ) );
+		add_action( 'admin_menu', array (&$this, 'adminMenu' ) );
 
 		// CSS Helper
-		add_action ( 'admin_head', array (&$this, 'helperCSS' ) );
+		add_action( 'admin_head', array (&$this, 'helperCSS' ) );
 
 		// Helper JS & jQuery & Prototype
 		$avhamazon_pages = array ('avhamazon_options', 'avhamazon_tools' );
 		/**
 		 * TODO  With WordPress 2.5 the Tabs UI is build in :)
 		 */
-		if ( in_array ( $_GET['page'], $avhamazon_pages ) ) {
-			wp_enqueue_script ( 'jquery-tabs', $this->info['install_url'] . '/inc/js/jquery.tabs.pack.js', array ('jquery' ), '3' );
-			wp_enqueue_script ( 'jquery-forms', $this->info['install_url'] . '/inc/js/jquery.form.js', array ('jquery' ), '3' );
+		if ( in_array( $_GET['page'], $avhamazon_pages ) ) {
+			wp_enqueue_script( 'jquery-tabs', $this->info['install_url'] . '/inc/js/jquery.tabs.pack.js', array ('jquery' ), '3' );
+			wp_enqueue_script( 'jquery-forms', $this->info['install_url'] . '/inc/js/jquery.form.js', array ('jquery' ), '3' );
 		}
 		return;
 	}
@@ -48,8 +47,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function AVHAmazonAdmin ()
 	{
-
-		$this->__construct ();
+		$this->__construct();
 	}
 
 	/**
@@ -58,24 +56,23 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function initRoles ()
 	{
-
-		if ( function_exists ( 'get_role' ) ) {
-			$role = get_role ( 'administrator' );
-			if ( $role != null && ! $role->has_cap ( 'avh_amazon' ) ) {
-				$role->add_cap ( 'avh_amazon' );
+		if ( function_exists( 'get_role' ) ) {
+			$role = get_role( 'administrator' );
+			if ( $role != null && ! $role->has_cap( 'avh_amazon' ) ) {
+				$role->add_cap( 'avh_amazon' );
 			}
-			if ( $role != null && ! $role->has_cap ( 'admin_avh_amazon' ) ) {
-				$role->add_cap ( 'admin_avh_amazon' );
-			}
-			// Clean var
-			unset ( $role );
-
-			$role = get_role ( 'editor' );
-			if ( $role != null && ! $role->has_cap ( 'avh_amazon' ) ) {
-				$role->add_cap ( 'avh_amazon' );
+			if ( $role != null && ! $role->has_cap( 'admin_avh_amazon' ) ) {
+				$role->add_cap( 'admin_avh_amazon' );
 			}
 			// Clean var
-			unset ( $role );
+			unset( $role );
+
+			$role = get_role( 'editor' );
+			if ( $role != null && ! $role->has_cap( 'avh_amazon' ) ) {
+				$role->add_cap( 'avh_amazon' );
+			}
+			// Clean var
+			unset( $role );
 		}
 	}
 
@@ -85,10 +82,9 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function adminMenu ()
 	{
-
-		add_management_page ( __ ( 'AVH Amazon Tools', 'avhamazon' ), __ ( 'AVH Amazon Tools', 'avhamazon' ), 'avh_amazon', 'avhamazon_tools', array (&$this, 'pageAVHAmazonTools' ) );
-		add_options_page ( __ ( 'AVH Amazon: Options', 'avhamazon' ), 'AVH Amazon', 'avh_amazon', 'avhamazon_options', array (&$this, 'pageOptions' ) );
-		add_filter ( 'plugin_action_links', array (&$this, 'filterPluginActions' ), 10, 2 );
+		add_management_page( __( 'AVH Amazon Tools', 'avhamazon' ), __( 'AVH Amazon Tools', 'avhamazon' ), 'avh_amazon', 'avhamazon_tools', array (&$this, 'pageAVHAmazonTools' ) );
+		add_options_page( __( 'AVH Amazon: Options', 'avhamazon' ), 'AVH Amazon', 'avh_amazon', 'avhamazon_options', array (&$this, 'pageOptions' ) );
+		add_filter( 'plugin_action_links', array (&$this, 'filterPluginActions' ), 10, 2 );
 	}
 
 	/**
@@ -97,16 +93,15 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function filterPluginActions ( $links, $file )
 	{
-
 		static $this_plugin;
 
 		if ( ! $this_plugin )
-			$this_plugin = $this->getBaseDirectory ( plugin_basename ( $this->info['install_dir'] ) );
+			$this_plugin = $this->getBaseDirectory( plugin_basename( $this->info['install_dir'] ) );
 		if ( $file )
-			$file = $this->getBaseDirectory ( $file );
+			$file = $this->getBaseDirectory( $file );
 		if ( $file == $this_plugin ) {
-			$settings_link = '<a href="options-general.php?page=avhamazon_options">' . __ ( 'Settings', 'avhamazon' ) . '</a>';
-			array_unshift ( $links, $settings_link ); // before other links
+			$settings_link = '<a href="options-general.php?page=avhamazon_options">' . __( 'Settings', 'avhamazon' ) . '</a>';
+			array_unshift( $links, $settings_link ); // before other links
 		//$links = array_merge ( array (	$settings_link ), $links ); // before other links
 		}
 		return $links;
@@ -120,15 +115,14 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 	function pageAVHAmazonTools ()
 	{
-
 		$email = '';
-		$locale='';
+		$locale = '';
 
-		if (isset($_POST['action'])) {
-			check_admin_referer('avhamazon-tools');
-			$action = attribute_escape ($_POST['action']);
-			$email = attribute_escape ($_POST['email']);
-			$locale = attribute_escape ($_POST['locale']);
+		if ( isset( $_POST['action'] ) ) {
+			check_admin_referer( 'avhamazon-tools' );
+			$action = attribute_escape( $_POST['action'] );
+			$email = attribute_escape( $_POST['email'] );
+			$locale = attribute_escape( $_POST['locale'] );
 		}
 
 		// Locale Table
@@ -136,18 +130,18 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 		echo '<div class="wrap">';
 		echo '<h2>';
-		echo _e ( 'AVH Amazon: Tools', 'avhamazon' );
+		echo _e( 'AVH Amazon: Tools', 'avhamazon' );
 		echo '</h2>';
 		echo '<h3>Find Wish List ID</h3>';
-		echo '<form id="findid" action=' . $this->getBackLink().' method="post">';
-		wp_nonce_field ( 'avhamazon-tools' );
+		echo '<form id="findid" action=' . $this->getBackLink() . ' method="post">';
+		wp_nonce_field( 'avhamazon-tools' );
 		echo '<table class="form-table"><tbody><tr><td>';
 		echo '<p>Select the Amazon locale.</p>';
 		echo '<p><select id="locale" name="locale" />';
 		$seldata = '';
 		foreach ( $locale_table as $key => $value ) {
 			$seldata .= '<option value="' . $key . '"';
-			if ($key == $locale) {
+			if ( $key == $locale ) {
 				$seldata .= ' selected ';
 			}
 			$seldata .= '>' . $value . '</option>' . "\n";
@@ -156,45 +150,45 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		echo '</select>';
 		echo '<p>Enter the e-mail address used to sign on to Amazon to find the Wish List ID.</p>';
 		echo '<p><input name="action" value="findid" type="hidden" />';
-		echo '<input id="email" type="text" size="40" name="email" id="email" autocomplete="on" value="'.$email.'"/>';
+		echo '<input id="email" type="text" size="40" name="email" id="email" autocomplete="on" value="' . $email . '"/>';
 		echo '<input class="button-secondary" type="submit" value="Search"	name="submitButton" autocomplete="on" /></p>';
 		echo '</td></tr>';
 		echo '</tbody></table>';
 		echo '<div id="avhamazonwishlistoutputsearch">';
-		if ( isset ( $action ) ) {
-			$result = $this->handleRESTcall ( $this->getRestListSearchParams ( $email ) );
+		if ( isset( $action ) ) {
+			$result = $this->handleRESTcall( $this->getRestListSearchParams( $email ) );
 			$total = $result['Lists']['TotalResults'];
 
 			if ( 0 == $total ) {
-				echo '<h3>No wishlists found for '.$email .'<h3>';
+				echo '<h3>No wishlists found for ' . $email . '<h3>';
 			} elseif ( 1 == $total ) {
-				if ( empty ( $result['Lists']['List']['DateCreated'] ) ) { // Wishlist is deleted recently, the list entry still excists but the URL is invalid
-					echo '<h3>No wishlist found for '.$email .'</h3>';
+				if ( empty( $result['Lists']['List']['DateCreated'] ) ) { // Wishlist is deleted recently, the list entry still excists but the URL is invalid
+					echo '<h3>No wishlist found for ' . $email . '</h3>';
 				} else {
 					echo '<h3>Wishlist found:<br/></h3>';
-					$this->toolsTableHead ();
-					$this->ShowList ( $result['Lists']['List'], '' );
-					$this->toolsTableFooter ();
+					$this->toolsTableHead();
+					$this->ShowList( $result['Lists']['List'], '' );
+					$this->toolsTableFooter();
 				}
 			} else {
 				echo '<h3>Wishlist(s) found:<br /></h3>';
-				$this->toolsTableHead ();
+				$this->toolsTableHead();
 				$class = '';
 
 				foreach ( $result['Lists']['List'] as $list ) {
-					if ( ! empty ( $list['DateCreated'] ) ) { // Wishlist isn't deleted.
+					if ( ! empty( $list['DateCreated'] ) ) { // Wishlist isn't deleted.
 						$this->toolsTableRow( $list, $class );
 						$class = ('alternate' == $class) ? '' : 'alternate';
 					}
 				}
-				$this->toolsTableFooter ();
+				$this->toolsTableFooter();
 			}
 		}
 		echo '</div>';
 
 		echo '</form>';
 
-		$this->printAdminFooter ();
+		$this->printAdminFooter();
 		echo '</div>';
 	}
 
@@ -205,7 +199,6 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function toolsTableHead ()
 	{
-
 		echo '<table class="widefat"><thead><tr><th style="text-align: center;" scope="col">ID</th><th scope="col">Name</th><th scope="col">URL</th></th></thead><tbody>';
 	}
 
@@ -229,7 +222,6 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function toolsTableRow ( $list, $class )
 	{
-
 		echo '<tr class="' . $class . '"><th style="text-align: center;" scope="row">' . $list['ListId'] . '</th><td>' . $list['ListName'] . '</td><td><a href="' . $list['ListURL'] . '"  target="_blank">' . $list['ListURL'] . '</td></tr>';
 	}
 
@@ -239,7 +231,6 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function pageOptions ()
 	{
-
 		$option_data = array (
 			'general' => array (
 				array (
@@ -324,40 +315,40 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		);
 
 		// Update or reset options
-		if ( isset ( $_POST['updateoptions'] ) ) {
+		if ( isset( $_POST['updateoptions'] ) ) {
 			// Set all checkboxes unset
-			if ( isset ( $_POST['avh_checkboxes'] ) ) {
-				$checkboxes = explode ( '|', $_POST['avh_checkboxes'] );
+			if ( isset( $_POST['avh_checkboxes'] ) ) {
+				$checkboxes = explode( '|', $_POST['avh_checkboxes'] );
 				foreach ( $checkboxes as $value ) {
-					$value = ltrim ( $value, 'option[' );
-					$value = rtrim ( $value, ']' );
-					$keys = explode ( '][', $value );
-					$this->setOption ( $keys, 0 );
+					$value = ltrim( $value, 'option[' );
+					$value = rtrim( $value, ']' );
+					$keys = explode( '][', $value );
+					$this->setOption( $keys, 0 );
 				}
 			}
 			$formoptions = $_POST['avhamazon'];
 			foreach ( $this->options as $key => $value ) {
 				foreach ( $value as $key2 => $value2 ) {
-					$newval = (isset ( $formoptions[$key][$key2] )) ? attribute_escape ( $formoptions[$key][$key2] ) : '0';
+					$newval = (isset( $formoptions[$key][$key2] )) ? attribute_escape( $formoptions[$key][$key2] ) : '0';
 					if ( 'nr_of_items' == $key2 ) {
-						if ( ! is_numeric ( $formoptions[$key][$key2] ) ) {
+						if ( ! is_numeric( $formoptions[$key][$key2] ) ) {
 							$newval = 1;
 						}
 					}
 					if ( $newval != $value2 ) {
-						$this->setOption ( array ($key, $key2 ), $newval );
+						$this->setOption( array ($key, $key2 ), $newval );
 					}
 				}
 			}
-			$this->saveOptions ();
+			$this->saveOptions();
 			$this->message = 'Options saved';
 			$this->status = 'updated';
-		} elseif ( isset ( $_POST['reset_options'] ) ) {
-			$this->resetToDefaultOptions ();
+		} elseif ( isset( $_POST['reset_options'] ) ) {
+			$this->resetToDefaultOptions();
 			$this->message = 'AVH Amazon options resetted to default options!';
 		}
 
-		$this->displayMessage ();
+		$this->displayMessage();
 
 		echo '<script type="text/javascript">';
 		echo 'jQuery(document).ready( function() {';
@@ -367,24 +358,25 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 		echo '<div class="wrap avh_wrap">';
 		echo '<h2>';
-		_e ( 'AVH Amazon: Options', 'avhamazon' );
+		_e( 'AVH Amazon: Options', 'avhamazon' );
 		echo '</h2>';
-		echo '<form	action="'. $this->admin_base_url . 'avhamazon_options' .'"method="post">';
+		echo '<form	action="' . $this->admin_base_url . 'avhamazon_options' . '"method="post">';
 		echo '<div id="printOptions">';
 		echo '<ul class="avhamazon_submenu">';
 		foreach ( $option_data as $key => $value ) {
-			echo '<li><a href="#' . sanitize_title ( $key ) . '">' . $this->getNiceTitleOptions ( $key ) . '</a></li>';
+			echo '<li><a href="#' . sanitize_title( $key ) . '">' . $this->getNiceTitleOptions( $key ) . '</a></li>';
 		}
 		echo '</ul>';
-		echo $this->printOptions ( $option_data );
+		echo $this->printOptions( $option_data );
 		echo '</div>';
 
 		$buttonprimary = ($this->info['wordpress_version'] < 2.7) ? '' : 'button-primary';
 		$buttonsecondary = ($this->info['wordpress_version'] < 2.7) ? '' : 'button-secondary';
-		echo '<p class="submit"><input	class="'.$buttonprimary .'"	type="submit" name="updateoptions" value="'. __ ( 'Save Changes', 'avhamazon' ) .'" />';
-		echo '<input class="'.$buttonsecondary.'" type="submit" name="reset_options" onclick="return confirm(\''. __ ( 'Do you really want to restore the default options?', 'avhamazon' ).'\' value="'. __ ( 'Reset Options', 'avhamazon' ).'" /></p>';
+		echo '<p class="submit"><input	class="' . $buttonprimary . '"	type="submit" name="updateoptions" value="' . __( 'Save Changes', 'avhamazon' ) . '" />';
+		echo '<input class="' . $buttonsecondary . '" type="submit" name="reset_options" onclick="return confirm(\'' . __( 'Do you really want to restore the default options?', 'avhamazon' ) . '\' value="' . __( 'Reset Options', 'avhamazon' ) . '" /></p>';
 		echo '</form>';
-		$this->printAdminFooter ();
+
+		$this->printAdminFooter();
 		echo '</div>';
 	}
 
@@ -394,10 +386,9 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function installPlugin ()
 	{
-
-		$options_from_table = get_option ( $this->db_options_name_core );
+		$options_from_table = get_option( $this->db_options_name_core );
 		if ( ! $options_from_table ) {
-			$this->resetToDefaultOptions ();
+			$this->resetToDefaultOptions();
 		}
 
 	}
@@ -410,10 +401,9 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function removePlugin ( $plugin )
 	{
-
-		$current = get_option ( 'active_plugins' );
-		array_splice ( $current, array_search ( $plugin, $current ), 1 ); // Array-fu!
-		update_option ( 'active_plugins', $current );
+		$current = get_option( 'active_plugins' );
+		array_splice( $current, array_search( $plugin, $current ), 1 ); // Array-fu!
+		update_option( 'active_plugins', $current );
 	}
 
 	/**
@@ -424,7 +414,6 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function setOption ( $optkeys, $optval )
 	{
-
 		$key1 = $optkeys[0];
 		$key2 = $optkeys[1];
 		$this->options[$key1][$key2] = $optval;
@@ -436,9 +425,8 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function saveOptions ()
 	{
-
-		update_option ( $this->db_options_name_core, $this->options );
-		wp_cache_flush (); // Delete cache
+		update_option( $this->db_options_name_core, $this->options );
+		wp_cache_flush(); // Delete cache
 	}
 
 	/**
@@ -447,10 +435,9 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function resetToDefaultOptions ()
 	{
-
-		update_option ( $this->db_options_name_core, $this->default_options );
+		update_option( $this->db_options_name_core, $this->default_options );
 		$this->options = $this->default_options;
-		wp_cache_flush (); // Delete cache
+		wp_cache_flush(); // Delete cache
 	}
 
 	/**
@@ -459,9 +446,8 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function deleteAllOptions ()
 	{
-
-		delete_option ( $this->db_options_name_core, $this->default_options );
-		wp_cache_flush (); // Delete cache
+		delete_option( $this->db_options_name_core, $this->default_options );
+		wp_cache_flush(); // Delete cache
 	}
 
 	############## Admin WP Helper ##############
@@ -471,9 +457,8 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function printAdminFooter ()
 	{
-
 		echo '<p class="footer_avhamazon">';
-		printf ( __ ( '&copy; Copyright 2009 <a href="http://blog.avirtualhome.com/" title="My Thoughts">Peter van der Does</a> | AVH Amazon Version %s', 'avhamazon' ), $this->version );
+		printf( __( '&copy; Copyright 2009 <a href="http://blog.avirtualhome.com/" title="My Thoughts">Peter van der Does</a> | AVH Amazon Version %s', 'avhamazon' ), $this->version );
 		echo '</p>';
 	}
 
@@ -483,7 +468,6 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function displayMessage ()
 	{
-
 		if ( $this->message != '' ) {
 			$message = $this->message;
 			$status = $this->status;
@@ -492,8 +476,8 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 		if ( $message ) {
 			$status = ($status != '') ? $status : 'updated';
-			echo '<div id="message"	class="'. $status .' fade">';
-			echo '<p><strong>'. $message .'</strong></p></div>';
+			echo '<div id="message"	class="' . $status . ' fade">';
+			echo '<p><strong>' . $message . '</strong></p></div>';
 		}
 	}
 
@@ -503,9 +487,8 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function helperCSS ()
 	{
-
 		if ( $this->info['wordpress_version'] >= 2.6 ) {
-			$this->handleCssFile ( 'avhamazonadmin', '/inc/avh-amazon.admin.css' );
+			$this->handleCssFile( 'avhamazonadmin', '/inc/avh-amazon.admin.css' );
 		} else {
 			// for older versions
 			echo '<link media="all" type="text/css" href="' . $this->info['install_url'] . '/inc/avh-amazon.admin.css?ver=' . $this->version . '" rel="stylesheet"> </link>';
@@ -520,7 +503,6 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function printOptions ( $option_data )
 	{
-
 		// Get actual options
 		$option_actual = ( array ) $this->options;
 
@@ -528,10 +510,10 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		$output = '';
 		$checkbox = '|';
 		foreach ( $option_data as $section => $options ) {
-			$output .= "\n" . '<div id="' . sanitize_title ( $section ) . '"><fieldset class="options"><legend>' . $this->getNiceTitleOptions ( $section ) . '</legend><table class="form-table">' . "\n";
+			$output .= "\n" . '<div id="' . sanitize_title( $section ) . '"><fieldset class="options"><legend>' . $this->getNiceTitleOptions( $section ) . '</legend><table class="form-table">' . "\n";
 			foreach ( ( array ) $options as $option ) {
-				$option_key = rtrim ( $option[0], ']' );
-				$option_key = substr ( $option_key, strpos ( $option_key, '][' ) + 2 );
+				$option_key = rtrim( $option[0], ']' );
+				$option_key = substr( $option_key, strpos( $option_key, '][' ) + 2 );
 
 				// Helper
 				if ( $option[2] == 'helper' ) {
@@ -541,30 +523,30 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 				switch ( $option[2] ) {
 					case 'checkbox' :
-						$input_type = '<input type="checkbox" id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape ( $option[3] ) . '" ' . checked ( '1', $option_actual[$section][$option_key] ) . ' />' . "\n";
+						$input_type = '<input type="checkbox" id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape( $option[3] ) . '" ' . checked( '1', $option_actual[$section][$option_key] ) . ' />' . "\n";
 						$checkbox .= $option[0] . '|';
 						$explanation = $option[4];
 						break;
 
 					case 'dropdown' :
-						$selvalue = explode ( '/', $option[3] );
-						$seltext = explode ( '/', $option[4] );
+						$selvalue = explode( '/', $option[3] );
+						$seltext = explode( '/', $option[4] );
 						$seldata = '';
 						foreach ( ( array ) $selvalue as $key => $sel ) {
-							$seldata .= '<option value="' . $sel . '" ' . (($option_actual[$section][$option_key] == $sel) ? 'selected="selected"' : '') . ' >' . ucfirst ( $seltext[$key] ) . '</option>' . "\n";
+							$seldata .= '<option value="' . $sel . '" ' . (($option_actual[$section][$option_key] == $sel) ? 'selected="selected"' : '') . ' >' . ucfirst( $seltext[$key] ) . '</option>' . "\n";
 						}
 						$input_type = '<select id="' . $option[0] . '" name="' . $option[0] . '">' . $seldata . '</select>' . "\n";
 						$explanation = $option[5];
 						break;
 
 					case 'text-color' :
-						$input_type = '<input type="text" ' . (($option[3] > 50) ? ' style="width: 95%" ' : '') . 'id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape ( $option_actual[$section][$option_key] ) . '" size="' . $option[3] . '" /><div class="box_color ' . $option[0] . '"></div>' . "\n";
+						$input_type = '<input type="text" ' . (($option[3] > 50) ? ' style="width: 95%" ' : '') . 'id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape( $option_actual[$section][$option_key] ) . '" size="' . $option[3] . '" /><div class="box_color ' . $option[0] . '"></div>' . "\n";
 						$explanation = $option[4];
 						break;
 
 					case 'text' :
 					default :
-						$input_type = '<input type="text" ' . (($option[3] > 50) ? ' style="width: 95%" ' : '') . 'id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape ( $option_actual[$section][$option_key] ) . '" size="' . $option[3] . '" />' . "\n";
+						$input_type = '<input type="text" ' . (($option[3] > 50) ? ' style="width: 95%" ' : '') . 'id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape( $option_actual[$section][$option_key] ) . '" size="' . $option[3] . '" />' . "\n";
 						$explanation = $option[4];
 						break;
 				}
@@ -572,16 +554,16 @@ class AVHAmazonAdmin extends AVHAmazonCore
 				// Additional Information
 				$extra = '';
 				if ( $explanation ) {
-					$extra = '<div class="avhamazon_explain">' . __ ( $explanation ) . '</div>' . "\n";
+					$extra = '<div class="avhamazon_explain">' . __( $explanation ) . '</div>' . "\n";
 				}
 
 				// Output
-				$output .= '<tr style="vertical-align: top;"><th scope="row"><label for="' . $option[0] . '">' . __ ( $option[1] ) . '</label></th><td>' . $input_type . '	' . $extra . '</td></tr>' . "\n";
+				$output .= '<tr style="vertical-align: top;"><th scope="row"><label for="' . $option[0] . '">' . __( $option[1] ) . '</label></th><td>' . $input_type . '	' . $extra . '</td></tr>' . "\n";
 			}
 			$output .= '</table>' . "\n";
 			if ( '|' !== $checkbox )
-				$checkbox = ltrim ( $checkbox, '|' );
-			$output .= '<input	type="hidden" name="avh_checkboxes" value="' . rtrim ( $checkbox, '|' ) . '" />';
+				$checkbox = ltrim( $checkbox, '|' );
+			$output .= '<input	type="hidden" name="avh_checkboxes" value="' . rtrim( $checkbox, '|' ) . '" />';
 			$output .= '</fieldset></div>' . "\n";
 		}
 		return $output;
@@ -595,22 +577,21 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function getNiceTitleOptions ( $id = '' )
 	{
-
 		switch ( $id ) {
 			case 'general' :
-				return __ ( 'General', 'avhamazon' );
+				return __( 'General', 'avhamazon' );
 				break;
 			case 'widget_wishlist' :
-				return __ ( 'Wishlist', 'avhamazon' );
+				return __( 'Wishlist', 'avhamazon' );
 				break;
 			case 'shortcode' :
-				return __ ( 'Shortcode', 'avhamazon' );
+				return __( 'Shortcode', 'avhamazon' );
 				break;
 			case 'faq' :
-				return __ ( 'FAQ', 'avhamazon' );
+				return __( 'FAQ', 'avhamazon' );
 				break;
 			case 'about' :
-				return __ ( 'About', 'avhamazon' );
+				return __( 'About', 'avhamazon' );
 				break;
 		}
 		return 'Unknown';
