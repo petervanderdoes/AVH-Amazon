@@ -121,53 +121,100 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	function pageAVHAmazonTools ()
 	{
 
+		$email = '';
+		$locale='';
+
+		if (isset($_POST['action'])) {
+			check_admin_referer('avhamazon-tools');
+			$action = attribute_escape ($_POST['action']);
+			$email = attribute_escape ($_POST['email']);
+			$locale = attribute_escape ($_POST['locale']);
+		}
+
 		// Locale Table
 		$locale_table = $this->locale_table;
-		?>
-<script type="text/javascript"><!--
 
-jQuery(document).ready(function() {
-	var searchoptions = {
-		target:		'#avhamazonwishlistoutputsearch'	// target element(s) to be updated with server response
-	};
-
-	jQuery('#findid').submit(function() {
-		jQuery(this).ajaxSubmit(searchoptions);
-		return false;
-	});
-});
-// -->
-</script>
-<?php
 		echo '<div class="wrap">';
 		echo '<h2>';
 		echo _e ( 'AVH Amazon: Tools', 'avhamazon' );
 		echo '</h2>';
 		echo '<h3>Find Wish List ID</h3>';
-		echo '<form id="findid" action=' . $this->info['install_url'] . '/inc/avh-amazon.tools.php method="post" autocomplete="on">';
-		echo '<input type="hidden" value="' . ABSPATH . '" name="abs" autocomplete="on"/>';
+		echo '<form id="findid" action=' . $this->getBackLink().' method="post">';
+		wp_nonce_field ( 'avhamazon-tools' );
 		echo '<table class="form-table"><tbody><tr><td>';
 		echo '<p>Select the Amazon locale.</p>';
 		echo '<p><select id="locale" name="locale" />';
 		$seldata = '';
 		foreach ( $locale_table as $key => $value ) {
-			$seldata .= '<option value="' . $key . '" >' . $value . '</option>' . "\n";
+			$seldata .= '<option value="' . $key . '"';
+			if ($key == $locale) {
+				$seldata .= ' selected ';
+			}
+			$seldata .= '>' . $value . '</option>' . "\n";
 		}
 		echo $seldata;
 		echo '</select>';
 		echo '<p>Enter the e-mail address used to sign on to Amazon to find the Wish List ID.</p>';
 		echo '<p><input name="action" value="findid" type="hidden" />';
-		echo '<input id="email" type="text" size="40" name="email" id="email" autocomplete="on" />';
+		echo '<input id="email" type="text" size="40" name="email" id="email" autocomplete="on" value="'.$email.'"/>';
 		echo '<input class="button-secondary" type="submit" value="Search"	name="submitButton" autocomplete="on" /></p>';
 		echo '</td></tr>';
 		echo '</tbody></table>';
-		echo '<div id="avhamazonwishlistoutputsearch"></div>';
+		echo '<div id="avhamazonwishlistoutputsearch">';
+		if ( isset ( $action ) ) {
+			$result = $this->handleRESTcall ( $this->getRestListSearchParams ( $email ) );
+			$total = $result['Lists']['TotalResults'];
+
+			if ( 0 == $total ) {
+				echo '<h3>No wishlists found for '.$email .'<h3>';
+			} elseif ( 1 == $total ) {
+				if ( empty ( $result['Lists']['List']['DateCreated'] ) ) { // Wishlist is deleted recently, the list entry still excists but the URL is invalid
+					echo '<h3>No wishlist found for '.$email .'</h3>';
+				} else {
+					echo '<h3>Wishlist found:<br/></h3>';
+					$this->toolsTableHead ();
+					$this->ShowList ( $result['Lists']['List'], '' );
+					$this->toolsTableFooter ();
+				}
+			} else {
+				echo '<h3>Wishlist(s) found:<br /></h3>';
+				$this->toolsTableHead ();
+				$class = '';
+
+				foreach ( $result['Lists']['List'] as $list ) {
+					if ( ! empty ( $list['DateCreated'] ) ) { // Wishlist isn't deleted.
+						$this->toolsTableRow( $list, $class );
+						$class = ('alternate' == $class) ? '' : 'alternate';
+					}
+				}
+				$this->toolsTableFooter ();
+			}
+		}
+		echo '</div>';
+
 		echo '</form>';
 
 		$this->printAdminFooter ();
 		echo '</div>';
 	}
 
+	function toolsTableHead ()
+	{
+
+		echo '<table class="widefat"><thead><tr><th style="text-align: center;" scope="col">ID</th><th scope="col">Name</th><th scope="col">URL</th></th></thead><tbody>';
+	}
+
+	function toolsTableFooter ()
+	{
+
+		echo '</tbody></table>';
+	}
+
+	function toolsTableRow ( $list, $class )
+	{
+
+		echo '<tr class="' . $class . '"><th style="text-align: center;" scope="row">' . $list['ListId'] . '</th><td>' . $list['ListName'] . '</td><td><a href="' . $list['ListURL'] . '"  target="_blank">' . $list['ListURL'] . '</td></tr>';
+	}
 	/**
 	 * WP Page Options- AVH Amazon options
 	 *

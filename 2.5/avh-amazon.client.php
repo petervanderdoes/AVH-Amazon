@@ -442,19 +442,13 @@ class AVHAmazonCore
 		// It will be empty if we had an error.
 		if ( ! empty ( $xml_array ) ) {
 			// Depending on the Operation called we'll return the right array back.
-			switch ( $query_array['Operation'] ) {
-				case 'ListLookup' :
-					$return_array = $xml_array['ListLookupResponse'];
-					break;
-				case 'ItemLookup' :
-					$return_array = $xml_array['ItemLookupResponse'];
-					break;
-				default :
-					echo 'Unknown Operation in rest Call';
-					die ();
+			$key = $query_array['Operation'] . 'Response';
+			if ( ! isset ( $xml_array[$key] ) ) {
+				echo 'Unknown Operation in rest Call';
+				die ();
 			}
+			$return_array = $xml_array[$key];
 		}
-
 		return ($return_array);
 	}
 
@@ -509,11 +503,31 @@ class AVHAmazonCore
 	function getRestItemLookupParams ( $Itemid, $associatedid )
 	{
 
-		$itemLookUp = array ('Operation' => 'ItemLookup', 'ItemId' => $Itemid, 'IdType' => 'ASIN', 'Condition' => 'All', 'ResponseGroup' => 'Medium', 'AssociateTag' => $associatedid );
+		$itemLookUp = array (
+			'Operation' => 'ItemLookup',
+			'ItemId' => $Itemid,
+			'IdType' => 'ASIN',
+			'Condition' => 'All',
+			'ResponseGroup' => 'Medium',
+			'AssociateTag' => $associatedid );
 
 		$request = array_merge ( $this->amazon_standard_request, $itemLookUp );
 
 		return $request;
+	}
+
+	function getRestListSearchParams ( $email, $list = 'WishList' )
+	{
+
+		$request = array (
+			'Operation' => 'ListSearch',
+			'Email' => $email,
+			'ListType' => $list,
+			'ResponseGroup' => 'ListInfo' );
+
+		$return = array_merge ( $this->amazon_standard_request, $request );
+
+		return $return;
 	}
 
 	/**
@@ -836,6 +850,21 @@ class AVHAmazonCore
 			wp_enqueue_style ( $handle );
 		}
 	}
+
+	function getBackLink ()
+	{
+
+		$page = basename ( __FILE__ );
+		if ( isset ( $_GET['page'] ) && ! empty ( $_GET['page'] ) ) {
+			$page = preg_replace ( '[^a-zA-Z0-9\.\_\-]', '', $_GET['page'] );
+		}
+
+		if ( function_exists ( "admin_url" ) )
+			return admin_url ( basename ( $_SERVER["PHP_SELF"] ) ) . "?page=" . $page;
+		else
+			return $_SERVER['PHP_SELF'] . "?page=" . $page;
+	}
+
 } //End Class avh_amazon
 
 
