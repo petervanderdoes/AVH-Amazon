@@ -357,16 +357,6 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		echo $this->admin_base_url . 'avhamazon_options';
 		?>"
 	method="post">
-<p><input type="submit" name="updateoptions"
-	value="<?php
-		_e ( 'Update Options &raquo;', 'avhamazon' );
-		?>" /> <input type="submit" name="reset_options"
-	onclick="return confirm('<?php
-		_e ( 'Do you really want to restore the default options?', 'avhamazon' );
-		?>');"
-	value="<?php
-		_e ( 'Reset Options', 'avhamazon' );
-		?>" /></p>
 <div id="printOptions">
 <ul class="avhamazon_submenu">
 			<?php
@@ -381,10 +371,10 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		?>
 				</div>
 
-<p class="submit"><input type="submit" name="updateoptions"
+<p class="submit"><input class="<?php echo ($this->info['wordpress_version'] < 2.7) ? '' : 'button-primary' ?>" type="submit" name="updateoptions"
 	value="<?php
-		_e ( 'Update Options &raquo;', 'avhamazon' );
-		?>" /> <input type="submit" name="reset_options"
+		_e ( 'Save Changes', 'avhamazon' );
+		?>" /> <input class="<?php echo ($this->info['wordpress_version'] < 2.7) ? '' : 'button-secondary' ?>"" type="submit" name="reset_options"
 	onclick="return confirm('<?php
 		_e ( 'Do you really want to restore the default options?', 'avhamazon' );
 		?>');"
