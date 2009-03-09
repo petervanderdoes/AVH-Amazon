@@ -151,7 +151,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 						break;
 					case 'pic' :
 						$imgsrc = $this->getImageUrl( $attrs['picsize'], $item_result );
-						$return = '<div class="wp-caption alignleft"><a title="' . $content . '" href="' . $myurl . '"><img src="' . $imgsrc . '" alt="' . $content . '"/></a><p class="wp-caption-text">' . $content . '</p></div>';
+						$return = '<div class="wp-caption alignleft"><a title="' . $content . '" href="' . $myurl . '"><img src="' . $imgsrc . '" alt="' . $content . '"/></a></div>';
 						break;
 					case 'pic-text' :
 						$imgsrc = $this->getImageUrl( $attrs['picsize'], $item_result );
