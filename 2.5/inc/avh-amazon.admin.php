@@ -563,9 +563,10 @@ class AVHAmazonAdmin extends AVHAmazonCore
 				$output .= '<tr style="vertical-align: top;"><th scope="row"><label for="' . $option[0] . '">' . __( $option[1] ) . '</label></th><td>' . $input_type . '	' . $extra . '</td></tr>' . "\n";
 			}
 			$output .= '</table>' . "\n";
-			if ( '|' !== $checkbox )
+			if ( '|' !== $checkbox ) {
 				$checkbox = ltrim( $checkbox, '|' );
-			$output .= '<input	type="hidden" name="avh_checkboxes" value="' . rtrim( $checkbox, '|' ) . '" />';
+				$output .= '<input	type="hidden" name="avh_checkboxes" value="' . rtrim( $checkbox, '|' ) . '" />';
+			}
 			$output .= '</fieldset></div>' . "\n";
 		}
 		return $output;
