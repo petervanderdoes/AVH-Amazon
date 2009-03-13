@@ -79,7 +79,7 @@ None
 	* Moved from SOAP to REST to improve speed.
 	* Increased security
 	* RFC: Ability to select picture size in the short code.
-	* Bugfix: In shortcode when selecting picture only the text was displayed as well.
+	* Several bugs are fixed.
 * Version 2.3.3
 	* Bugfix: In the shortcode the default associate ID wasn't set to the right one when using a a non US locale.
 * Version 2.3.2
