@@ -80,6 +80,8 @@ None
 	* Increased security
 	* RFC: Ability to select picture size in the short code.
 	* Several bugs are fixed.
+* Version 2.3.4
+	* Bugfix: Footer option in widget didn't show.
 * Version 2.3.3
 	* Bugfix: In the shortcode the default associate ID wasn't set to the right one when using a a non US locale.
 * Version 2.3.2
