@@ -847,6 +847,21 @@ class AVHAmazonCore
 	}
 
 	/**
+	 * Used in forms to set the checked option.
+	 *
+	 * @param mixed $checked
+	 * @param mixed_type $current
+	 * @return string
+	 *
+	 * @since 2.3.4
+	 */
+	function isChecked ( $checked, $current )
+	{
+		if ( $checked == $current )
+			return (' checked="checked"');
+	}
+
+	/**
 	 * Insert the CSS file
 	 *
 	 * @param string $handle CSS Handle

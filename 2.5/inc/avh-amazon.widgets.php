@@ -127,7 +127,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 				$options['wishlist_id'] = strip_tags( stripslashes( $widget_instance['wishlistid'] ) );
 				$options['locale'] = strip_tags( stripslashes( $widget_instance['locale'] ) );
 				$options['nr_of_items'] = strip_tags( stripslashes( $widget_instance['nr-of-items'] ) );
-				$options['show_footer'] = ($widget_instance['widget-avhamazon-show-footer'] ? 1 : 0);
+				$options['show_footer'] = ($widget_instance['show-footer'] ? 1 : 0);
 				$options['footer_template'] = strip_tags( stripslashes( $widget_instance['footer-template'] ) );
 
 				$all_options[$widget_number] = $options;
@@ -202,7 +202,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 		echo '<label for="widget-avhamazon-show-footer-' . $number . '" style="line-height: 35px; display: block;">';
 		_e( 'Show footer:', 'avhamazon' );
 		echo '<br />';
-		echo '<input style="width: 100% !important;" type="checkbox" id="widget-avhamazon-show-footer-' . $number . '" name="widget_avhamazon_wishlist[' . $number . '][show-footer]" value="1"' . checked( '1', $show_footer ) . ' />';
+		echo '<input style="width: 100% !important;" type="checkbox" id="widget-avhamazon-show-footer-' . $number . '" name="widget_avhamazon_wishlist[' . $number . '][show-footer]" value="1"' . isChecked( '1', $show_footer ) . ' />';
 		echo '</label>';
 
 		echo '<label for="widget-avhamazon-footer-template-' . $number . '" style="line-height: 35px; display: block;">';
