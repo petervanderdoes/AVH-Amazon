@@ -77,7 +77,8 @@ None
 == Arbitrary section ==
 * Version 2.4
 	* Moved from SOAP to REST to improve speed.
-	* Increased security
+	* Increased security.
+	* Reduced memory footprint.
 	* RFC: Ability to select picture size in the short code.
 	* Several bugs are fixed.
 * Version 2.3.4
