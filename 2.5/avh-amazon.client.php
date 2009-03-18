@@ -727,34 +727,54 @@ class AVHAmazonCore
 	 *
 	 * @param string $imagesize (small,medium,large)
 	 * @param array Result of the Item Lookup call
-	 * @return string URL of the image
+	 * @return array the image's URL, Height, Width
 	 */
-	function getImageUrl ( $imagesize, $item_result )
+	function getImageInfo ( $imagesize, $item_result )
 	{
 		$imageurl = $this->info['graphics_url'];
 		switch ( strtolower( $imagesize ) ) {
-			case 'small' :
-				$imgsrc = $item_result['Items']['Item']['SmallImage']['URL'];
-				if ( empty( $imgsrc ) )
-					$imgsrc = $imageurl . '/no-image-75.gif';
-				break;
 			case 'medium' :
-				$imgsrc = $item_result['Items']['Item']['MediumImage']['URL'];
-				if ( empty( $imgsrc ) )
-					$imgsrc = $imageurl . '/no-image-160.gif';
+				$img['url'] = $item_result['Items']['Item']['MediumImage']['URL'];
+				$img['h'] = $item_result['Items']['Item']['MediumImage']['Height'];
+				$img['w'] = $item_result['Items']['Item']['MediumImage']['Width'];
+				if ( empty( $img['url'] ) ) {
+					$img['url'] = $imageurl . '/no-image-160.gif';
+					$img['h'] = 75;
+					$img['w'] = 75;
+				}
+				break;
+			case 'small' :
+				$img['url'] = $item_result['Items']['Item']['SmallImage']['URL'];
+				$img['h'] = $item_result['Items']['Item']['SmallImage']['Height'];
+				$img['w'] = $item_result['Items']['Item']['SmallImage']['Width'];
+				if ( empty( $img['url'] ) ) {
+					$img['url'] = $imageurl . '/no-image-75.gif';
+					$img['h'] = 75;
+					$img['w'] = 75;
+				}
 				break;
 			case 'large' :
-				$imgsrc = $item_result['Items']['Item']['LargeImage']['URL'];
-				if ( empty( $imgsrc ) )
-					$imgsrc = $imageurl . '/no-image-500.gif';
+				$img['url'] = $item_result['Items']['Item']['LargeImage']['URL'];
+				$img['h'] = $item_result['Items']['Item']['LargeImage']['Height'];
+				$img['w'] = $item_result['Items']['Item']['LargeImage']['Width'];
+				if ( empty( $img['url'] ) ) {
+					$img['url'] = $imageurl . '/no-image-500.gif';
+					$img['h'] = 75;
+					$img['w'] = 75;
+				}
 				break;
 			default :
-				$imgsrc = $item_result['Items']['Item']['MediumImage']['URL'];
-				if ( empty( $imgsrc ) )
-					$imgsrc = $imageurl . '/no-image-160.gif';
+				$img['url'] = $item_result['Items']['Item']['MediumImage']['URL'];
+				$img['h'] = $item_result['Items']['Item']['SmallImage']['Height'];
+				$img['w'] = $item_result['Items']['Item']['SmallImage']['Width'];
+				if ( empty( $img['url'] ) ) {
+					$img['url'] = $imageurl . '/no-image-160.gif';
+					$img['h'] = 75;
+					$img['w'] = 75;
+				}
 				break;
 		}
-		return ($imgsrc);
+		return ($img);
 	}
 
 	/**

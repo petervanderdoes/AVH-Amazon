@@ -150,12 +150,12 @@ class AVHAmazonShortcode extends AVHAmazonCore
 						$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
 						break;
 					case 'pic' :
-						$imgsrc = $this->getImageUrl( $attrs['picsize'], $item_result );
-						$return = '<div class="wp-caption alignleft"><a title="' . $content . '" href="' . $myurl . '"><img src="' . $imgsrc . '" alt="' . $content . '"/></a></div>';
+						$imginfo = $this->getImageInfo( $attrs['picsize'], $item_result );
+						$return = '<div class="wp-caption alignleft"><a title="' . $content . '" href="' . $myurl . '"><img width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $content . '"/></a></div>';
 						break;
 					case 'pic-text' :
-						$imgsrc = $this->getImageUrl( $attrs['picsize'], $item_result );
-						$return = '<table style=" border: none; cellpadding: 2px; align: left"><tr><td><a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" src="' . $imgsrc . '" alt="' . $content . '"/></a></td><td><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a></td></tr></table>';
+						$imginfo = $this->getImageInfo( $attrs['picsize'], $item_result );
+						$return = '<table style=" border: none; cellpadding: 2px; align: left"><tr><td><a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $content . '"/></a></td><td><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a></td></tr></table>';
 						break;
 					default :
 						$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';

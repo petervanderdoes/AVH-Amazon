@@ -292,14 +292,14 @@ class AVHAmazonWidget extends AVHAmazonCore
 					if ( isset( $item_result['Items']['Request']['Errors'] ) ) {
 						echo 'Item with ASIN ' . $Item['Item']['ASIN'] . ' doesn\'t exist';
 					} else {
-						$imgsrc = $this->getImageUrl( $imagesize, $item_result );
+						$imginfo = $this->getImageInfo( $imagesize, $item_result );
 
 						$pos = strpos( $item_result['Items']['Item']['DetailPageURL'], $Item['Item']['ASIN'] );
 						$myurl = substr( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen( $Item['Item']['ASIN'] ) );
 						$myurl .= '/ref=wl_it_dp?ie=UTF8&colid=' . $wishlist_id;
 						$myurl .= '&tag=' . $associated_id;
 
-						echo '<a title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" src="' . $imgsrc . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a><br/>';
+						echo '<a title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a><br/>';
 						echo '<div class="wishlistcaption">' . $Item['Item']['ItemAttributes']['Title'] . '</div>';
 						echo '<BR />';
 					}
