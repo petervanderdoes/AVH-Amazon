@@ -36,7 +36,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 		$widget_options = array ('classname' => 'widget_avhamazon_wishlist' );
 		$widget_function = array (&$this, 'widgetWishlist' );
 
-		$control_options = array ('width' => 300, 'height' => 270 );
+		$control_options = array ('width' => 300, 'height' => 270, 'id_base' => 'widget-avhamazon-wishlist' );
 		$control_function = array (&$this, 'widgetControl' );
 		$name = 'AVH Amazon Wishlist';
 
@@ -107,7 +107,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 			foreach ( ( array ) $this_sidebar as $_widget_id ) {
 				// Remove all widgets of this type from the sidebar.  We'll add the new data in a second.  This makes sure we don't get any duplicate data
 				// since widget ids aren't necessarily persistent across multiple updates
-				if ( 'widget_avhamazon_wishlist' == $wp_registered_widgets[$_widget_id]['callback'] && isset( $wp_registered_widgets[$_widget_id]['params'][0]['number'] ) ) {
+				if ( 'widget_avhamazon_wishlist' == $wp_registered_widgets[$_widget_id]['callback'][1] && isset( $wp_registered_widgets[$_widget_id]['params'][0]['number'] ) ) {
 					$widget_number = $wp_registered_widgets[$_widget_id]['params'][0]['number'];
 					if ( ! in_array( "widget-avhamazon-wishlist-$widget_number", $_POST['widget-id'] ) ) { // the widget has been removed.
 						unset( $all_options[$widget_number] );
