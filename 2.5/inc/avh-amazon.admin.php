@@ -13,11 +13,6 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	{
 		parent::__construct();
 
-		// Admin URL and Pagination
-		$this->admin_base_url = $this->info['siteurl'] . '/wp-admin/admin.php?page=';
-		if ( isset( $_GET['pagination'] ) ) {
-			$this->actual_page = ( int ) $_GET['pagination'];
-		}
 
 		// Admin Capabilities
 		add_action( 'init', array (&$this, 'initRoles' ) );
@@ -30,9 +25,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 		// Helper JS & jQuery & Prototype
 		$avhamazon_pages = array ('avhamazon_options', 'avhamazon_tools' );
-		/**
-		 * TODO  With WordPress 2.5 the Tabs UI is build in :)
-		 */
+
 		if ( in_array( $_GET['page'], $avhamazon_pages ) ) {
 			wp_enqueue_script( 'jquery-tabs', $this->info['install_url'] . '/inc/js/jquery.tabs.pack.js', array ('jquery' ), '3' );
 			wp_enqueue_script( 'jquery-forms', $this->info['install_url'] . '/inc/js/jquery.form.js', array ('jquery' ), '3' );
