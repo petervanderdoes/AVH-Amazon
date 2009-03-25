@@ -202,7 +202,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 		echo '<label for="widget-avhamazon-show-footer-' . $number . '" style="line-height: 35px; display: block;">';
 		_e( 'Show footer:', 'avhamazon' );
 		echo '<br />';
-		echo '<input style="width: 100% !important;" type="checkbox" id="widget-avhamazon-show-footer-' . $number . '" name="widget_avhamazon_wishlist[' . $number . '][show-footer]" value="1"' . isChecked( '1', $show_footer ) . ' />';
+		echo '<input style="width: 100% !important;" type="checkbox" id="widget-avhamazon-show-footer-' . $number . '" name="widget_avhamazon_wishlist[' . $number . '][show-footer]" value="1"' . $this->isChecked( '1', $show_footer ) . ' />';
 		echo '</label>';
 
 		echo '<label for="widget-avhamazon-footer-template-' . $number . '" style="line-height: 35px; display: block;">';
