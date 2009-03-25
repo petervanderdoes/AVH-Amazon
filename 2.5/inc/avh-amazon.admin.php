@@ -316,16 +316,6 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 		// Update or reset options
 		if ( isset( $_POST['updateoptions'] ) ) {
-			// Set all checkboxes unset
-			if ( isset( $_POST['avh_checkboxes'] ) ) {
-				$checkboxes = explode( '|', $_POST['avh_checkboxes'] );
-				foreach ( $checkboxes as $value ) {
-					$value = ltrim( $value, 'option[' );
-					$value = rtrim( $value, ']' );
-					$keys = explode( '][', $value );
-					$this->setOption( $keys, 0 );
-				}
-			}
 			$formoptions = $_POST['avhamazon'];
 			foreach ( $this->options as $key => $value ) {
 				foreach ( $value as $key2 => $value2 ) {
@@ -525,7 +515,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 				switch ( $option[2] ) {
 					case 'checkbox' :
-						$input_type = '<input type="checkbox" id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape( $option[3] ) . '" ' . checked( '1', $option_actual[$section][$option_key] ) . ' />' . "\n";
+						$input_type = '<input type="checkbox" id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape( $option[3] ) . '" ' . $this->isChecked( '1', $option_actual[$section][$option_key] ) . ' />' . "\n";
 						$checkbox .= $option[0] . '|';
 						$explanation = $option[4];
 						break;
