@@ -129,6 +129,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 				$options['nr_of_items'] = strip_tags( stripslashes( $widget_instance['nr-of-items'] ) );
 				$options['show_footer'] = ($widget_instance['show-footer'] ? 1 : 0);
 				$options['footer_template'] = strip_tags( stripslashes( $widget_instance['footer-template'] ) );
+				$options['new_window'] =  ($widget_instance['new-window'] ? 1 : 0);
 
 				$all_options[$widget_number] = $options;
 			}
@@ -146,6 +147,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 			$nr_of_items = '';
 			$show_footer = 0;
 			$footer_template = '';
+			$new_window = 0;
 			$number = '%i%';
 		} else {
 			// Prepare data for display
@@ -156,6 +158,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 			$nr_of_items = format_to_edit( $all_options[$number]['nr_of_items'] );
 			$show_footer = $all_options[$number]['show_footer'];
 			$footer_template = format_to_edit( $all_options[$number]['footer_template'] );
+			$new_window = $all_options[$number]['new_window'];
 		}
 
 		// The form has inputs with names like widget_avhamazon_wishlist[$number][something] so that all data for that instance of
@@ -211,6 +214,12 @@ class AVHAmazonWidget extends AVHAmazonCore
 		echo '<input style="width: 100% !important;" type="text" id="widget-avhamazon-footer-template-' . $number . '" name="widget_avhamazon_wishlist[' . $number . '][footer-template]" value="' . $footer_template . '" />';
 		echo '</label>';
 
+		echo '<label for="widget-avhamazon-new-window-' . $number . '" style="line-height: 35px; display: block;">';
+		_e( 'Open in new window:', 'avhamazon' );
+		echo '<br />';
+		echo '<input style="width: 100% !important;" type="checkbox" id="widget-avhamazon-new-window-' . $number . '" name="widget_avhamazon_wishlist[' . $number . '][new-window]" value="1"' . $this->isChecked( '1', $new_window ) . ' />';
+		echo '</label>';
+
 		echo '<input type="hidden" name="widget_avhamazon_wishlist[' . $number . '][submit]" id="widget-avhamazon-submit-' . $number . '" value="1" />';
 		echo '</div>';
 	}
@@ -263,6 +272,9 @@ class AVHAmazonWidget extends AVHAmazonCore
 		// Footer Template
 		$footer_template = isset( $footer_template ) ? $footer_template : $this->getWidgetOptions( $options[$number], 'footer_template', 'widget_wishlist' );
 
+		// Open in new windows
+		$new_window = isset( $new_window ) ? $new_window : $this->getWidgetOptions( $options[$number], 'new_window', 'widget_wishlist' );
+
 		// Check default assiociate ID and change it for the Locale
 		if ( $this->associate_table['US'] == $associated_id ) {
 			$associated_id = $this->getAssociateId( $locale );
@@ -299,7 +311,8 @@ class AVHAmazonWidget extends AVHAmazonCore
 						$myurl .= '/ref=wl_it_dp?ie=UTF8&colid=' . $wishlist_id;
 						$myurl .= '&tag=' . $associated_id;
 
-						echo '<a title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a><br/>';
+						$target = $new_window == 1 ? 'target="_blank"' : '';
+						echo '<a ' . $target . ' title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a><br/>';
 						echo '<div class="wishlistcaption">' . $Item['Item']['ItemAttributes']['Title'] . '</div>';
 						echo '<BR />';
 					}

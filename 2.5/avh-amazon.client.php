@@ -147,7 +147,8 @@ class AVHAmazonCore
 			'locale' => 'US',
 			'nr_of_items' => 1,
 			'show_footer' => 0,
-			'footer_template' => 'Show all %nr_of_items% items' );
+			'footer_template' => 'Show all %nr_of_items% items',
+			'new_window' => 0 );
 
 		/**
 		 * Default options - Shortcode

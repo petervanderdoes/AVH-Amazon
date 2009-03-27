@@ -13,6 +13,11 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	{
 		parent::__construct();
 
+			// Admin URL and Pagination
+		$this->admin_base_url = $this->info['siteurl'] . '/wp-admin/admin.php?page=';
+		if ( isset ( $_GET['pagination'] ) ) {
+			$this->actual_page = ( int ) $_GET['pagination'];
+		}
 
 		// Admin Capabilities
 		add_action( 'init', array (&$this, 'initRoles' ) );
@@ -269,6 +274,13 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					'text',
 					30,
 					'The display of the footer is controlled in the widget options<BR />%nr_of_items% is replaced by the actual number of items in the wishlist.'
+				),
+				array (
+					'avhamazon[widget_wishlist][new_window]',
+					'Open in new windows:',
+					'checkbox',
+					1,
+					'When a user clicks on the link open it in a new windows'
 				)
 			),
 			'shortcode' => array (
