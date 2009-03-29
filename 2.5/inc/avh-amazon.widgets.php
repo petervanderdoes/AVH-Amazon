@@ -308,8 +308,12 @@ class AVHAmazonWidget extends AVHAmazonCore
 
 						$pos = strpos( $item_result['Items']['Item']['DetailPageURL'], $Item['Item']['ASIN'] );
 						$myurl = substr( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen( $Item['Item']['ASIN'] ) );
-						$myurl .= '/ref=wl_it_dp?ie=UTF8&colid=' . $wishlist_id;
-						$myurl .= '&tag=' . $associated_id;
+						$myurl .= '/ref=wl_it_dp';
+
+						$query['ie']='UTF8';
+						$query['colid']=$wishlist_id;
+						$query['tag']=$associated_id;
+						$myurl .= '?'.$this->BuildQuery($query);
 
 						$target = $new_window == 1 ? 'target="_blank"' : '';
 						echo '<a ' . $target . ' title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a><br/>';

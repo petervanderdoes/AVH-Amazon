@@ -138,9 +138,12 @@ class AVHAmazonShortcode extends AVHAmazonCore
 				$myurl = substr( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen( $attrs['asin'] ) );
 				// If a wishlist is given, make sure when somebody clicks on the link, Amazon knows the List owner.
 				if ( $attrs['wishlist'] ) {
-					$myurl .= '/ref=wl_it_dp?ie=UTF8&colid=' . $attrs['wishlist'];
+					$myurl .= '/ref=wl_it_dp';
+					$query['ie']='UTF8';
+					$query['colid']=$attrs['wishlist'];
 				}
-				$myurl .= '&tag=' . $associatedid;
+				$query['tag']=$associatedid;
+				$myurl .= '?'.$this->BuildQuery($query);
 
 				// If no content is given we use the Title from Amazon.
 				$content = ($content) ? $content : $item_result['Items']['Item']['ItemAttributes']['Title'];
