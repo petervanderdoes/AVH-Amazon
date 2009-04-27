@@ -48,7 +48,7 @@ The avh-amazon plugin can be installed in 3 easy steps:
 
 = Can I use this plugin if I don't have a widget enabled theme? =
 Yes you can, you can use the following code to display the wishlist:
-`<?php $avhwidget=& new AVHAmazonWidget();$avhwidget->widgetWishlist(array(),1 , FALSE); ?>`
+ $avhwidget=& new AVHAmazonWidget();$avhwidget->widgetWishlist(array(),1 , FALSE); 
 
 = What about support? =
 I created a support site at http://forums.avirtualhome.com where you can ask questions or request features.
