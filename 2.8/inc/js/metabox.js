@@ -4,7 +4,7 @@
  * Deps: jquery
  * Enqueue: true
  */
-var avhamazonmetabox = function () {}
+var avhamazonmetabox = function () {};
  
 avhamazonmetabox.prototype = {
     options           : {},
@@ -21,11 +21,11 @@ avhamazonmetabox.prototype = {
             }
         });
         if (content != '') {
-        	returnvalue = '[avhamazon' + attrs + ']' + content + '[/avhamazon]'
+        	returnvalue = '[avhamazon' + attrs + ']' + content + '[/avhamazon]';
         } else {
-        	returnvalue = '[avhamazon' + attrs + ']'
+        	returnvalue = '[avhamazon' + attrs + ']';
         }
-        return returnvalue 
+        return returnvalue;
     },
 
     sendToEditor      : function(w,f) {
@@ -49,18 +49,32 @@ avhamazonmetabox.prototype = {
         send_to_editor(this.generateShortCode());
         return false;
     }
-}
+};
 
-jQuery(document).ready(function() {
-	jQuery('#avhamazon_submit_wishlist').click( avhamazon_metabox_submit_wishlist );
-	jQuery('#avhamazon_wishlist_show').find('input').keydown(avhamazon_metabox_wishlist);
-	jQuery('#avhamazon_wishlist_show').find('select').keydown(avhamazon_metabox_wishlist);
-	jQuery('#avhamazon_submit_asin').click( avhamazon_metabox_submit_asin );
-	jQuery('#avhamazon_asin_show').find('input').keydown(avhamazon_metabox_asin);
-	jQuery('#avhamazon_asin_show').find('select').keydown(avhamazon_metabox_asin);
-	jQuery('#avhamazon_wishlist_loading').hide();
-	jQuery('#avhamazon_asin_loading').hide();
-	jQuery('#avhamazon_tabs').tabs();
+jQuery(document).ready(function($) {
+	$('#avhamazon_submit_wishlist').click( avhamazon_metabox_submit_wishlist );
+	$('#avhamazon_wishlist_show').find('input').keydown(avhamazon_metabox_wishlist);
+	$('#avhamazon_wishlist_show').find('select').keydown(avhamazon_metabox_wishlist);
+	$('#avhamazon_submit_asin').click( avhamazon_metabox_submit_asin );
+	$('#avhamazon_asin_show').find('input').keydown(avhamazon_metabox_asin);
+	$('#avhamazon_asin_show').find('select').keydown(avhamazon_metabox_asin);
+	$('#avhamazon_wishlist_loading').hide();
+	$('#avhamazon_asin_loading').hide();
+	
+	// Metabox tabs
+	$('#avhamazon_tabs a').click(function(){
+		var t = $(this).attr('href');
+		$(this).parent().addClass('ui-tabs-selected').siblings('li').removeClass('ui-tabs-selected');
+		$(this).parent().parent().siblings('.ui-tabs-panel').hide();
+		$(t).show();
+		if ( '#avhamazon_tab_wishlist' == t )
+			deleteUserSetting('avhamazonwish');
+		else
+			setUserSetting('avhamazonwish','asin');
+		return false;
+	});
+	if ( getUserSetting('avhamazonwish') )
+		$('#avhamazon_tabs a[href="#avhamazon_tab_asin"]').click();
 	}
 	);
 
@@ -112,7 +126,7 @@ function avhamazon_metabox_asin( event ) {
 function avhamazon_metabox_submit(avhamazon_action, avhamazon_output, avhamazon_loading, avhamazon_values, avhamazon_nonce) {
 	jQuery(avhamazon_output).hide();
 	jQuery(avhamazon_loading).show();
-	jQuery('avhamazon_wishlist_loading_pic').css('visibility','visible')
+	jQuery('avhamazon_wishlist_loading_pic').css('visibility','visible');
 	jQuery.post(
 		jQuery('#avhamazon_mb_url').attr("value")+"/wp-admin/admin-ajax.php",
 		{ action: 'avhamazon_metabox', 'cookie': encodeURIComponent(document.cookie), 'avhamazon_mb_action': avhamazon_action, 'avhamazon_mb_values[]': avhamazon_values,'avhamazon_ajax_nonce': avhamazon_nonce }, 
@@ -130,4 +144,4 @@ function avhamazon_metabox_submit(avhamazon_action, avhamazon_output, avhamazon_
 function avhamazon_metabox_sendtoeditor( ) {
 	var tabid=this.name;
 	return (avhamazon.sendToEditor(tabid, this.form));
-}
+};

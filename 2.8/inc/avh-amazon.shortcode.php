@@ -232,7 +232,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function metaboxTabAsin ( $locale )
 	{
-		echo '<div id="avhamazon_tab_asin" class="ui-tabs-panel">';
+		echo '<div id="avhamazon_tab_asin" class="ui-tabs-panel" style="display:none;">';
 		echo '	<div id="avhamazon_asin_show">';
 		echo '		<p>';
 		echo '			<label style="display:block">' . __( 'ASIN', 'avhamazon' );
