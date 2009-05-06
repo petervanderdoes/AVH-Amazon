@@ -33,7 +33,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 		if ( in_array( $_GET['page'], $avhamazon_pages ) ) {
 			wp_enqueue_script( 'jquery-ui-tabs');
-			wp_enqueue_script( 'jquery-forms', $this->info['install_url'] . '/inc/js/jquery.form.js', array ('jquery' ), '3' );
+			wp_enqueue_script( 'jquery-forms');
 		}
 		return;
 	}
