@@ -37,7 +37,9 @@ switch ( (floatval( $wp_version )) ) {
 		break;
 	case 2.8 :
 		require (dirname( __FILE__ ) . '/2.8/avh-amazon.client.php');
+		break;
 	default :
 		$message = '<div class="updated fade"><p><strong>' . __( 'AVH Amazon can\'t work with this WordPress version !', 'avhamazon' ) . '</strong></p></div>';
 		add_action( 'admin_notices', create_function( '', "echo '$message';" ) );
+		break;
 }
