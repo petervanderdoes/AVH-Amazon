@@ -367,10 +367,8 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		echo $this->printOptions( $option_data );
 		echo '</div>';
 
-		$buttonprimary = ($this->info['wordpress_version'] < 2.7) ? '' : 'button-primary';
-		$buttonsecondary = ($this->info['wordpress_version'] < 2.7) ? '' : 'button-secondary';
-		echo '<p class="submit"><input	class="' . $buttonprimary . '"	type="submit" name="updateoptions" value="' . __( 'Save Changes', 'avhamazon' ) . '" />';
-		echo '<input class="' . $buttonsecondary . '" type="submit" name="reset_options" onclick="return confirm(\'' . __( 'Do you really want to restore the default options?', 'avhamazon' ) . '\')" value="' . __( 'Reset Options', 'avhamazon' ) . '" /></p>';
+		echo '<p class="submit"><input	class="button-primary"	type="submit" name="updateoptions" value="' . __( 'Save Changes', 'avhamazon' ) . '" />';
+		echo '<input class="button-secondary" type="submit" name="reset_options" onclick="return confirm(\'' . __( 'Do you really want to restore the default options?', 'avhamazon' ) . '\')" value="' . __( 'Reset Options', 'avhamazon' ) . '" /></p>';
 		echo '</form>';
 
 		$this->printAdminFooter();
