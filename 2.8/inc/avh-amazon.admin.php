@@ -32,7 +32,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		$avhamazon_pages = array ('avhamazon_options', 'avhamazon_tools' );
 
 		if ( in_array( $_GET['page'], $avhamazon_pages ) ) {
-			//wp_enqueue_script( 'jquery-tabs', $this->info['install_url'] . '/inc/js/jquery.tabs.pack.js', array ('jquery' ), '3' );
+			wp_enqueue_script( 'jquery-ui-tabs');
 			wp_enqueue_script( 'jquery-forms', $this->info['install_url'] . '/inc/js/jquery.form.js', array ('jquery' ), '3' );
 		}
 		return;
@@ -349,7 +349,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 		echo '<script type="text/javascript">';
 		echo 'jQuery(document).ready( function() {';
-		echo 'jQuery(\'#printOptions\').tabs({fxSlide: true});';
+		echo 'jQuery(\'#printOptions\').tabs();';
 		echo '});';
 		echo '</script>';
 
