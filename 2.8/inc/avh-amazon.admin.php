@@ -13,22 +13,22 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	{
 		parent::__construct();
 
-			// Admin URL and Pagination
+		// Admin URL and Pagination
 		$this->admin_base_url = $this->info['siteurl'] . '/wp-admin/admin.php?page=';
 		if ( isset ( $_GET['pagination'] ) ) {
 			$this->actual_page = ( int ) $_GET['pagination'];
 		}
 
 		// Admin Capabilities
-		add_action( 'init', array (&$this, 'initRoles' ) );
+		add_action( 'init', array (&$this, 'actionInitRoles' ) );
 
 		// Admin menu
-		add_action( 'admin_menu', array (&$this, 'adminMenu' ) );
+		add_action( 'admin_menu', array (&$this, 'actionAdminMenu' ) );
 
 		// CSS Helper
 		add_action( 'admin_print_styles', array (&$this, 'actionInjectCSS' ) );
 
-		// Helper JS & jQuery & Prototype
+		// Enqueue jQuery only on certain pages
 		$avhamazon_pages = array ('avhamazon_options', 'avhamazon_tools' );
 
 		if ( in_array( $_GET['page'], $avhamazon_pages ) ) {
@@ -50,8 +50,9 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	/**
 	 * Setup Roles
 	 *
+	 * @WordPress Action init
 	 */
-	function initRoles ()
+	function actionInitRoles ()
 	{
 		if ( function_exists( 'get_role' ) ) {
 			$role = get_role( 'administrator' );
@@ -76,16 +77,32 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	/**
 	 * Add the Tools and Options to the Management and Options page repectively
 	 *
+	 * @WordPress Action admin_menu
+	 *
 	 */
-	function adminMenu ()
+	function actionAdminMenu ()
 	{
 		add_management_page( __( 'AVH Amazon Tools', 'avhamazon' ), __( 'AVH Amazon Tools', 'avhamazon' ), 'avh_amazon', 'avhamazon_tools', array (&$this, 'pageAVHAmazonTools' ) );
 		add_options_page( __( 'AVH Amazon: Options', 'avhamazon' ), 'AVH Amazon', 'avh_amazon', 'avhamazon_options', array (&$this, 'pageOptions' ) );
-		add_filter( 'plugin_action_links', array (&$this, 'filterPluginActions' ), 10, 2 );
+		add_filter( 'plugin_action_links_avh-amazon/avh-amazon.php', array (&$this, 'filterPluginActions' ), 10, 2 );
+	}
+
+	/**
+	 * Enqueue CSS
+	 *
+	 * @WordPress Action admin_print_styles
+	 * @since 3.0
+	 *
+	 */
+	function actionInjectCSS ()
+	{
+		wp_enqueue_style( 'avhamazonadmin', $this->info['install_url'] . '/inc/avh-amazon.admin.css', array (), $this->version, 'screen' );
 	}
 
 	/**
 	 * Adds Settings next to the plugin actions
+	 *
+	 * @WordPress Filter plugin_action_links_avh-amazon/avh-amazon.php
 	 *
 	 */
 	function filterPluginActions ( $links, $file )
@@ -390,18 +407,6 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 	############## WP Options ##############
 	/**
-	 * Removes the plugin, old style of doing it.
-	 *
-	 * @param string $plugin
-	 */
-	function removePlugin ( $plugin )
-	{
-		$current = get_option( 'active_plugins' );
-		array_splice( $current, array_search( $plugin, $current ), 1 ); // Array-fu!
-		update_option( 'active_plugins', $current );
-	}
-
-	/**
 	 * Update an option value  -- note that this will NOT save the options.
 	 *
 	 * @param array $optkeys
@@ -474,18 +479,6 @@ class AVHAmazonAdmin extends AVHAmazonCore
 			echo '<div id="message"	class="' . $status . ' fade">';
 			echo '<p><strong>' . $message . '</strong></p></div>';
 		}
-	}
-
-	/**
-	 * Enqueue CSS
-	 *
-	 * @WordPress Action admin_print_styles
-	 * @since 3.0
-	 *
-	 */
-	function actionInjectCSS ()
-	{
-		wp_enqueue_style( 'avhamazonadmin', $this->info['install_url'] . '/inc/avh-amazon.admin.css', array (), $this->version, 'screen' );
 	}
 
 	/**
