@@ -26,7 +26,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		add_action( 'admin_menu', array (&$this, 'adminMenu' ) );
 
 		// CSS Helper
-		add_action( 'admin_head', array (&$this, 'helperCSS' ) );
+		add_action( 'admin_init', array (&$this, 'helperCSS' ) );
 
 		// Helper JS & jQuery & Prototype
 		$avhamazon_pages = array ('avhamazon_options', 'avhamazon_tools' );
@@ -484,12 +484,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function helperCSS ()
 	{
-		if ( $this->info['wordpress_version'] >= 2.6 ) {
-			$this->handleCssFile( 'avhamazonadmin', '/inc/avh-amazon.admin.css' );
-		} else {
-			// for older versions
-			echo '<link media="all" type="text/css" href="' . $this->info['install_url'] . '/inc/avh-amazon.admin.css?ver=' . $this->version . '" rel="stylesheet"> </link>';
-		}
+		$this->handleCssFile( 'avhamazonadmin', '/inc/avh-amazon.admin.css' );
 	}
 
 	/**
