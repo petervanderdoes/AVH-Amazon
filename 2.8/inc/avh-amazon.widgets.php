@@ -340,11 +340,6 @@ class AVHAmazonWidget extends AVHAmazonCore
 	 */
 	function handleWidgetCss ()
 	{
-		if ( $this->info['wordpress_version'] >= 2.6 ) {
-			$this->handleCssFile( 'avhamazonwidget', '/inc/avh-amazon.widget.css' );
-		} else {
-			// for older versions
-			echo '<link media="all" type="text/css" href="' . $this->info['install_url'] . '/inc/avh-amazon.widget.css?ver=' . $this->version . '" rel="stylesheet"> </link>';
-		}
+		wp_enqueue_style( 'avhamazonwidget', $this->info['install_url'] . '/inc/avh-amazon.widget.css', array (), $this->version, 'screen' );
 	}
 }

@@ -479,7 +479,10 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	}
 
 	/**
-	 * Print link to CSS
+	 * Enqueue CSS
+	 *
+	 * @WordPress Action admin_print_styles
+	 * @since 3.0
 	 *
 	 */
 	function actionInjectCSS ()
