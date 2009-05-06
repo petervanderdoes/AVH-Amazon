@@ -154,6 +154,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		echo '</tbody></table>';
 		echo '<div id="avhamazonwishlistoutputsearch">';
 		if ( isset( $action ) ) {
+			$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
 			$result = $this->handleRESTcall( $this->getRestListSearchParams( $email ) );
 			$total = $result['Lists']['TotalResults'];
 
