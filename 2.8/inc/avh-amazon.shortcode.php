@@ -44,7 +44,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	{
 		if ( $GLOBALS['editing'] ) { //@todo Check if there's a better solution for this.
 			wp_enqueue_script( 'avhamazonmetabox', $this->info['install_url'] . '/inc/js/metabox.js', array ('jquery' ), $this->version );
-			wp_enqueue_script( 'jquery-ui-tabs' );
+			//wp_enqueue_script( 'jquery-ui-tabs' );
 		}
 	}
 
