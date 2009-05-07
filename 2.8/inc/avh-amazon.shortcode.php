@@ -177,11 +177,11 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	{
 		$locale = $this->getOption( 'locale', 'shortcode' );
 
-		echo '<ul id="avhamazon_tabs" class="ui-tabs-nav">';
+		echo '<ul id="avhamazon_tabs" class="avhamazon-tabs-nav">';
 		echo '<input name="avhamazon_mb_url" id="avhamazon_mb_url" value="' . $this->info['siteurl'] . '" type="hidden" />';
 
 		// The tabs
-		echo '<li class="ui-tabs-selected"><a href="#avhamazon_tab_wishlist">' . __( 'Wishlist', 'avhamazon' ) . '</a></li>';
+		echo '<li class="avhamazon-tabs-selected"><a href="#avhamazon_tab_wishlist">' . __( 'Wishlist', 'avhamazon' ) . '</a></li>';
 		echo '<li class=""><a href="#avhamazon_tab_asin">' . __( 'ASIN', 'avhamazon' ) . '</a></li></ul>';
 
 		$this->metaboxTabWishlist( $locale );
@@ -198,7 +198,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	{
 		wp_nonce_field( 'avhamazon-metabox', 'avhamazon_ajax_nonce', false );
 		$wishlist_id = $this->getOption( 'wishlist_id', 'shortcode' );
-		echo '<div id="avhamazon_tab_wishlist" class="ui-tabs-panel">';
+		echo '<div id="avhamazon_tab_wishlist" class="avhamazon-tabs-panel">';
 		echo '	<div id="avhamazon-wishlist-show" style="display:block">';
 		echo '		<p>';
 		echo '			<label style="display:block">' . __( 'Wish List ID:', 'avhamazon' );
@@ -232,7 +232,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function metaboxTabAsin ( $locale )
 	{
-		echo '<div id="avhamazon_tab_asin" class="ui-tabs-panel" style="display:none;">';
+		echo '<div id="avhamazon_tab_asin" class="avhamazon-tabs-panel" style="display:none;">';
 		echo '	<div id="avhamazon_asin_show">';
 		echo '		<p>';
 		echo '			<label style="display:block">' . __( 'ASIN', 'avhamazon' );

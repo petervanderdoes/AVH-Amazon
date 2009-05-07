@@ -64,8 +64,8 @@ jQuery(document).ready(function($) {
 	// Metabox tabs
 	$('#avhamazon_tabs a').click(function(){
 		var t = $(this).attr('href');
-		$(this).parent().addClass('ui-tabs-selected').siblings('li').removeClass('ui-tabs-selected');
-		$(this).parent().parent().siblings('.ui-tabs-panel').hide();
+		$(this).parent().addClass('avhamazon-tabs-selected').siblings('li').removeClass('avhamazon-tabs-selected');
+		$(this).parent().parent().siblings('.avhamazon-tabs-panel').hide();
 		$(t).show();
 		if ( '#avhamazon_tab_wishlist' == t )
 			deleteUserSetting('avhamazonwish');
