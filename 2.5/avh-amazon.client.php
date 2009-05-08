@@ -548,7 +548,7 @@ class AVHAmazonCore
 			'ProductPage' => ( string ) $page,
 			'Sort' => 'LastUpdated' );
 
-		$request = array_merge( $this->amazon_standard_request, $listLookup );
+		$request = array_merge( $this->getRestStandardRequest(), $listLookup );
 
 		return $request;
 	}
@@ -571,11 +571,19 @@ class AVHAmazonCore
 			'ResponseGroup' => 'Medium',
 			'AssociateTag' => $associatedid );
 
-		$request = array_merge( $this->amazon_standard_request, $itemLookUp );
+		$request = array_merge( $this->getRestStandardRequest(), $itemLookUp );
 
 		return $request;
 	}
 
+	/**
+	 * Rest request - ListSearch
+	 *
+	 * @param string $email
+	 * @param string $list
+	 * @return array
+	 * @since ??
+	 */
 	function getRestListSearchParams ( $email, $list = 'WishList' )
 	{
 		$request = array (
@@ -584,11 +592,25 @@ class AVHAmazonCore
 			'ListType' => $list,
 			'ResponseGroup' => 'ListInfo' );
 
-		$return = array_merge( $this->amazon_standard_request, $request );
+		$return = array_merge( $this->getRestStandardRequest(), $request );
 
 		return $return;
 	}
 
+	/**
+	 * Get the standard request array.
+	 *
+	 * @return array
+	 * @since 3.0
+	 * @TODO Per August 15, 2009 all request to Amazon need to be signed, until then they accept unsigned requests as well.
+	 */
+	function getRestStandardRequest() {
+
+		// @TODO Until August
+		$this->amazon_standard_request['AWSAccessKeyId'] = (empty($this->options['general']['awskey'])) ? '1MPCC36EZ827YJQ02AG2' : $this->options['general']['awskey'];
+
+		return $this->amazon_standard_request;
+	}
 	/**
 	 * Convert an array into a query string
 	 *
