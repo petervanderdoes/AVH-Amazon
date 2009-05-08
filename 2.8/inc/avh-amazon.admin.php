@@ -253,7 +253,21 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					'Associated ID:',
 					'text',
 					16,
-					'Use this Associated ID when clicking on the wishlist'
+					'Use this Associated ID when clicking on the wishlist.'
+				),
+				array (
+					'avhamazon[general][awskey]',
+					'AWS Key:',
+					'text',
+					20,
+					'Your Amazon Web Services Access Key ID.'
+				),
+				array (
+					'avhamazon[general][awssecretkey]',
+					'AWS Secret Key:',
+					'text',
+					40,
+					'Your Amazon Web Services Secret Access Key.'
 				)
 			),
 			'widget_wishlist' => array (

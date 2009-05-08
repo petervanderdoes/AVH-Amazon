@@ -107,8 +107,9 @@ class AVHAmazonCore
 		$this->amazon_endpoint = $this->amazon_endpoint_table['US'];
 		$this->amazon_standard_request = array (
 			'Service' => 'AWSECommerceService',
-			'Version' => '2009-02-01',
-			'AWSAccessKeyId' => '1MPCC36EZ827YJQ02AG2' );
+			'Version' => '2009-03-31',
+			'AWSAccessKeyId' => '1MPCC36EZ827YJQ02AG2',
+			'Timestamp' => '' );
 
 		/**
 		 * Amazon general options
@@ -172,6 +173,11 @@ class AVHAmazonCore
 		 *
 		 */
 		$this->handleOptions();
+
+		/**
+		 * Set the Access Key ID for the requests
+		 */
+		$this->amazon_standard_request['AWSAccessKeyId'] = $this->options['general']['awskey'];
 
 		// Determine installation path & url
 		$path = str_replace( '\\', '/', dirname( __FILE__ ) );
@@ -435,7 +441,8 @@ class AVHAmazonCore
 	{
 		$xml_array = array ();
 
-		$querystring = $this->BuildQuery( $query_array );
+		$querystring = $this->getAWSQueryString($query_array);
+
 		$url = $this->amazon_endpoint . '?' . $querystring;
 
 		// Starting with WordPress 2.7 we'll use the HTTP class.
@@ -470,6 +477,32 @@ class AVHAmazonCore
 			$return_array = $xml_array[$key];
 		}
 		return ($return_array);
+	}
+
+	/**
+	 * Build the Query
+	 *
+	 * @param array $query_array
+	 * @return string
+	 *
+	 */
+
+	function getAWSQueryString ( $query_array )
+	{
+		$query_array['Timestamp'] = gmdate( 'Y-m-d\TH:i:s\Z' );
+		//@TODO Per August 15, 2009 all request to Amazon need to be signed, until then they accept unsigned requests as well.
+		if ( ! empty( $this->options['general']['awssecretkey'] ) ) {
+			$endpoint = parse_url( $this->amazon_endpoint );
+			ksort( $query_array );
+
+			$query_string = $this->BuildQuery( $query_array );
+			$str = "GET\n" . $endpoint['host'] . "\n/onca/xml\n" . $query_string;
+
+			$query_array['Signature'] = base64_encode( hash_hmac( 'sha256', $str, $this->options['general']['awssecretkey'], true ) );
+		}
+
+		$querystring = $this->BuildQuery( $query_array );
+		return ($querystring);
 	}
 
 	/**
