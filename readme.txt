@@ -75,6 +75,9 @@ You will find an item's ASIN on the product detail page.
 None
 
 == Arbitrary section ==
+* Version 3.0
+	* It uses the new Widget class introduced in WordPress 2.8.
+	* Amazon policy change. Calls to Amazon need to be signed per August 15 of 2009. In order to sign calls you will need an Amazon Web Services account and PHP5. See the FAQ for more details.
 * Version 2.4
 	* Speed improvements.
 	* Increased security.

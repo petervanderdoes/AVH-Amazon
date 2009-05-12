@@ -135,7 +135,11 @@ class AVHAmazonCore
 		 */
 		$this->default_general_options = array (
 			'version' => $this->version,
-			'associated_id' => 'avh-amazon-20' );
+			'associated_id' => 'avh-amazon-20',
+			'awskey' => '',
+			'awssecretkey' => '',
+			'policychange' => '' );
+
 
 		/**
 		 * Default options - Widget Wishlist
@@ -622,21 +626,7 @@ class AVHAmazonCore
 		if ( count( $array ) == 0 ) {
 			return '';
 		} else {
-			if ( function_exists( 'http_build_query' ) ) {
-				$query = http_build_query( $array );
-			} else {
-				$query = '';
-				foreach ( $array as $key => $value ) {
-					if ( is_array( $value ) ) {
-						$new_convention = sprintf( $convention, $key ) . '[%s]';
-						$query .= BuildQuery( $value, $new_convention );
-					} else {
-						$key = urlencode( $key );
-						$value = urlencode( $value );
-						$query .= sprintf( $convention, $key ) . "=$value&";
-					}
-				}
-			}
+			$query = http_build_query( $array );
 			return $query;
 		}
 	}

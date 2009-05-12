@@ -34,6 +34,11 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		if ( in_array( $_GET['page'], $avhamazon_pages ) ) {
 			wp_enqueue_script( 'jquery-ui-tabs');
 		}
+
+		// Admin notice A AWS developer key is neccasry as well as PHP5. :(
+		if (empty($this->options['general']['awssecretkey']) || version_compare( '5', phpversion(), '>' ) ){
+			add_action ('admin_notices', array(&$this,'actionNotice'));
+		}
 		return;
 	}
 
@@ -97,6 +102,34 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	function actionInjectCSS ()
 	{
 		wp_enqueue_style( 'avhamazonadmin', $this->info['install_url'] . '/inc/avh-amazon.admin.css', array (), $this->version, 'screen' );
+	}
+
+	function actionNotice ()
+	{
+		$options = get_option( $this->db_options_name_core );
+
+		if ( ! wp_verify_nonce( $options['general']['policychange'], 'AmazonPolicyChange' ) ) { //Use nonce for daily check. If older as 24 hours, display the message again.
+			$options['general']['policychange'] = wp_create_nonce( 'AmazonPolicyChange' );
+			update_option( $this->db_options_name_core, $options );
+
+			$criteria_met = TRUE;
+			$this->message = 'AVH Amazon Plugin Notice<br />';
+			$this->message .= 'Amazon has changed their policy and per August 15, 2009 all calls to Amazon are going to have to be signed.<br />';
+
+			if ( empty( $this->options['general']['awssecretkey'] ) ) {
+				$criteria_met = FALSE;
+				$this->message .= 'You need your own personal AWS account (See the FAQ of the plugin for details on how to get one).<br/>The account gives you access to your personal secret key which is needed for calls to Amazon. When you have your account please enter them in the settings page of the AVH Amazon plugin.<br/>';
+			}
+
+			if ( version_compare( '5', phpversion(), '>' ) ) {
+				$criteria_met = FALSE;
+				$this->message .= 'Due to limitations of PHP4, PHP5 is neccesary to create the signature used.';
+			}
+
+			if ( ! $criteria_met ) {
+				$this->displayMessage();
+			}
+		}
 	}
 
 	/**
@@ -355,7 +388,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 			$formoptions = $_POST['avhamazon'];
 			foreach ( $this->options as $key => $value ) {
 				foreach ( $value as $key2 => $value2 ) {
-					if ( 'general' != $key || 'version' != $key2 ) {
+					if ( !('general' == $key && ('version' == $key2 || 'policychange' == $key2))) {
 						$newval = (isset( $formoptions[$key][$key2] )) ? attribute_escape( $formoptions[$key][$key2] ) : '0';
 						if ( 'nr_of_items' == $key2 ) {
 							if ( ! is_numeric( $formoptions[$key][$key2] ) ) {
