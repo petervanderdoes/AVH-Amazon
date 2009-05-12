@@ -37,8 +37,8 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		}
 
 		// Admin notice A AWS developer key is neccasry as well as PHP5. :(
-		if (empty($this->options['general']['awssecretkey']) || version_compare( '5', phpversion(), '>' ) ){
-			add_action ('admin_notices', array(&$this,'actionNotice'));
+		if ( empty( $this->options['general']['awssecretkey'] ) ) {
+			add_action( 'admin_notices', array (&$this, 'actionNotice' ) );
 		}
 		return;
 	}
@@ -90,6 +90,13 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		add_filter( 'plugin_action_links', array (&$this, 'filterPluginActions' ), 10, 2 );
 	}
 
+	/**
+	 * Notice to get an AWS account
+	 *
+	 * @WordPress Action admin_notices
+	 * @since 3.0
+	 *
+	 */
 	function actionNotice ()
 	{
 		$options = get_option( $this->db_options_name_core );
@@ -98,23 +105,10 @@ class AVHAmazonAdmin extends AVHAmazonCore
 			$options['general']['policychange'] = wp_create_nonce( 'AmazonPolicyChange' );
 			update_option( $this->db_options_name_core, $options );
 
-			$criteria_met = TRUE;
 			$this->message = 'AVH Amazon Plugin Notice<br />';
 			$this->message .= 'Amazon has changed their policy and per August 15, 2009 all calls to Amazon are going to have to be signed.<br />';
-
-			if ( empty( $this->options['general']['awssecretkey'] ) ) {
-				$criteria_met = FALSE;
-				$this->message .= 'You need your own personal AWS account (See the FAQ of the plugin for details on how to get one).<br/>The account gives you access to your personal secret key which is needed for calls to Amazon. When you have your account please enter them in the settings page of the AVH Amazon plugin.<br/>';
-			}
-
-			if ( version_compare( '5', phpversion(), '>' ) ) {
-				$criteria_met = FALSE;
-				$this->message .= 'Due to limitations of PHP4, PHP5 is neccesary to create the signature used.';
-			}
-
-			if ( ! $criteria_met ) {
-				$this->displayMessage();
-			}
+			$this->message .= 'You will need your own personal AWS account (See the FAQ of the plugin for details on how to get one).<br/>The account gives you access to your personal secret key which is needed for calls to Amazon. When you have your account please enter both keys in the settings page of the AVH Amazon plugin.<br/>';
+			$this->displayMessage();
 		}
 	}
 

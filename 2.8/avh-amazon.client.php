@@ -488,13 +488,14 @@ class AVHAmazonCore
 	 *
 	 * @param array $query_array
 	 * @return string
+	 * @since 3.0
 	 *
 	 */
-
 	function getAWSQueryString ( $query_array )
 	{
 		$query_array['Timestamp'] = gmdate( 'Y-m-d\TH:i:s\Z' );
 		//@TODO Per August 15, 2009 all request to Amazon need to be signed, until then they accept unsigned requests as well.
+
 
 		if ( ! empty( $this->options['general']['awssecretkey'] ) ) {
 			$endpoint = parse_url( $this->amazon_endpoint );
@@ -503,7 +504,13 @@ class AVHAmazonCore
 			$query_string = $this->BuildQuery( $query_array );
 			$str = "GET\n" . $endpoint['host'] . "\n/onca/xml\n" . $query_string;
 
-			$query_array['Signature'] = base64_encode( hash_hmac( 'sha256', $str, $this->options['general']['awssecretkey'], true ) );
+			if ( $this->running_php5 ) {
+				// PHP5 Native function is much quicker.
+				$query_array['Signature'] = base64_encode( hash_hmac( 'sha256', $str, $this->options['general']['awssecretkey'], true ) );
+			} else {
+				// PHP4 function to get the hash_hmac sha256
+				$query_array['Signature'] = base64_encode( hmac( $this->options['general']['awssecretkey'], $str ) );
+			}
 		}
 
 		$querystring = $this->BuildQuery( $query_array );
@@ -968,6 +975,10 @@ class AVHAmazonCore
 
 } //End Class avh_amazon
 
+/**
+ * SHA256 Class.
+ */
+require_once 'inc/avh-amazon.sha256.inc.php';
 
 /**
  * Initialize the plugin
