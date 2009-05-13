@@ -485,7 +485,12 @@ class AVHAmazonCore
 				echo 'Unknown Operation in rest Call';
 				die();
 			}
-			$return_array = $xml_array[$key];
+
+			if ( isset( $xml_array[$key]['OperationRequest']['Errors'] ) ) {
+				$return_array = $xml_array[$key]['OperationRequest']['Errors']['Error'][1];
+			} else {
+				$return_array = $xml_array[$key];
+			}
 		}
 		return ($return_array);
 	}
