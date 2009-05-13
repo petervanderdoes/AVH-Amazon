@@ -449,27 +449,12 @@ class AVHAmazonCore
 
 		$url = $this->amazon_endpoint . '?' . $querystring;
 
-		// Starting with WordPress 2.7 we'll use the HTTP class.
-		if ( function_exists( 'wp_remote_request' ) ) {
-			$response = wp_remote_request( $url );
-			if ( ! is_wp_error( $response ) ) {
-				$xml_array = $this->ConvertXML2Array( $response['body'] );
-			} else {
-				$return_array = array ('Error' => $response->errors );
-			}
-		} else { // Prior to WordPress 2.7 we'll use the Snoopy Class.
-			require_once (ABSPATH . 'wp-includes/class-snoopy.php');
-			$snoopy = new Snoopy( );
-			$snoopy->fetch( $url );
-			if ( ! $snoopy->error ) {
-				$response = $snoopy->results;
-				$xml_array = $this->ConvertXML2Array( $response );
-			} else {
-				$response = array ($snoopy->error => array (0 => $url ) );
-				$return_array = array ('Error' => $response );
-			}
+		$response = wp_remote_request( $url );
+		if ( ! is_wp_error( $response ) ) {
+			$xml_array = $this->ConvertXML2Array( $response['body'] );
+		} else {
+			$return_array = array ('Error' => $response->errors );
 		}
-
 		// It will be empty if we had an error.
 		if ( ! empty( $xml_array ) ) {
 			// Depending on the Operation called we'll return the right array back.
