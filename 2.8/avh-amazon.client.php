@@ -617,9 +617,11 @@ class AVHAmazonCore
 
 		// @TODO Until August
 		$this->amazon_standard_request['AWSAccessKeyId'] = empty($this->amazon_standard_request['AWSAccessKeyId']) ? '1MPCC36EZ827YJQ02AG2' : $this->options['general']['awskey'];
-
+		// After August
+		// $this->amazon_standard_request['AWSAccessKeyId'] = $this->options['general']['awskey'];
 		return $this->amazon_standard_request;
 	}
+
 	/**
 	 * Convert an array into a query string
 	 *
@@ -628,7 +630,7 @@ class AVHAmazonCore
 	 * @return string
 	 * @since 2.4
 	 */
-	function BuildQuery ( $array = NULL, $convention = '%s' )
+	function BuildQuery ( $array = NULL )
 	{
 		if ( count( $array ) == 0 ) {
 			return '';
@@ -932,8 +934,10 @@ class AVHAmazonCore
 	 */
 	function isChecked ( $checked, $current )
 	{
-		if ( $checked == $current )
+		if ( $checked == $current ) {
 			return (' checked="checked"');
+		}
+		return '';
 	}
 
 	/**

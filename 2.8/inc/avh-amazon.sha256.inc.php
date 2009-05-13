@@ -195,11 +195,10 @@ function sha256 ( $str, $ig_func = false )
 	unset( $binStr ); // binary representation of input string
 	unset( $hexStr ); // 256-bit message digest in readable hex format
 
-
 	// check for php 5.1.2's internal sha256 function, ignore if ig_func is true
-	if ( $ig_func == false )
-		if ( function_exists( "hash" ) )
-			return hash( "sha256", $str, false );
+	if ( $ig_func == false && function_exists( "hash" ) ) {
+		return hash( "sha256", $str, false );
+	}
 
 	$sh = new shaHelper( );
 

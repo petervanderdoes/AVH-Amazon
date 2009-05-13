@@ -44,8 +44,6 @@ class AVHAmazonWidget extends AVHAmazonCore
 			$options = array ();
 		}
 
-		$registered = false;
-
 		foreach ( array_keys( $options ) as $key ) {
 			if ( ! isset( $options[$key]['title'] ) ) {
 				continue;
@@ -275,7 +273,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 		// Open in new windows
 		$new_window = isset( $new_window ) ? $new_window : $this->getWidgetOptions( $options[$number], 'new_window', 'widget_wishlist' );
 
-		// Check default assiociate ID and change it for the Locale
+		// Check default associate ID and change it for the Locale
 		if ( $this->associate_table['US'] == $associated_id ) {
 			$associated_id = $this->getAssociateId( $locale );
 		}
