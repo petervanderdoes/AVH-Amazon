@@ -182,7 +182,6 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		$locale = $this->getOption( 'locale', 'shortcode' );
 
 		echo '<ul id="avhamazon_tabs" class="avhamazon-tabs-nav">';
-		echo '<input name="avhamazon_mb_url" id="avhamazon_mb_url" value="' . $this->info['siteurl'] . '" type="hidden" />';
 
 		// The tabs
 		echo '<li class="avhamazon-tabs-selected"><a href="#avhamazon_tab_wishlist">' . __( 'Wishlist', 'avhamazon' ) . '</a></li>';
