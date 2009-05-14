@@ -45,11 +45,11 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function handleAdminScripts ( $hook_suffix )
 	{
-		$admin_pages = array ('post.php', 'page.php' );
-		$suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '.dev' : '';
 
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.dev' : '';
+		$admin_pages = array ('post.php', 'page.php' );
 		if ( in_array( $hook_suffix, $admin_pages ) ) {
-			wp_enqueue_script( 'avhamazonmetabox', $this->info['install_url'] . '/inc/js/metabox'.$suffix.'.js', array ('jquery' ), $this->version, true );
+			wp_enqueue_script( 'avhamazonmetabox', $this->info['install_url'] . '/inc/js/metabox' . $suffix . '.js', array ('jquery' ), $this->version, true );
 		}
 	}
 
@@ -86,6 +86,11 @@ class AVHAmazonShortcode extends AVHAmazonCore
 				$error = 'WishList ' . $attrs['wishlist'] . ' doesn\'t exists';
 				$attrs['asin'] = null;
 			}
+		}
+
+		if ( isset( $list_result['Error'] ) ) {
+			$error = $this->getHttpError( $item_result['Error'] );
+			$attrs['asin'] = null;
 		}
 
 		// If a random item is wanted, fill $attrs['asin'] with an ASIN from the wishlist
