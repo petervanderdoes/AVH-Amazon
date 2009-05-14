@@ -48,7 +48,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		$admin_pages = array ('post.php', 'page.php' );
 
 		if ( in_array( $hook_suffix, $admin_pages ) ) {
-			wp_enqueue_script( 'avhamazonmetabox', $this->info['install_url'] . '/inc/js/metabox.js', array ('jquery' ), $this->version );
+			wp_enqueue_script( 'avhamazonmetabox', $this->info['install_url'] . '/inc/js/metabox.js', array ('jquery' ), $this->version, true );
 		}
 	}
 
