@@ -13,7 +13,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		// Set the actions, filters and shortcode.
 		add_action( 'admin_menu', array (&$this, 'handleAdminMenu' ) );
 		add_action( 'wp_ajax_avhamazon_metabox', array (&$this, 'on_wp_ajax_avhamazon_metabox' ) ); // New function for AJAX calls from the submit button.
-		add_filter( 'admin_print_scripts', array (&$this, 'adminHead' ) ); // Runs in the HTML header so a plugin can add JavaScript scripts to all admin pages.
+		add_filter( 'admin_enqueue_scripts', array (&$this, 'handleAdminScripts' ) ); // Runs in the HTML header so a plugin can add JavaScript scripts to all admin pages.
 		add_shortcode( 'avhamazon', array (&$this, 'handleShortcode' ) );
 	}
 
@@ -37,12 +37,17 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	}
 
 	/**
-	 * Add the javascript to all admin pages.
+	 * Add the javascript to the admin pages.
+	 *
+	 * @WordPress Action admin_enqueue_scripts
+	 * @since 3.0
 	 *
 	 */
-	function adminHead ()
+	function handleAdminScripts ( $hook_suffix )
 	{
-		if ( $GLOBALS['editing'] ) { //@todo Check if there's a better solution for this.
+		$admin_pages = array ('post.php', 'page.php' );
+
+		if ( in_array( $hook_suffix, $admin_pages ) ) {
 			wp_enqueue_script( 'avhamazonmetabox', $this->info['install_url'] . '/inc/js/metabox.js', array ('jquery' ), $this->version );
 		}
 	}

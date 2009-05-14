@@ -1,8 +1,5 @@
 /**
- * Handle: avhamazonmetabox
- * Version: 2.0
- * Deps: jquery
- * Enqueue: true
+ * Handle: avhamazonmetabox Version: 2.0 Deps: jquery Enqueue: true
  */
 var avhamazonmetabox = function () {};
  
