@@ -46,9 +46,10 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	function handleAdminScripts ( $hook_suffix )
 	{
 		$admin_pages = array ('post.php', 'page.php' );
+		$suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '.dev' : '';
 
 		if ( in_array( $hook_suffix, $admin_pages ) ) {
-			wp_enqueue_script( 'avhamazonmetabox', $this->info['install_url'] . '/inc/js/metabox.js', array ('jquery' ), $this->version, true );
+			wp_enqueue_script( 'avhamazonmetabox', $this->info['install_url'] . '/inc/js/metabox'.$suffix.'.js', array ('jquery' ), $this->version, true );
 		}
 	}
 
