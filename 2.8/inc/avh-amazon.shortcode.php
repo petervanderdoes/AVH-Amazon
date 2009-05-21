@@ -1,14 +1,14 @@
 <?php
-class AVHAmazonShortcode extends AVHAmazonCore
+class AVHAmazonShortcode
 {
-
+	var $avhamazoncore;
 	/**
 	 * PHP5 Constructor
 	 *
 	 */
 	function __construct ()
 	{
-		parent::__construct();
+		$avhamazoncore= new AVHAmazonCore();
 
 		// Set the actions, filters and shortcode.
 		add_action( 'admin_menu', array (&$this, 'handleAdminMenu' ) );
@@ -49,7 +49,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.dev' : '';
 		$admin_pages = array ('post.php', 'page.php' );
 		if ( in_array( $hook_suffix, $admin_pages ) ) {
-			wp_enqueue_script( 'avhamazonmetabox', $this->info['install_url'] . '/inc/js/metabox' . $suffix . '.js', array ('jquery' ), $this->version, true );
+			wp_enqueue_script( 'avhamazonmetabox', $this->avhamazoncore->info['install_url'] . '/inc/js/metabox' . $suffix . '.js', array ('jquery' ), $this->avhamazoncore->version, true );
 		}
 	}
 
@@ -61,27 +61,27 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function handleShortcode ( $atts, $content = null )
 	{
-		$return = $this->comment_begin;
+		$return = $this->avhamazoncore->comment_begin;
 		$result = '';
 		$error = '';
-		$locale = $this->getOption( 'locale', 'shortcode' );
+		$locale = $this->avhamazoncore->getOption( 'locale', 'shortcode' );
 		$attrs = shortcode_atts( array ('asin' => '', 'locale' => $locale, 'linktype' => 'text', 'wishlist' => '', 'picsize' => 'small' ), $atts );
 
 		$locale = $attrs['locale'];
 
 		// Get the associate ID
-		$associatedid = $this->getOption( 'associated_id', 'general' );
-		if ( $this->associate_table['US'] == $associatedid ) {
-			$associatedid = $this->getAssociateId( $locale );
+		$associatedid = $this->avhamazoncore->getOption( 'associated_id', 'general' );
+		if ( $this->avhamazoncore->associate_table['US'] == $associatedid ) {
+			$associatedid = $this->avhamazoncore->getAssociateId( $locale );
 		}
 
 		/**
 		 * Set up Endpoint
 		 */
-		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
+		$this->avhamazoncore->amazon_endpoint = $this->avhamazoncore->amazon_endpoint_table[$locale];
 
 		if ( $attrs['wishlist'] ) {
-			$list_result = $this->getListResults( $attrs['wishlist'] );
+			$list_result = $this->avhamazoncore->getListResults( $attrs['wishlist'] );
 			if ( $list_result['Lists']['Request']['Errors'] ) {
 				$error = 'WishList ' . $attrs['wishlist'] . ' doesn\'t exists';
 				$attrs['asin'] = null;
@@ -89,13 +89,13 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		}
 
 		if ( isset( $list_result['Error'] ) ) {
-			$error = $this->getHttpError( $item_result['Error'] );
+			$error = $this->avhamazoncore->getHttpError( $item_result['Error'] );
 			$attrs['asin'] = null;
 		}
 
 		// If a random item is wanted, fill $attrs['asin'] with an ASIN from the wishlist
 		if ( 'random' == strtolower( $attrs['asin'] ) ) {
-			$Item_keys = $this->getItemKeys( $list_result['Lists']['List']['ListItem'] );
+			$Item_keys = $this->avhamazoncore->getItemKeys( $list_result['Lists']['List']['ListItem'] );
 			foreach ( $Item_keys as $value ) {
 				$Item = $list_result['Lists']['List']['ListItem'][$value];
 			}
@@ -105,13 +105,13 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		if ( 'all' == strtolower( $attrs['asin'] ) ) {
 			foreach ( $list_result['Lists']['List']['ListItem'] as $value ) {
 				$attrs['asin'] = $value['Item']['ASIN'];
-				list ( $oneresult, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid );
+				list ( $oneresult, $error ) = $this->avhamazoncore->shortcodeAsin( $attrs, $content, $associatedid );
 				$result .= $oneresult . '<br />';
 			}
 			$attrs['asin'] = null;
 		}
 		if ( $attrs['asin'] ) {
-			list ( $result, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid );
+			list ( $result, $error ) = $this->avhamazoncore->shortcodeAsin( $attrs, $content, $associatedid );
 		}
 
 		if ( $error ) {
@@ -119,7 +119,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		} else {
 			$return .= $result;
 		}
-		$return .= $this->comment_end;
+		$return .= $this->avhamazoncore->comment_end;
 		return ($return);
 	}
 
@@ -134,10 +134,10 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	function shortcodeAsin ( $attrs, $content, $associatedid )
 	{
 		$error = '';
-		$item_result = $this->handleRESTcall( $this->getRestItemLookupParams( $attrs['asin'], $associatedid ) );
+		$item_result = $this->avhamazoncore->handleRESTcall( $this->avhamazoncore->getRestItemLookupParams( $attrs['asin'], $associatedid ) );
 		if ( isset( $item_result['Error'] ) ) {
 			$return = '';
-			$error = $this->getHttpError( $item_result['Error'] );
+			$error = $this->avhamazoncore->getHttpError( $item_result['Error'] );
 		} else {
 			if ( isset( $item_result['Items']['Request']['Errors'] ) ) {
 				$return = '';
@@ -153,7 +153,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 					$query['colid']=$attrs['wishlist'];
 				}
 				$query['tag']=$associatedid;
-				$myurl .= '?'.$this->BuildQuery($query);
+				$myurl .= '?'.$this->avhamazoncore->BuildQuery($query);
 
 				// If no content is given we use the Title from Amazon.
 				$content = ($content) ? $content : $item_result['Items']['Item']['ItemAttributes']['Title'];
@@ -163,11 +163,11 @@ class AVHAmazonShortcode extends AVHAmazonCore
 						$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
 						break;
 					case 'pic' :
-						$imginfo = $this->getImageInfo( $attrs['picsize'], $item_result );
+						$imginfo = $this->avhamazoncore->getImageInfo( $attrs['picsize'], $item_result );
 						$return = '<div class="wp-caption alignleft"><a title="' . $content . '" href="' . $myurl . '"><img width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $content . '"/></a></div>';
 						break;
 					case 'pic-text' :
-						$imginfo = $this->getImageInfo( $attrs['picsize'], $item_result );
+						$imginfo = $this->avhamazoncore->getImageInfo( $attrs['picsize'], $item_result );
 						$return = '<table style=" border: none; cellpadding: 2px; align: left"><tr><td><a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $content . '"/></a></td><td><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a></td></tr></table>';
 						break;
 					default :
@@ -185,7 +185,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 */
 	function createMetabox ()
 	{
-		$locale = $this->getOption( 'locale', 'shortcode' );
+		$locale = $this->avhamazoncore->getOption( 'locale', 'shortcode' );
 
 		echo '<ul id="avhamazon_tabs" class="avhamazon-tabs-nav">';
 
@@ -206,7 +206,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	function metaboxTabWishlist ( $locale )
 	{
 		wp_nonce_field( 'avhamazon-metabox', 'avhamazon_ajax_nonce', false );
-		$wishlist_id = $this->getOption( 'wishlist_id', 'shortcode' );
+		$wishlist_id = $this->avhamazoncore->getOption( 'wishlist_id', 'shortcode' );
 		echo '<div id="avhamazon_tab_wishlist" class="avhamazon-tabs-panel">';
 		echo '	<div id="avhamazon-wishlist-show" style="display:block">';
 		echo '		<p>';
@@ -216,7 +216,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		echo '			<label style="display:block">' . __( 'Locale Amazon:', 'avhamazon' );
 		echo '			<select id="avhamazon_scwishlist_locale" name="avhamazon_scwishlist_locale" />';
 		$seldata = '';
-		foreach ( $this->locale_table as $key => $value ) {
+		foreach ( $this->avhamazoncore->locale_table as $key => $value ) {
 			$seldata .= '<option value="' . $key . '" ' . (($locale == $key) ? 'selected="selected"' : '') . ' >' . $value . '</option>' . "\n";
 		}
 		echo $seldata;
@@ -227,7 +227,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		echo '		</p>';
 		echo '	</div>';
 		echo '<div id="avhamazon_wishlist_loading" style="display:hide">';
-		echo '	<p>Searching <img src="' . $this->info['graphics_url'] . '/ajax-loader.gif"></p>';
+		echo '	<p>Searching <img src="' . $this->avhamazoncore->info['graphics_url'] . '/ajax-loader.gif"></p>';
 		echo '</div>';
 		echo '	<div id="avhamazon_wishlist_output"></div>';
 		echo '</div>';
@@ -250,7 +250,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		echo '			<label style="display:block">' . __( 'Locale Amazon:', 'avhamazon' );
 		echo '			<select id="avhamazon_scasin_locale" name="avhamazon_scasin_locale" />';
 		$seldata = '';
-		foreach ( $this->locale_table as $key => $value ) {
+		foreach ( $this->avhamazoncore->locale_table as $key => $value ) {
 			$seldata .= '<option value="' . $key . '" ' . (($locale == $key) ? 'selected="selected"' : '') . ' >' . $value . '</option>' . "\n";
 		}
 		echo $seldata;
@@ -260,7 +260,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		echo '		</p>';
 		echo '	</div>';
 		echo '<div id="avhamazon_asin_loading" style="display:hide">';
-		echo '	<p>Searching <img src="' . $this->info['graphics_url'] . '/ajax-loader.gif"></p>';
+		echo '	<p>Searching <img src="' . $this->avhamazoncore->info['graphics_url'] . '/ajax-loader.gif"></p>';
 		echo '</div>';
 		echo '	<div id="avhamazon_asin_output"></div>';
 		echo '</div>';
@@ -302,16 +302,16 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		/**
 		 * Set up endpoint
 		 */
-		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
+		$this->avhamazoncore->amazon_endpoint = $this->avhamazoncore->amazon_endpoint_table[$locale];
 
-		$list_result = $this->getListResults( $wishlist );
+		$list_result = $this->avhamazoncore->getListResults( $wishlist );
 		$total_items = count( $list_result['Lists']['List']['ListItem'] );
 		if ( $total_items > 0 ) {
 			$this->metaboxTabOutputHeader();
 			$listitem = $list_result['Lists']['List']['ListItem'];
 			foreach ( $listitem as $key => $value ) {
 				$Item = $value;
-				$item_result = $this->handleRESTcall( $this->getRestItemLookupParams( $Item['Item']['ASIN'], '' ) );
+				$item_result = $this->avhamazoncore->handleRESTcall( $this->avhamazoncore->getRestItemLookupParams( $Item['Item']['ASIN'], '' ) );
 				$this->metaboxTabOutputItem( $item_result['Items']['Item']['ItemAttributes']['Title'], $Item['Item']['ASIN'], 'avhamazon_scwishlist_asin-' . $key, 'avhamazon_scwishlist_asin', '', ('0' == $key) ? TRUE : FALSE );
 			}
 			// Display the last row as a randomizing option
@@ -336,9 +336,9 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		/**
 		 * Set up endpoint
 		 */
-		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
+		$this->avhamazoncore->amazon_endpoint = $this->avhamazoncore->amazon_endpoint_table[$locale];
 
-		$item_result = $this->handleRESTcall( $this->getRestItemLookupParams( $asin, '' ) );
+		$item_result = $this->avhamazoncore->handleRESTcall( $this->avhamazoncore->getRestItemLookupParams( $asin, '' ) );
 		if ( $item_result['Items']['Request']['Errors'] ) {
 			echo '<strong>' . __( 'Can\'t find the given item', 'avhamazon' ) . '</strong>';
 		} else {
