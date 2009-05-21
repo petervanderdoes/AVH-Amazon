@@ -8,7 +8,7 @@ class AVHAmazonShortcode
 	 */
 	function __construct ()
 	{
-		$avhamazoncore= new AVHAmazonCore();
+		$this->avhamazoncore= new AVHAmazonCore();
 
 		// Set the actions, filters and shortcode.
 		add_action( 'admin_menu', array (&$this, 'handleAdminMenu' ) );
