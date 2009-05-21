@@ -1,6 +1,7 @@
 <?php
-class AVHAmazonWidget extends AVHAmazonCore
+class AVHAmazonWidget extends WP_Widget
 {
+	var $avhamazoncore;
 
 	/**
 	 * PHP5 Constructor
@@ -8,7 +9,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 	 */
 	function __construct ()
 	{
-		parent::__construct();
+		$this->avhamazoncore = new AVHAmazonCore();
 
 		// Initialize!
 		add_action( 'widgets_init', array (&$this, 'initWidget' ) );
@@ -40,7 +41,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 		$control_function = array (&$this, 'widgetControl' );
 		$name = 'AVH Amazon Wishlist';
 
-		if ( ! $options = get_option( $this->db_options_name_widget_wishlist ) ) {
+		if ( ! $options = get_option( $this->avhamazoncore->db_options_name_widget_wishlist ) ) {
 			$options = array ();
 		}
 
@@ -75,7 +76,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 		static $updated = false; // Whether or not we have already updated the data after a POST submit
 
 
-		$locale_table = $this->locale_table;
+		$locale_table = $this->avhamazoncore->locale_table;
 
 		if ( is_numeric( $widget_args ) ) {
 			$widget_args = array ('number' => $widget_args );
@@ -132,7 +133,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 				$all_options[$widget_number] = $options;
 			}
 
-			update_option( $this->db_options_name_widget_wishlist, $all_options );
+			update_option( $this->avhamazoncore->db_options_name_widget_wishlist, $all_options );
 			$updated = true;
 		}
 
@@ -203,7 +204,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 		echo '<label for="widget-avhamazon-show-footer-' . $number . '" style="line-height: 35px; display: block;">';
 		_e( 'Show footer:', 'avhamazon' );
 		echo '<br />';
-		echo '<input style="width: 100% !important;" type="checkbox" id="widget-avhamazon-show-footer-' . $number . '" name="widget_avhamazon_wishlist[' . $number . '][show-footer]" value="1"' . $this->isChecked( '1', $show_footer ) . ' />';
+		echo '<input style="width: 100% !important;" type="checkbox" id="widget-avhamazon-show-footer-' . $number . '" name="widget_avhamazon_wishlist[' . $number . '][show-footer]" value="1"' . $this->avhamazoncore->isChecked( '1', $show_footer ) . ' />';
 		echo '</label>';
 
 		echo '<label for="widget-avhamazon-footer-template-' . $number . '" style="line-height: 35px; display: block;">';
@@ -215,7 +216,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 		echo '<label for="widget-avhamazon-new-window-' . $number . '" style="line-height: 35px; display: block;">';
 		_e( 'Open in new window:', 'avhamazon' );
 		echo '<br />';
-		echo '<input style="width: 100% !important;" type="checkbox" id="widget-avhamazon-new-window-' . $number . '" name="widget_avhamazon_wishlist[' . $number . '][new-window]" value="1"' . $this->isChecked( '1', $new_window ) . ' />';
+		echo '<input style="width: 100% !important;" type="checkbox" id="widget-avhamazon-new-window-' . $number . '" name="widget_avhamazon_wishlist[' . $number . '][new-window]" value="1"' . $this->avhamazoncore->isChecked( '1', $new_window ) . ' />';
 		echo '</label>';
 
 		echo '<input type="hidden" name="widget_avhamazon_wishlist[' . $number . '][submit]" id="widget-avhamazon-submit-' . $number . '" value="1" />';
@@ -241,68 +242,68 @@ class AVHAmazonWidget extends AVHAmazonCore
 
 		if ( $usingwidget ) {
 			// Data should be stored as array:  array( number => data for that instance of the widget, ... )
-			$options = get_option( $this->db_options_name_widget_wishlist );
+			$options = get_option( $this->avhamazoncore->db_options_name_widget_wishlist );
 			if ( ! isset( $options[$number] ) ) {
 				return;
 			}
 		}
 		// Title of the widget
-		$title = isset( $title ) ? $title : $this->getWidgetOptions( $options[$number], 'title', 'widget_wishlist' );
+		$title = isset( $title ) ? $title : $this->avhamazoncore->getWidgetOptions( $options[$number], 'title', 'widget_wishlist' );
 
 		// Wishlist ID
-		$wishlist_id = isset( $wishlist_id ) ? $wishlist_id : $this->getWidgetOptions( $options[$number], 'wishlist_id', 'widget_wishlist' );
+		$wishlist_id = isset( $wishlist_id ) ? $wishlist_id : $this->avhamazoncore->getWidgetOptions( $options[$number], 'wishlist_id', 'widget_wishlist' );
 
 		// Assiociated ID
-		$associated_id = isset( $associated_id ) ? $associated_id : $this->getWidgetOptions( $options[$number], 'associated_id', 'general' );
+		$associated_id = isset( $associated_id ) ? $associated_id : $this->avhamazoncore->getWidgetOptions( $options[$number], 'associated_id', 'general' );
 
 		// Image size
-		$imagesize = isset( $imagesize ) ? $imagesize : $this->getWidgetOptions( $options[$number], 'wishlist_imagesize', 'widget_wishlist' );
+		$imagesize = isset( $imagesize ) ? $imagesize : $this->avhamazoncore->getWidgetOptions( $options[$number], 'wishlist_imagesize', 'widget_wishlist' );
 
 		// Amazon locale
-		$locale = isset( $locale ) ? $locale : $this->getWidgetOptions( $options[$number], 'locale', 'widget_wishlist' );
+		$locale = isset( $locale ) ? $locale : $this->avhamazoncore->getWidgetOptions( $options[$number], 'locale', 'widget_wishlist' );
 
 		// Number of Items
-		$nr_of_items = isset( $nr_of_items ) ? $nr_of_items : $this->getWidgetOptions( $options[$number], 'nr_of_items', 'widget_wishlist' );
+		$nr_of_items = isset( $nr_of_items ) ? $nr_of_items : $this->avhamazoncore->getWidgetOptions( $options[$number], 'nr_of_items', 'widget_wishlist' );
 
 		// Show Footer
-		$show_footer = isset( $show_footer ) ? $show_footer : $this->getWidgetOptions( $options[$number], 'show_footer', 'widget_wishlist' );
+		$show_footer = isset( $show_footer ) ? $show_footer : $this->avhamazoncore->getWidgetOptions( $options[$number], 'show_footer', 'widget_wishlist' );
 
 		// Footer Template
-		$footer_template = isset( $footer_template ) ? $footer_template : $this->getWidgetOptions( $options[$number], 'footer_template', 'widget_wishlist' );
+		$footer_template = isset( $footer_template ) ? $footer_template : $this->avhamazoncore->getWidgetOptions( $options[$number], 'footer_template', 'widget_wishlist' );
 
 		// Open in new windows
-		$new_window = isset( $new_window ) ? $new_window : $this->getWidgetOptions( $options[$number], 'new_window', 'widget_wishlist' );
+		$new_window = isset( $new_window ) ? $new_window : $this->avhamazoncore->getWidgetOptions( $options[$number], 'new_window', 'widget_wishlist' );
 
 		// Check default associate ID and change it for the Locale
-		if ( $this->associate_table['US'] == $associated_id ) {
-			$associated_id = $this->getAssociateId( $locale );
+		if ( $this->avhamazoncore->associate_table['US'] == $associated_id ) {
+			$associated_id = $this->avhamazoncore->getAssociateId( $locale );
 		}
-		$this->amazon_endpoint = $this->amazon_endpoint_table[$locale];
+		$this->avhamazoncore->amazon_endpoint = $this->avhamazoncore->amazon_endpoint_table[$locale];
 
-		$list_result = $this->getListResults( $wishlist_id );
+		$list_result = $this->avhamazoncore->getListResults( $wishlist_id );
 
 		echo $before_widget;
-		echo $this->comment_begin;
+		echo $this->avhamazoncore->comment_begin;
 		echo '<div id="avhamazon-widget">';
 		echo $before_title . $title . $after_title;
 
 		if ( isset( $list_result['Error'] ) ) {
-			echo $this->getHttpError( $list_result['Error'] );
+			echo $this->avhamazoncore->getHttpError( $list_result['Error'] );
 		} else {
 			// Display the result
 			$total_items = count( $list_result['Lists']['List']['ListItem'] );
-			$Item_keys = $this->getItemKeys( $list_result['Lists']['List']['ListItem'], $nr_of_items );
+			$Item_keys = $this->avhamazoncore->getItemKeys( $list_result['Lists']['List']['ListItem'], $nr_of_items );
 
 			foreach ( $Item_keys as $value ) {
 				$Item = $list_result['Lists']['List']['ListItem'][$value];
-				$item_result = $this->handleRESTcall( $this->getRestItemLookupParams( $Item['Item']['ASIN'], $associated_id ) );
+				$item_result = $this->avhamazoncore->handleRESTcall( $this->avhamazoncore->getRestItemLookupParams( $Item['Item']['ASIN'], $associated_id ) );
 				if ( isset( $item_result['Error'] ) ) {
-					echo $this->getHttpError( $item_result['Error'] );
+					echo $this->avhamazoncore->getHttpError( $item_result['Error'] );
 				} else {
 					if ( isset( $item_result['Items']['Request']['Errors'] ) ) {
 						echo 'Item with ASIN ' . $Item['Item']['ASIN'] . ' doesn\'t exist';
 					} else {
-						$imginfo = $this->getImageInfo( $imagesize, $item_result );
+						$imginfo = $this->avhamazoncore->getImageInfo( $imagesize, $item_result );
 
 						$pos = strpos( $item_result['Items']['Item']['DetailPageURL'], $Item['Item']['ASIN'] );
 						$myurl = substr( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen( $Item['Item']['ASIN'] ) );
@@ -311,7 +312,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 						$query['ie']='UTF8';
 						$query['colid']=$wishlist_id;
 						$query['tag']=$associated_id;
-						$myurl .= '?'.$this->BuildQuery($query);
+						$myurl .= '?'.$this->avhamazoncore->BuildQuery($query);
 
 						$target = $new_window == 1 ? 'target="_blank"' : '';
 						echo '<a ' . $target . ' title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a><br/>';
@@ -328,7 +329,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 			}
 		}
 		echo "</div>";
-		echo $this->comment_end;
+		echo $this->avhamazoncore->comment_end;
 		echo $after_widget;
 	}
 
@@ -338,6 +339,6 @@ class AVHAmazonWidget extends AVHAmazonCore
 	 */
 	function handleWidgetCss ()
 	{
-		wp_enqueue_style( 'avhamazonwidget', $this->info['install_url'] . '/inc/avh-amazon.widget.css', array (), $this->version, 'screen' );
+		wp_enqueue_style( 'avhamazonwidget', $this->avhamazoncore->info['install_url'] . '/inc/avh-amazon.widget.css', array (), $this->avhamazoncore->version, 'screen' );
 	}
 }
