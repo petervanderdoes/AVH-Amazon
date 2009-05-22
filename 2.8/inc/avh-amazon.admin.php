@@ -12,7 +12,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 	function __construct ()
 	{
-		$this->avhamazoncore= new AVHAmazonCore();
+		$this->avhamazoncore=AVHAmazonCore::getInstance();
 
 		// Admin URL and Pagination
 		$this->avhamazoncore->admin_base_url = $this->avhamazoncore->info['siteurl'] . '/wp-admin/admin.php?page=';

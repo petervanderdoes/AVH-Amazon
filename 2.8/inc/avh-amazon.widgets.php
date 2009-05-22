@@ -2,15 +2,15 @@
 class AVHAmazonWidget extends WP_Widget
 {
 	var $avhamazoncore;
-
+	var $core;
 	/**
 	 * PHP5 Constructor
 	 *
 	 */
 	function __construct ()
 	{
-		$this->avhamazoncore = new AVHAmazonCore();
-
+		//$this->avhamazoncore = new AVHAmazonCore();
+		$this->avhamazoncore=AVHAmazonCore::getInstance();
 		// Initialize!
 		add_action( 'widgets_init', array (&$this, 'initWidget' ) );
 	}

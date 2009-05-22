@@ -85,6 +85,14 @@ class AVHAmazonCore
 	var $db_options_name_core;
 	var $db_options_name_widget_wishlist;
 
+	function getInstance ()
+	{
+		static $_instance;
+		if ( $_instance === null ) {
+			$_instance = new self( );
+		}
+		return $_instance;
+	}
 	/**
 	 * PHP5 constructor
 	 *
