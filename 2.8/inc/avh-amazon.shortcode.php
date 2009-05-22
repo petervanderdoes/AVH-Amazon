@@ -111,7 +111,7 @@ class AVHAmazonShortcode
 			$attrs['asin'] = null;
 		}
 		if ( $attrs['asin'] ) {
-			list ( $result, $error ) = $this->avhamazoncore->shortcodeAsin( $attrs, $content, $associatedid );
+			list ( $result, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid );
 		}
 
 		if ( $error ) {
