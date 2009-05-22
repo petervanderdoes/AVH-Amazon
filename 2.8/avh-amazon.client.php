@@ -314,6 +314,9 @@ class AVHAmazonCore
 				if ( $options_from_table['general']['version'] < '2.4' ) {
 					$this->doRemoveCacheFolder();
 				}
+				if ( $options_from_table['general']['version'] < '3.0' ) {
+					$this->upgradeWidgetSettings_3_0();
+				}
 				// Write the new default options and the proper version to the database
 				$default_options['general']['version'] = $this->version;
 				update_option( $this->db_options_name_core, $default_options );
@@ -404,6 +407,9 @@ class AVHAmazonCore
 		add_option( $this->db_options_name_core, $newvalues );
 	} // end upgradeDefaultOptions
 
+	function upgradeWidgetSettings_3_0() {
+		echo 'a';
+	}
 
 	/**
 	 * Get all the items from the list
@@ -1008,7 +1014,7 @@ function avhamazon_init ()
 
 	// Include the widgets code
 	require (dirname( __FILE__ ) . '/inc/avh-amazon.widgets.php');
-	$avhamazon_widget = & new AVHAmazonWidget( );
+	$widget_avhamazon_wishlist = & new WP_Widget_AVHAmazon_Wishlist( );
 
 } // End avhamazon_init()
 
