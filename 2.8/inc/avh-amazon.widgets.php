@@ -11,13 +11,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 	{
 		$this->core=AVHAmazonCore::getInstance();
 
-		// Register the widget
-		register_widget('WP_Widget_AVHAmazon_Wishlist');
-
-		// Initialize!
-		$widget_options = array ('description' => 'The AVH Amazon plugin gives you the ability to show items from your Amazon wishlist by using widgets or shortcode in posts and pages.<br />The shortcode can also be used to display any item from Amazon','classname' => 'widget_avhamazon_wishlist' );
-		WP_Widget::__construct( false, __( 'AVH Amazon' ), $widget_options );
-
+		add_action('widget_init', array (&$this,'handleInit'));
 		// NOTES: old option name: widget_avhamazon_wishlist -> widget_avhamazon_wishlist
 		//        old register-sidebar: widget-avhamazon-wishlist -> avhamazon_wishlist
 	}
@@ -33,6 +27,21 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 
 	}
 
+	/**
+	 * Handle the initialization of the widget
+	 *
+	 * @WordPress Action widget_init
+	 * @since 3.0
+	 *
+	 */
+	function handleInit(){
+
+		register_widget('WP_Widget_AVHAmazon_Wishlist');
+
+		$widget_options = array ('description' => 'The AVH Amazon plugin gives you the ability to show items from your Amazon wishlist by using widgets or shortcode in posts and pages.<br />The shortcode can also be used to display any item from Amazon','classname' => 'widget_avhamazon_wishlist' );
+		WP_Widget::__construct( false, __( 'AVH Amazon' ), $widget_options );
+
+	}
 	/** Echo the settings update form
 	 *
 	 * @param array $instance Current settings
@@ -210,6 +219,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 	 * @param array $new_instance New settings for this instance as input by the user via form()
 	 * @param array $old_instance Old settings for this instance
 	 * @return array Settings to save or bool false to cancel saving
+	 * @since 3.0
 	 */
 	function update ( $new_instance, $old_instance )
 	{
