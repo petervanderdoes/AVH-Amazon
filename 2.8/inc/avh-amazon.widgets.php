@@ -12,7 +12,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		$this->core=AVHAmazonCore::getInstance();
 
 		// Register the widget
-		register_widget('AVHAmazonWidget');
+		register_widget('WP_Widget_AVHAmazon_Wishlist');
 
 		// Initialize!
 		$widget_options = array ('description' => 'The AVH Amazon plugin gives you the ability to show items from your Amazon wishlist by using widgets or shortcode in posts and pages.<br />The shortcode can also be used to display any item from Amazon','classname' => 'widget_avhamazon_wishlist' );
