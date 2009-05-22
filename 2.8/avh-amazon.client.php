@@ -85,6 +85,11 @@ class AVHAmazonCore
 	var $db_options_name_core;
 	var $db_options_name_widget_wishlist;
 
+	/**
+	 * Singleton method
+	 *
+	 * @return object
+	 */
 	function getInstance ()
 	{
 		static $_instance;
@@ -93,6 +98,7 @@ class AVHAmazonCore
 		}
 		return $_instance;
 	}
+
 	/**
 	 * PHP5 constructor
 	 *
