@@ -408,7 +408,18 @@ class AVHAmazonCore
 	} // end upgradeDefaultOptions
 
 	function upgradeWidgetSettings_3_0() {
-		echo 'a';
+		$sidebars_widgets = get_option ('sidebars_widgets');
+		foreach ($sidebars_widgets as $key_sidebar => $sidebar) {
+			if ((!empty($sidebar)) && (is_array($sidebar))) {
+				foreach ($sidebar as $key_widget => $widget ) {
+					if ('widget-avhamazon-wishlist' == substr($widget,0,25)) {
+						$new_widget = str_replace('widget-avhamazon-wishlist','avhamazon_wishlist',$widget);
+						$sidebars_widgets[$key_sidebar][$key_widget] = $new_widget;
+					}
+				}
+			}
+		}
+		update_option('sidebars_widgets',$sidebars_widgets);
 	}
 
 	/**
