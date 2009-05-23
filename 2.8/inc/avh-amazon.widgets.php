@@ -11,7 +11,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 	{
 		$this->core=AVHAmazonCore::getInstance();
 
-		add_action('widget_init', array (&$this,'handleInit'));
+		add_action('widgets_init', array (&$this,'handleInit'));
 		// NOTES: old option name: widget_avhamazon_wishlist -> widget_avhamazon_wishlist
 		//        old register-sidebar: widget-avhamazon-wishlist -> avhamazon_wishlist
 	}
@@ -30,7 +30,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 	/**
 	 * Handle the initialization of the widget
 	 *
-	 * @WordPress Action widget_init
+	 * @WordPress Action widgets_init
 	 * @since 3.0
 	 *
 	 */
