@@ -9,9 +9,9 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 	 */
 	function __construct ()
 	{
-		$this->core=AVHAmazonCore::getInstance();
+		$this->core = AVHAmazonCore::getInstance();
 
-		$widget_options = array ('description' => 'Gives you the ability to show items from your Amazon wishlist by using widgets or shortcode in posts and pages. The shortcode can also be used to display an item from Amazon','classname' => 'widget_avhamazon_wishlist' );
+		$widget_options = array ('description' => 'Gives you the ability to show items from your Amazon wishlist by using widgets or shortcode in posts and pages. The shortcode can also be used to display an item from Amazon', 'classname' => 'widget_avhamazon_wishlist' );
 		parent::__construct( false, __( 'AVH Amazon' ), $widget_options );
 
 	}
@@ -49,34 +49,33 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		$footer_template = format_to_edit( $instance['footer_template'] );
 		$new_window = $instance['footer_template'];
 
-
 		echo '<div>';
 		echo '<p>';
-		echo '<label for="' . $this->get_field_id('title') . '" >';
+		echo '<label for="' . $this->get_field_id( 'title' ) . '" >';
 		_e( 'Title:', 'avhamazon' );
 		echo '</label>';
-		echo '<input class="widefat" type="text" id="' . $this->get_field_id('title') . '" name="' . $this->get_field_name('title') . '" value="' . $title . '" />';
+		echo '<input class="widefat" type="text" id="' . $this->get_field_id( 'title' ) . '" name="' . $this->get_field_name( 'title' ) . '" value="' . $title . '" />';
 		echo '</p>';
 
 		echo '<p>';
-		echo '<label for="' . $this->get_field_id('associated_id') . '">';
+		echo '<label for="' . $this->get_field_id( 'associated_id' ) . '">';
 		_e( 'Associated ID:', 'avhamazon' );
 		echo '</label>';
-		echo '<input class="widefat" type="text" id="' . $this->get_field_id('associated_id') . '" name="' . $this->get_field_name('associated_id') . '" value="' . $associated_id . '" />';
+		echo '<input class="widefat" type="text" id="' . $this->get_field_id( 'associated_id' ) . '" name="' . $this->get_field_name( 'associated_id' ) . '" value="' . $associated_id . '" />';
 		echo '</p>';
 
 		echo '<p>';
-		echo '<label for="' . $this->get_field_id('wishlist_id') . '">';
+		echo '<label for="' . $this->get_field_id( 'wishlist_id' ) . '">';
 		_e( 'Wishlist ID:', 'avhamazon' );
 		echo '</label>';
-		echo '<input class="widefat" type="text" id="' . $this->get_field_id('wishlist_id') . '" name="' . $this->get_field_name('wishlist_id') . '" value="' . $wishlist_id . '" />';
+		echo '<input class="widefat" type="text" id="' . $this->get_field_id( 'wishlist_id' ) . '" name="' . $this->get_field_name( 'wishlist_id' ) . '" value="' . $wishlist_id . '" />';
 		echo '</p>';
 
 		echo '<p>';
-		echo '<label for="' . $this->get_field_id('locale') . '">';
+		echo '<label for="' . $this->get_field_id( 'locale' ) . '">';
 		_e( 'Locale Amazon:', 'avhamazon' );
 		echo '</label>';
-		echo '<select class="widefat" id="' . $this->get_field_id('locale') . '" name="' . $this->get_field_name('locale') . '" />';
+		echo '<select class="widefat" id="' . $this->get_field_id( 'locale' ) . '" name="' . $this->get_field_name( 'locale' ) . '" />';
 		$seldata = '';
 		foreach ( $locale_table as $key => $sel ) {
 			$seldata .= '<option value="' . $key . '" ' . (($locale == $key) ? 'selected="selected"' : '') . ' >' . $sel . '</option>' . "\n";
@@ -86,32 +85,32 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		echo '</p>';
 
 		echo '<p>';
-		echo '<label for="' . $this->get_field_id('nr_of_items') . '">';
+		echo '<label for="' . $this->get_field_id( 'nr_of_items' ) . '">';
 		_e( 'Number of items:', 'avhamazon' );
 		echo '</label>';
-		echo '<input class="widefat" type="text" id="' . $this->get_field_id('nr_of_items') . '" name="' . $this->get_field_name('nr_of_items') . '" value="' . $nr_of_items . '" />';
+		echo '<input class="widefat" type="text" id="' . $this->get_field_id( 'nr_of_items' ) . '" name="' . $this->get_field_name( 'nr_of_items' ) . '" value="' . $nr_of_items . '" />';
 		echo '</p>';
 
 		echo '<p>';
-		echo '<label for="' . $this->get_field_id('footer_template') . '">';
+		echo '<label for="' . $this->get_field_id( 'footer_template' ) . '">';
 		_e( 'Footer template:', 'avhamazon' );
 		echo '</label>';
-		echo '<input class="widefat" type="text" id="' . $this->get_field_id('footer_template') . '" name="' . $this->get_field_name('footer_template') . '" value="' . $footer_template . '" />';
+		echo '<input class="widefat" type="text" id="' . $this->get_field_id( 'footer_template' ) . '" name="' . $this->get_field_name( 'footer_template' ) . '" value="' . $footer_template . '" />';
 
-		echo '<label for="' . $this->get_field_id('show_footer') . '">';
-		echo '<input type="checkbox" id="' . $this->get_field_id('show_footer') . '" name="' . $this->get_field_name('show_footer') . '" value="1"' . $this->core->isChecked( '1', $show_footer ) . ' /> ';
+		echo '<label for="' . $this->get_field_id( 'show_footer' ) . '">';
+		echo '<input type="checkbox" id="' . $this->get_field_id( 'show_footer' ) . '" name="' . $this->get_field_name( 'show_footer' ) . '" value="1"' . $this->core->isChecked( '1', $show_footer ) . ' /> ';
 		_e( 'Show footer', 'avhamazon' );
 		echo '</label>';
 		echo '</p>';
 
 		echo '<p>';
-		echo '<label for="' . $this->get_field_id('footer_template') . '">';
-		echo '<input type="checkbox" id="' . $this->get_field_id('footer_template') . '" name="' . $this->get_field_name('footer_template') . '" value="1"' . $this->core->isChecked( '1', $new_window ) . ' />';
+		echo '<label for="' . $this->get_field_id( 'footer_template' ) . '">';
+		echo '<input type="checkbox" id="' . $this->get_field_id( 'footer_template' ) . '" name="' . $this->get_field_name( 'footer_template' ) . '" value="1"' . $this->core->isChecked( '1', $new_window ) . ' />';
 		_e( 'Open links in new window', 'avhamazon' );
 		echo '</label>';
 		echo '</p>';
 
-		echo '<input type="hidden" id="' . $this->get_field_id('submit') . '" name="' . $this->get_field_name('submit') . '" value="1" />';
+		echo '<input type="hidden" id="' . $this->get_field_id( 'submit' ) . '" name="' . $this->get_field_name( 'submit' ) . '" value="1" />';
 		_e( 'Empty field will use default value.', 'avhamazon' );
 		echo '</div>';
 	}
@@ -318,10 +317,10 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 						$myurl = substr( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen( $Item['Item']['ASIN'] ) );
 						$myurl .= '/ref=wl_it_dp';
 
-						$query['ie']='UTF8';
-						$query['colid']=$wishlist_id;
-						$query['tag']=$associated_id;
-						$myurl .= '?'.$this->core->BuildQuery($query);
+						$query['ie'] = 'UTF8';
+						$query['colid'] = $wishlist_id;
+						$query['tag'] = $associated_id;
+						$myurl .= '?' . $this->core->BuildQuery( $query );
 
 						$target = $new_window == 1 ? 'target="_blank"' : '';
 						echo '<a ' . $target . ' title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a><br/>';

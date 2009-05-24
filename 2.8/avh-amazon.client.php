@@ -1025,9 +1025,10 @@ function avhamazon_init ()
 
 	// Include the widgets code
 	require (dirname( __FILE__ ) . '/inc/avh-amazon.widgets.php');
-	add_action('widgets_init', 'avhamazon_widgets_init');
+	add_action( 'widgets_init', 'avhamazon_widgets_init' );
 
 } // End avhamazon_init()
+
 
 /**
  * Register the widget
@@ -1036,8 +1037,9 @@ function avhamazon_init ()
  * @since 3.0
  *
  */
-function avhamazon_widgets_init(){
-	register_widget('WP_Widget_AVHAmazon_Wishlist');
+function avhamazon_widgets_init ()
+{
+	register_widget( 'WP_Widget_AVHAmazon_Wishlist' );
 }
 
 add_action( 'plugins_loaded', 'avhamazon_init' );
