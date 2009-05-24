@@ -54,62 +54,67 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 
 		echo '<div>';
 		echo '<p>';
-		_e( 'Empty field will use default value.', 'avhamazon' );
-
 		echo '<label for="' . $this->get_field_id('title') . '" >';
 		_e( 'Title:', 'avhamazon' );
-		echo '<br />';
-		echo '<input type="text" id="' . $this->get_field_id('title') . '" name="' . $this->get_field_name('title') . '" value="' . $title . '" />';
 		echo '</label>';
+		echo '<input class="widefat" type="text" id="' . $this->get_field_id('title') . '" name="' . $this->get_field_name('title') . '" value="' . $title . '" />';
+		echo '</p>';
 
+		echo '<p>';
 		echo '<label for="' . $this->get_field_id('associated_id') . '">';
 		_e( 'Associated ID:', 'avhamazon' );
-		echo '<br />';
-		echo '<input type="text" id="' . $this->get_field_id('associated_id') . '" name="' . $this->get_field_name('associated_id') . '" value="' . $associated_id . '" /> </label>';
+		echo '</label>';
+		echo '<input class="widefat" type="text" id="' . $this->get_field_id('associated_id') . '" name="' . $this->get_field_name('associated_id') . '" value="' . $associated_id . '" />';
+		echo '</p>';
 
+		echo '<p>';
 		echo '<label for="' . $this->get_field_id('wishlist_id') . '">';
 		_e( 'Wishlist ID:', 'avhamazon' );
-		echo '<br />';
-		echo '<input style="width: 100% !important;" type="text" id="' . $this->get_field_id('wishlist_id') . '" name="' . $this->get_field_name('wishlist_id') . '" value="' . $wishlist_id . '" />';
 		echo '</label>';
+		echo '<input class="widefat" type="text" id="' . $this->get_field_id('wishlist_id') . '" name="' . $this->get_field_name('wishlist_id') . '" value="' . $wishlist_id . '" />';
+		echo '</p>';
 
+		echo '<p>';
 		echo '<label for="' . $this->get_field_id('locale') . '">';
 		_e( 'Locale Amazon:', 'avhamazon' );
-		echo '<br />';
-		echo '<select id="' . $this->get_field_id('locale') . '" name="' . $this->get_field_name('locale') . '" />';
+		echo '</label>';
+		echo '<select class="widefat" id="' . $this->get_field_id('locale') . '" name="' . $this->get_field_name('locale') . '" />';
 		$seldata = '';
 		foreach ( $locale_table as $key => $sel ) {
 			$seldata .= '<option value="' . $key . '" ' . (($locale == $key) ? 'selected="selected"' : '') . ' >' . $sel . '</option>' . "\n";
 		}
 		echo $seldata;
 		echo '</select>';
-		echo '</label>';
+		echo '</p>';
 
+		echo '<p>';
 		echo '<label for="' . $this->get_field_id('nr_of_items') . '">';
 		_e( 'Number of items:', 'avhamazon' );
-		echo '<br />';
-		echo '<input type="text" id="' . $this->get_field_id('nr_of_items') . '" name="' . $this->get_field_name('nr_of_items') . '" value="' . $nr_of_items . '" />';
 		echo '</label>';
+		echo '<input class="widefat" type="text" id="' . $this->get_field_id('nr_of_items') . '" name="' . $this->get_field_name('nr_of_items') . '" value="' . $nr_of_items . '" />';
+		echo '</p>';
 
-		echo '<label for="' . $this->get_field_id('show_footer') . '">';
-		_e( 'Show footer:', 'avhamazon' );
-		echo '<br />';
-		echo '<input type="checkbox" id="' . $this->get_field_id('show_footer') . '" name="' . $this->get_field_name('show_footer') . '" value="1"' . $this->core->isChecked( '1', $show_footer ) . ' />';
-		echo '</label>';
-
+		echo '<p>';
 		echo '<label for="' . $this->get_field_id('footer_template') . '">';
 		_e( 'Footer template:', 'avhamazon' );
-		echo '<br />';
-		echo '<input type="text" id="' . $this->get_field_id('footer_template') . '" name="' . $this->get_field_name('footer_template') . '" value="' . $footer_template . '" />';
 		echo '</label>';
+		echo '<input class="widefat" type="text" id="' . $this->get_field_id('footer_template') . '" name="' . $this->get_field_name('footer_template') . '" value="' . $footer_template . '" />';
 
-		echo '<label for="' . $this->get_field_id('footer_template') . '">';
-		_e( 'Open in new window:', 'avhamazon' );
-		echo '<br />';
-		echo '<input type="checkbox" id="' . $this->get_field_id('footer_template') . '" name="' . $this->get_field_name('footer_template') . '" value="1"' . $this->core->isChecked( '1', $new_window ) . ' />';
+		echo '<label for="' . $this->get_field_id('show_footer') . '">';
+		echo '<input type="checkbox" id="' . $this->get_field_id('show_footer') . '" name="' . $this->get_field_name('show_footer') . '" value="1"' . $this->core->isChecked( '1', $show_footer ) . ' /> ';
+		_e( 'Show footer', 'avhamazon' );
 		echo '</label>';
+		echo '</p>';
+
+		echo '<p>';
+		echo '<label for="' . $this->get_field_id('footer_template') . '">';
+		echo '<input type="checkbox" id="' . $this->get_field_id('footer_template') . '" name="' . $this->get_field_name('footer_template') . '" value="1"' . $this->core->isChecked( '1', $new_window ) . ' />';
+		_e( 'Open links in new window', 'avhamazon' );
+		echo '</label>';
+		echo '</p>';
 
 		echo '<input type="hidden" id="' . $this->get_field_id('submit') . '" name="' . $this->get_field_name('submit') . '" value="1" />';
+		_e( 'Empty field will use default value.', 'avhamazon' );
 		echo '</div>';
 	}
 
