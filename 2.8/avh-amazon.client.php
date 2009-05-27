@@ -753,7 +753,15 @@ class AVHAmazonCore
 	function getImageInfo ( $imagesize, $item_result )
 	{
 		$imageurl = $this->info['graphics_url'];
-		$imageset = $item_result['Items']['Item']['ImageSets']['ImageSet'];
+		if (is_array($item_result['Items']['Item']['ImageSets']['ImageSet'])) {
+			if (is_array($item_result['Items']['Item']['ImageSets']['ImageSet'][0])) {
+				$imageset = $item_result['Items']['Item']['ImageSets']['ImageSet'][0];
+			} else {
+				$imageset = $item_result['Items']['Item']['ImageSets']['ImageSet'];
+			}
+		} else {
+			 $imageset = $item_result['Items']['Item'];
+		}
 		switch ( strtolower( $imagesize ) ) {
 			case 'medium' :
 				$img['url'] = $imageset['MediumImage']['URL'];
