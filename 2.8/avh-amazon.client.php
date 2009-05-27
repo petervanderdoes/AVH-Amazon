@@ -113,32 +113,16 @@ class AVHAmazonCore
 		 * Amazon RESTful properties
 		 *
 		 */
-		$this->amazon_endpoint_table = array (
-			'US' => 'http://ecs.amazonaws.com/onca/xml',
-			'CA' => 'http://ecs.amazonaws.ca/onca/xml',
-			'DE' => 'http://ecs.amazonaws.de/onca/xml',
-			'UK' => 'http://ecs.amazonaws.co.uk/onca/xml' );
+		$this->amazon_endpoint_table = array ('US' => 'http://ecs.amazonaws.com/onca/xml', 'CA' => 'http://ecs.amazonaws.ca/onca/xml', 'DE' => 'http://ecs.amazonaws.de/onca/xml', 'UK' => 'http://ecs.amazonaws.co.uk/onca/xml' );
 		$this->amazon_endpoint = $this->amazon_endpoint_table['US'];
-		$this->amazon_standard_request = array (
-			'Service' => 'AWSECommerceService',
-			'Version' => '2009-03-31',
-			'AWSAccessKeyId' => '1MPCC36EZ827YJQ02AG2',
-			'Timestamp' => '' );
+		$this->amazon_standard_request = array ('Service' => 'AWSECommerceService', 'Version' => '2009-03-31', 'AWSAccessKeyId' => '1MPCC36EZ827YJQ02AG2', 'Timestamp' => '' );
 
 		/**
 		 * Amazon general options
 		 *
 		 */
-		$this->locale_table = array (
-			'US' => 'Amazon.com',
-			'CA' => 'Amazon.ca',
-			'DE' => 'Amazon.de',
-			'UK' => 'Amazon.co.uk' );
-		$this->associate_table = array (
-			'US' => 'avh-amazon-20',
-			'CA' => 'avh-amazon-ca-20',
-			'DE' => 'avh-amazon-de-21',
-			'UK' => 'avh-amazon-uk-21' );
+		$this->locale_table = array ('US' => 'Amazon.com', 'CA' => 'Amazon.ca', 'DE' => 'Amazon.de', 'UK' => 'Amazon.co.uk' );
+		$this->associate_table = array ('US' => 'avh-amazon-20', 'CA' => 'avh-amazon-ca-20', 'DE' => 'avh-amazon-de-21', 'UK' => 'avh-amazon-uk-21' );
 
 		$this->db_options_name_core = 'avhamazon';
 		$this->db_options_name_widget_wishlist = 'widget_avhamazon_wishlist';
@@ -147,44 +131,25 @@ class AVHAmazonCore
 		 * Default options - General Purpose
 		 *
 		 */
-		$this->default_general_options = array (
-			'version' => $this->version,
-			'associated_id' => 'avh-amazon-20',
-			'awskey' => '',
-			'awssecretkey' => '',
-			'policychange' => '' );
-
+		$this->default_general_options = array ('version' => $this->version, 'associated_id' => 'avh-amazon-20', 'awskey' => '', 'awssecretkey' => '', 'policychange' => '' );
 
 		/**
 		 * Default options - Widget Wishlist
 		 *
 		 */
-		$this->default_widget_wishlist_options = array (
-			'title' => 'Amazon Wish List',
-			'wishlist_id' => '2CC2KKW02870',
-			'wishlist_imagesize' => 'Medium',
-			'locale' => 'US',
-			'nr_of_items' => 1,
-			'show_footer' => 0,
-			'footer_template' => 'Show all %nr_of_items% items',
-			'new_window' => 0 );
+		$this->default_widget_wishlist_options = array ('title' => 'Amazon Wish List', 'wishlist_id' => '2CC2KKW02870', 'wishlist_imagesize' => 'Medium', 'locale' => 'US', 'nr_of_items' => 1, 'show_footer' => 0, 'footer_template' => 'Show all %nr_of_items% items', 'new_window' => 0 );
 
 		/**
 		 * Default options - Shortcode
 		 *
 		 */
-		$this->default_shortcode_options = array (
-			'wishlist_id' => '',
-			'locale' => 'US' );
+		$this->default_shortcode_options = array ('wishlist_id' => '', 'locale' => 'US' );
 
 		/**
 		 * Default Options - All as stored in the DB
 		 *
 		 */
-		$this->default_options = array (
-			'general' => $this->default_general_options,
-			'widget_wishlist' => $this->default_widget_wishlist_options,
-			'shortcode' => $this->default_shortcode_options );
+		$this->default_options = array ('general' => $this->default_general_options, 'widget_wishlist' => $this->default_widget_wishlist_options, 'shortcode' => $this->default_shortcode_options );
 
 		/**
 		 * Set the options for the program
@@ -224,19 +189,7 @@ class AVHAmazonCore
 		// Set class property for info
 		$this->info = array ('home' => get_option( 'home' ), 'siteurl' => $info['siteurl'], 'install_url' => $info['install_url'], 'install_uri' => $info['install_uri'], 'install_dir' => $info['install_dir'], 'graphics_url' => $info['install_url'] . '/images', 'wordpress_version' => $this->getWordpressVersion() );
 
-		/**
-		 * TODO Localization
-		 */
-		// Localization.
-		//$locale = get_locale();
-		//if ( !empty( $locale ) ) {
-		//	$mofile = $this->info['install_dir'].'/languages/avhamazon-'.$locale.'.mo';
-		//	load_textdomain('avhamazon', $mofile);
-		//}
-
-
 		return;
-
 	}
 
 	/**
@@ -407,19 +360,21 @@ class AVHAmazonCore
 		add_option( $this->db_options_name_core, $newvalues );
 	} // end upgradeDefaultOptions
 
-	function upgradeWidgetSettings_3_0() {
-		$sidebars_widgets = get_option ('sidebars_widgets');
-		foreach ($sidebars_widgets as $key_sidebar => $sidebar) {
-			if ((!empty($sidebar)) && (is_array($sidebar))) {
-				foreach ($sidebar as $key_widget => $widget ) {
-					if ('widget-avhamazon-wishlist' == substr($widget,0,25)) {
-						$new_widget = str_replace('widget-avhamazon-wishlist','avhamazon_wishlist',$widget);
+
+	function upgradeWidgetSettings_3_0 ()
+	{
+		$sidebars_widgets = get_option( 'sidebars_widgets' );
+		foreach ( $sidebars_widgets as $key_sidebar => $sidebar ) {
+			if ( (! empty( $sidebar )) && (is_array( $sidebar )) ) {
+				foreach ( $sidebar as $key_widget => $widget ) {
+					if ( 'widget-avhamazon-wishlist' == substr( $widget, 0, 25 ) ) {
+						$new_widget = str_replace( 'widget-avhamazon-wishlist', 'avhamazon_wishlist', $widget );
 						$sidebars_widgets[$key_sidebar][$key_widget] = $new_widget;
 					}
 				}
 			}
 		}
-		update_option('sidebars_widgets',$sidebars_widgets);
+		update_option( 'sidebars_widgets', $sidebars_widgets );
 	}
 
 	/**
@@ -476,7 +431,7 @@ class AVHAmazonCore
 	{
 		$xml_array = array ();
 
-		$querystring = $this->getAWSQueryString($query_array);
+		$querystring = $this->getAWSQueryString( $query_array );
 
 		$url = $this->amazon_endpoint . '?' . $querystring;
 
@@ -569,14 +524,7 @@ class AVHAmazonCore
 		$WhatList = (is_null( $WhatList ) ? 'WishList' : $WhatList);
 		$page = (is_null( $page ) ? 1 : $page);
 
-		$listLookup = array (
-			'Operation' => 'ListLookup',
-			'ListId' => $ListID,
-			'ListType' => $WhatList,
-			'ResponseGroup' => 'ListFull',
-			'IsOmitPurchasedItems' => '1',
-			'ProductPage' => ( string ) $page,
-			'Sort' => 'LastUpdated' );
+		$listLookup = array ('Operation' => 'ListLookup', 'ListId' => $ListID, 'ListType' => $WhatList, 'ResponseGroup' => 'ListFull', 'IsOmitPurchasedItems' => '1', 'ProductPage' => ( string ) $page, 'Sort' => 'LastUpdated' );
 
 		$request = array_merge( $this->getRestStandardRequest(), $listLookup );
 
@@ -593,13 +541,7 @@ class AVHAmazonCore
 	 */
 	function getRestItemLookupParams ( $Itemid, $associatedid )
 	{
-		$itemLookUp = array (
-			'Operation' => 'ItemLookup',
-			'ItemId' => $Itemid,
-			'IdType' => 'ASIN',
-			'Condition' => 'All',
-			'ResponseGroup' => 'Medium',
-			'AssociateTag' => $associatedid );
+		$itemLookUp = array ('Operation' => 'ItemLookup', 'ItemId' => $Itemid, 'IdType' => 'ASIN', 'Condition' => 'All', 'ResponseGroup' => 'Medium', 'AssociateTag' => $associatedid );
 
 		$request = array_merge( $this->getRestStandardRequest(), $itemLookUp );
 
@@ -616,11 +558,7 @@ class AVHAmazonCore
 	 */
 	function getRestListSearchParams ( $email, $list = 'WishList' )
 	{
-		$request = array (
-			'Operation' => 'ListSearch',
-			'Email' => $email,
-			'ListType' => $list,
-			'ResponseGroup' => 'ListInfo' );
+		$request = array ('Operation' => 'ListSearch', 'Email' => $email, 'ListType' => $list, 'ResponseGroup' => 'ListInfo' );
 
 		$return = array_merge( $this->getRestStandardRequest(), $request );
 
@@ -634,10 +572,11 @@ class AVHAmazonCore
 	 * @since 3.0
 	 * @TODO Per August 15, 2009 all request to Amazon need to be signed, until then they accept unsigned requests as well.
 	 */
-	function getRestStandardRequest() {
+	function getRestStandardRequest ()
+	{
 
 		// @TODO Until August
-		$this->amazon_standard_request['AWSAccessKeyId'] = empty($this->amazon_standard_request['AWSAccessKeyId']) ? '1MPCC36EZ827YJQ02AG2' : $this->options['general']['awskey'];
+		$this->amazon_standard_request['AWSAccessKeyId'] = empty( $this->amazon_standard_request['AWSAccessKeyId'] ) ? '1MPCC36EZ827YJQ02AG2' : $this->options['general']['awskey'];
 		// After August
 		// $this->amazon_standard_request['AWSAccessKeyId'] = $this->options['general']['awskey'];
 		return $this->amazon_standard_request;
@@ -841,7 +780,7 @@ class AVHAmazonCore
 					$img['w'] = 75;
 				}
 				break;
-			case 'swatch':
+			case 'swatch' :
 				$img['url'] = $imageset['SwatchImage']['URL'];
 				$img['h'] = $imageset['SwatchImage']['Height'];
 				$img['w'] = $imageset['SwatchImage']['Width'];
@@ -1010,6 +949,7 @@ class AVHAmazonCore
 	}
 
 } //End Class avh_amazon
+
 
 /**
  * SHA256 Class.

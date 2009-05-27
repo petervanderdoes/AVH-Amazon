@@ -12,11 +12,11 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 	function __construct ()
 	{
-		$this->core=AVHAmazonCore::getInstance();
+		$this->core = AVHAmazonCore::getInstance();
 
 		// Admin URL and Pagination
 		$this->core->admin_base_url = $this->core->info['siteurl'] . '/wp-admin/admin.php?page=';
-		if ( isset ( $_GET['pagination'] ) ) {
+		if ( isset( $_GET['pagination'] ) ) {
 			$this->core->actual_page = ( int ) $_GET['pagination'];
 		}
 
@@ -33,12 +33,12 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		$avhamazon_pages = array ('avhamazon_options', 'avhamazon_tools' );
 
 		if ( in_array( $_GET['page'], $avhamazon_pages ) ) {
-			wp_enqueue_script( 'jquery-ui-tabs');
+			wp_enqueue_script( 'jquery-ui-tabs' );
 		}
 
 		// Admin notice A AWS developer key is neccasry as well as PHP5. :(
-		if (empty($this->core->options['general']['awssecretkey']) ){
-			add_action ('admin_notices', array(&$this,'actionNotice'));
+		if ( empty( $this->core->options['general']['awssecretkey'] ) ) {
+			add_action( 'admin_notices', array (&$this, 'actionNotice' ) );
 		}
 		return;
 	}
@@ -133,7 +133,6 @@ class AVHAmazonAdmin extends AVHAmazonCore
 			$this->displayMessage();
 		}
 	}
-
 
 	/**
 	 * Adds Settings next to the plugin actions
@@ -391,7 +390,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 			$formoptions = $_POST['avhamazon'];
 			foreach ( $this->core->options as $key => $value ) {
 				foreach ( $value as $key2 => $value2 ) {
-					if ( !('general' == $key && ('version' == $key2 || 'policychange' == $key2))) {
+					if ( ! ('general' == $key && ('version' == $key2 || 'policychange' == $key2)) ) {
 						$newval = (isset( $formoptions[$key][$key2] )) ? esc_attr( $formoptions[$key][$key2] ) : '0';
 						if ( 'nr_of_items' == $key2 ) {
 							if ( ! is_numeric( $formoptions[$key][$key2] ) ) {

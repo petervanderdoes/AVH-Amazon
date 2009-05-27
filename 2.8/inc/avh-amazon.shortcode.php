@@ -2,13 +2,14 @@
 class AVHAmazonShortcode
 {
 	var $core;
+
 	/**
 	 * PHP5 Constructor
 	 *
 	 */
 	function __construct ()
 	{
-		$this->core=AVHAmazonCore::getInstance();
+		$this->core = AVHAmazonCore::getInstance();
 
 		// Set the actions, filters and shortcode.
 		add_action( 'admin_menu', array (&$this, 'handleAdminMenu' ) );
@@ -149,11 +150,11 @@ class AVHAmazonShortcode
 				// If a wishlist is given, make sure when somebody clicks on the link, Amazon knows the List owner.
 				if ( $attrs['wishlist'] ) {
 					$myurl .= '/ref=wl_it_dp';
-					$query['ie']='UTF8';
-					$query['colid']=$attrs['wishlist'];
+					$query['ie'] = 'UTF8';
+					$query['colid'] = $attrs['wishlist'];
 				}
-				$query['tag']=$associatedid;
-				$myurl .= '?'.$this->core->BuildQuery($query);
+				$query['tag'] = $associatedid;
+				$myurl .= '?' . $this->core->BuildQuery( $query );
 
 				// If no content is given we use the Title from Amazon.
 				$content = ($content) ? $content : $item_result['Items']['Item']['ItemAttributes']['Title'];
@@ -369,14 +370,14 @@ class AVHAmazonShortcode
 	 * @param string $class
 	 * @param boolean $checked
 	 */
-	function metaboxTabOutputItem ( $title, $asin, $id, $name, $class = '', $checked = FALSE, $pic='' )
+	function metaboxTabOutputItem ( $title, $asin, $id, $name, $class = '', $checked = FALSE, $pic = '' )
 	{
 		$class = ($class) ? 'class="' . $class . '"' : '';
 		$image = '';
-		if (is_array($pic) && (!empty($pic['url']))) {
+		if ( is_array( $pic ) && (! empty( $pic['url'] )) ) {
 			$image = '<img width="' . $pic['w'] . '" height="' . $pic['h'] . '" src="' . $pic['url'] . '" />';
 		}
-		echo '<p><label ' . $class . '><input type="radio" value="' . $asin . '" id="' . $id . '" name="' . $name . '"' . ($checked ? ' checked="checked" ' : "") . ' /> '.$image.' ' . $title . '</label></p>';
+		echo '<p><label ' . $class . '><input type="radio" value="' . $asin . '" id="' . $id . '" name="' . $name . '"' . ($checked ? ' checked="checked" ' : "") . ' /> ' . $image . ' ' . $title . '</label></p>';
 	}
 
 	/**
