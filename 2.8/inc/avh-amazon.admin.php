@@ -170,9 +170,9 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 		if ( isset( $_POST['action'] ) ) {
 			check_admin_referer( 'avhamazon-tools' );
-			$action = attribute_escape( $_POST['action'] );
-			$email = attribute_escape( $_POST['email'] );
-			$locale = attribute_escape( $_POST['locale'] );
+			$action = esc_attr( $_POST['action'] );
+			$email = esc_attr( $_POST['email'] );
+			$locale = esc_attr( $_POST['locale'] );
 		}
 
 		// Locale Table
@@ -392,7 +392,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 			foreach ( $this->core->options as $key => $value ) {
 				foreach ( $value as $key2 => $value2 ) {
 					if ( !('general' == $key && ('version' == $key2 || 'policychange' == $key2))) {
-						$newval = (isset( $formoptions[$key][$key2] )) ? attribute_escape( $formoptions[$key][$key2] ) : '0';
+						$newval = (isset( $formoptions[$key][$key2] )) ? esc_attr( $formoptions[$key][$key2] ) : '0';
 						if ( 'nr_of_items' == $key2 ) {
 							if ( ! is_numeric( $formoptions[$key][$key2] ) ) {
 								$newval = 1;
@@ -559,7 +559,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 				switch ( $option[2] ) {
 					case 'checkbox' :
-						$input_type = '<input type="checkbox" id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape( $option[3] ) . '" ' . $this->core->isChecked( '1', $option_actual[$section][$option_key] ) . ' />' . "\n";
+						$input_type = '<input type="checkbox" id="' . $option[0] . '" name="' . $option[0] . '" value="' . esc_attr( $option[3] ) . '" ' . $this->core->isChecked( '1', $option_actual[$section][$option_key] ) . ' />' . "\n";
 						$checkbox .= $option[0] . '|';
 						$explanation = $option[4];
 						break;
@@ -576,13 +576,13 @@ class AVHAmazonAdmin extends AVHAmazonCore
 						break;
 
 					case 'text-color' :
-						$input_type = '<input type="text" ' . (($option[3] > 50) ? ' style="width: 95%" ' : '') . 'id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape( $option_actual[$section][$option_key] ) . '" size="' . $option[3] . '" /><div class="box_color ' . $option[0] . '"></div>' . "\n";
+						$input_type = '<input type="text" ' . (($option[3] > 50) ? ' style="width: 95%" ' : '') . 'id="' . $option[0] . '" name="' . $option[0] . '" value="' . esc_attr( $option_actual[$section][$option_key] ) . '" size="' . $option[3] . '" /><div class="box_color ' . $option[0] . '"></div>' . "\n";
 						$explanation = $option[4];
 						break;
 
 					case 'text' :
 					default :
-						$input_type = '<input type="text" ' . (($option[3] > 50) ? ' style="width: 95%" ' : '') . 'id="' . $option[0] . '" name="' . $option[0] . '" value="' . attribute_escape( $option_actual[$section][$option_key] ) . '" size="' . $option[3] . '" />' . "\n";
+						$input_type = '<input type="text" ' . (($option[3] > 50) ? ' style="width: 95%" ' : '') . 'id="' . $option[0] . '" name="' . $option[0] . '" value="' . esc_attr( $option_actual[$section][$option_key] ) . '" size="' . $option[3] . '" />' . "\n";
 						$explanation = $option[4];
 						break;
 				}

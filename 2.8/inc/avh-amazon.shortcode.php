@@ -276,7 +276,7 @@ class AVHAmazonShortcode
 		echo '<script type="text/javascript">';
 		echo 'var avhamazon = new avhamazonmetabox();';
 		echo '</script>';
-		$action = attribute_escape( $_POST['avhamazon_mb_action'] );
+		$action = esc_attr( $_POST['avhamazon_mb_action'] );
 		$values = $_POST['avhamazon_mb_values'];
 
 		switch ( $action ) {
@@ -296,8 +296,8 @@ class AVHAmazonShortcode
 	 */
 	function metaboxTabWishlistOutput ( $values )
 	{
-		$wishlist = attribute_escape( $values[0] );
-		$locale = attribute_escape( $values[1] );
+		$wishlist = esc_attr( $values[0] );
+		$locale = esc_attr( $values[1] );
 
 		/**
 		 * Set up endpoint
