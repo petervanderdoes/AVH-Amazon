@@ -344,8 +344,8 @@ class AVHAmazonShortcode
 			echo '<strong>' . __( 'Can\'t find the given item', 'avhamazon' ) . '</strong>';
 		} else {
 			$this->metaboxTabOutputHeader();
-			$image = $this->core->getImageInfo( 'swatch', $item_result );
-			$this->metaboxTabOutputItem( $item_result['Items']['Item']['ItemAttributes']['Title'], $asin, 'avhamazon_scasin_asin', 'avhamazon_scasin_asin', '', TRUE, $image );
+			$imageinfo = $this->core->getImageInfo( 'swatch', $item_result );
+			$this->metaboxTabOutputItem( $item_result['Items']['Item']['ItemAttributes']['Title'], $asin, 'avhamazon_scasin_asin', 'avhamazon_scasin_asin', '', TRUE, $imageinfo );
 			$this->metaboxTabOutputOptions( 'asin' );
 			$this->metaboxTabOutputSendtoeditor( 'asin' );
 		}
