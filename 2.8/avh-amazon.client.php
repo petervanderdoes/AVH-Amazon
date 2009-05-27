@@ -809,11 +809,12 @@ class AVHAmazonCore
 	function getImageInfo ( $imagesize, $item_result )
 	{
 		$imageurl = $this->info['graphics_url'];
+		$imageset = $item_result['Items']['Item']['ImageSets']['ImageSet'];
 		switch ( strtolower( $imagesize ) ) {
 			case 'medium' :
-				$img['url'] = $item_result['Items']['Item']['MediumImage']['URL'];
-				$img['h'] = $item_result['Items']['Item']['MediumImage']['Height'];
-				$img['w'] = $item_result['Items']['Item']['MediumImage']['Width'];
+				$img['url'] = $imageset['MediumImage']['URL'];
+				$img['h'] = $imageset['MediumImage']['Height'];
+				$img['w'] = $imageset['MediumImage']['Width'];
 				if ( empty( $img['url'] ) ) {
 					$img['url'] = $imageurl . '/no-image-160.gif';
 					$img['h'] = 75;
@@ -821,9 +822,9 @@ class AVHAmazonCore
 				}
 				break;
 			case 'small' :
-				$img['url'] = $item_result['Items']['Item']['SmallImage']['URL'];
-				$img['h'] = $item_result['Items']['Item']['SmallImage']['Height'];
-				$img['w'] = $item_result['Items']['Item']['SmallImage']['Width'];
+				$img['url'] = $imageset['SmallImage']['URL'];
+				$img['h'] = $imageset['SmallImage']['Height'];
+				$img['w'] = $imageset['SmallImage']['Width'];
 				if ( empty( $img['url'] ) ) {
 					$img['url'] = $imageurl . '/no-image-75.gif';
 					$img['h'] = 75;
@@ -831,19 +832,29 @@ class AVHAmazonCore
 				}
 				break;
 			case 'large' :
-				$img['url'] = $item_result['Items']['Item']['LargeImage']['URL'];
-				$img['h'] = $item_result['Items']['Item']['LargeImage']['Height'];
-				$img['w'] = $item_result['Items']['Item']['LargeImage']['Width'];
+				$img['url'] = $imageset['LargeImage']['URL'];
+				$img['h'] = $imageset['LargeImage']['Height'];
+				$img['w'] = $imageset['LargeImage']['Width'];
 				if ( empty( $img['url'] ) ) {
 					$img['url'] = $imageurl . '/no-image-500.gif';
 					$img['h'] = 75;
 					$img['w'] = 75;
 				}
 				break;
+			case 'swatch':
+				$img['url'] = $imageset['SwatchImage']['URL'];
+				$img['h'] = $imageset['SwatchImage']['Height'];
+				$img['w'] = $imageset['SwatchImage']['Width'];
+				if ( empty( $img['url'] ) ) {
+					$img['url'] = '';
+					$img['h'] = 0;
+					$img['w'] = 0;
+				}
+				break;
 			default :
-				$img['url'] = $item_result['Items']['Item']['MediumImage']['URL'];
-				$img['h'] = $item_result['Items']['Item']['SmallImage']['Height'];
-				$img['w'] = $item_result['Items']['Item']['SmallImage']['Width'];
+				$img['url'] = $imageset['MediumImage']['URL'];
+				$img['h'] = $imageset['MediumImage']['Height'];
+				$img['w'] = $imageset['MediumImage']['Width'];
 				if ( empty( $img['url'] ) ) {
 					$img['url'] = $imageurl . '/no-image-160.gif';
 					$img['h'] = 75;

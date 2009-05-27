@@ -330,8 +330,8 @@ class AVHAmazonShortcode
 	 */
 	function metaboxTabAsinOutput ( $values )
 	{
-		$asin = attribute_escape( $values[0] );
-		$locale = attribute_escape( $values[1] );
+		$asin = esc_attr( $values[0] );
+		$locale = esc_attr( $values[1] );
 
 		/**
 		 * Set up endpoint
@@ -343,7 +343,8 @@ class AVHAmazonShortcode
 			echo '<strong>' . __( 'Can\'t find the given item', 'avhamazon' ) . '</strong>';
 		} else {
 			$this->metaboxTabOutputHeader();
-			$this->metaboxTabOutputItem( $item_result['Items']['Item']['ItemAttributes']['Title'], $asin, 'avhamazon_scasin_asin', 'avhamazon_scasin_asin', '', TRUE );
+			$image = $this->core->getImageInfo( 'swatch', $item_result );
+			$this->metaboxTabOutputItem( $item_result['Items']['Item']['ItemAttributes']['Title'], $asin, 'avhamazon_scasin_asin', 'avhamazon_scasin_asin', '', TRUE, $image );
 			$this->metaboxTabOutputOptions( 'asin' );
 			$this->metaboxTabOutputSendtoeditor( 'asin' );
 		}
@@ -368,10 +369,14 @@ class AVHAmazonShortcode
 	 * @param string $class
 	 * @param boolean $checked
 	 */
-	function metaboxTabOutputItem ( $title, $asin, $id, $name, $class = '', $checked = FALSE )
+	function metaboxTabOutputItem ( $title, $asin, $id, $name, $class = '', $checked = FALSE, $pic='' )
 	{
 		$class = ($class) ? 'class="' . $class . '"' : '';
-		echo '<label ' . $class . '><input type="radio" value="' . $asin . '" id="' . $id . '" name="' . $name . '"' . ($checked ? ' checked="checked" ' : "") . ' /> ' . $title . '</label><br />';
+		$image = '';
+		if (is_array($pic) && (!empty($pic['url']))) {
+			$image = '<img width="' . $pic['w'] . '" height="' . $pic['h'] . '" src="' . $pic['url'] . '" />';
+		}
+		echo '<p><label ' . $class . '><input type="radio" value="' . $asin . '" id="' . $id . '" name="' . $name . '"' . ($checked ? ' checked="checked" ' : "") . ' /> '.$image.' ' . $title . '</label></p>';
 	}
 
 	/**
