@@ -40,7 +40,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		$locale_table = $this->core->locale_table;
 
 		// Prepare data for display
-		$title = esc_attr( $instance['title'] );
+		$title = esc_attr($instance['title'] );
 		$associated_id = format_to_edit( $instance['associated_id'] );
 		$wishlist_id = format_to_edit( $instance['wishlist_id'] );
 		$locale = $instance['locale'];
@@ -129,7 +129,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		extract( $args );
 
 		// Set up variables
-		$title = $this->core->getWidgetOptions( $instance, 'title', 'widget_wishlist' );
+		$title = apply_filters('widget_title',$this->core->getWidgetOptions( $instance, 'title', 'widget_wishlist' ) );
 		$wishlist_id = $this->core->getWidgetOptions( $instance, 'wishlist_id', 'widget_wishlist' );
 		$associated_id = $this->core->getWidgetOptions( $instance, 'associated_id', 'general' );
 		$imagesize = $this->core->getWidgetOptions( $instance, 'wishlist_imagesize', 'widget_wishlist' );
@@ -187,10 +187,10 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 				}
 			}
 			if ( $show_footer ) {
-				$footer = str_replace( '%nr_of_items%', $total_items, $footer_template );
+				$footer = apply_filters('avhamazon_text',str_replace( '%nr_of_items%', $total_items, $footer_template ));
 				$myurl = $list_result['Lists']['List']['ListURL'];
 				$myurl .= '?tag=' . $associated_id;
-				echo '<div class="footer"><a title="Show all on Wishlist" href="' . $myurl . '">' . $footer . '</a></div><br />';
+				echo '<div class="footer"><a title="Total items on the list" href="' . $myurl . '">' . $footer . '</a></div><br />';
 			}
 		}
 		echo "</div>";
@@ -219,8 +219,8 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 
 		$instance = $old_instance;
 
-		$instance['title'] = strip_tag( $new_instance['title'] );
-		$instance['associated_id'] = strip_tag( $new_instance['associatedid'] );
+		$instance['title'] = strip_tags( $new_instance['title'] );
+		$instance['associated_id'] = strip_tags( $new_instance['associatedid'] );
 		$instance['wishlist_id'] = strip_tags( $new_instance['wishlistid'] );
 		$instance['locale'] = strip_tags( $new_instance['locale'] );
 		$instance['nr_of_items'] = strip_tags( $new_instance['nr-of-items'] );

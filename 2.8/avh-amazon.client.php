@@ -189,6 +189,11 @@ class AVHAmazonCore
 		// Set class property for info
 		$this->info = array ('home' => get_option( 'home' ), 'siteurl' => $info['siteurl'], 'install_url' => $info['install_url'], 'install_uri' => $info['install_uri'], 'install_dir' => $info['install_dir'], 'graphics_url' => $info['install_url'] . '/images', 'wordpress_version' => $this->getWordpressVersion() );
 
+		// Add filter for sanatizing text
+		add_filter('avhamazon_text', 'wptexturize');
+		add_filter('avhamazon_text', 'convert_chars');
+		add_filter('avhamazon_text', 'esc_html');
+
 		return;
 	}
 
