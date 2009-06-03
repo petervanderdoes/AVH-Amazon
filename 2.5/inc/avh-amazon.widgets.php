@@ -344,7 +344,7 @@ class AVHAmazonWidget extends AVHAmazonCore
 			$this->handleCssFile( 'avhamazonwidget', '/inc/avh-amazon.widget.css' );
 		} else {
 			// for older versions
-			echo '<link media="all" type="text/css" href="' . $this->info['install_url'] . '/inc/avh-amazon.widget.css?ver=' . $this->version . '" rel="stylesheet"> </link>';
+			echo '<link media="all" type="text/css" href="' . $this->info['plugin_url'] . '/inc/avh-amazon.widget.css?ver=' . $this->version . '" rel="stylesheet"> </link>';
 		}
 	}
 }

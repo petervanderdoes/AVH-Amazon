@@ -32,8 +32,8 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		$avhamazon_pages = array ('avhamazon_options', 'avhamazon_tools' );
 
 		if ( in_array( $_GET['page'], $avhamazon_pages ) ) {
-			wp_enqueue_script( 'jquery-tabs', $this->info['install_url'] . '/inc/js/jquery.tabs.pack.js', array ('jquery' ), '3' );
-			wp_enqueue_script( 'jquery-forms', $this->info['install_url'] . '/inc/js/jquery.form.js', array ('jquery' ), '3' );
+			wp_enqueue_script( 'jquery-tabs', $this->info['plugin_url'] . '/inc/js/jquery.tabs.pack.js', array ('jquery' ), '3' );
+			wp_enqueue_script( 'jquery-forms', $this->info['plugin_url'] . '/inc/js/jquery.form.js', array ('jquery' ), '3' );
 		}
 
 		// Admin notice A AWS developer key is neccasry as well as PHP5. :(
@@ -121,7 +121,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		static $this_plugin;
 
 		if ( ! $this_plugin )
-			$this_plugin = $this->getBaseDirectory( plugin_basename( $this->info['install_dir'] ) );
+			$this_plugin = $this->getBaseDirectory( plugin_basename( $this->info['plugin_dir'] ) );
 		if ( $file )
 			$file = $this->getBaseDirectory( $file );
 		if ( $file == $this_plugin ) {

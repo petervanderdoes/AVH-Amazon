@@ -347,6 +347,6 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 	 */
 	function handleWidgetCss ()
 	{
-		wp_enqueue_style( 'avhamazonwidget', $this->core->info['install_url'] . '/inc/avh-amazon.widget.css', array (), $this->core->version, 'screen' );
+		wp_enqueue_style( 'avhamazonwidget', $this->core->info['plugin_url'] . '/inc/avh-amazon.widget.css', array (), $this->core->version, 'screen' );
 	}
 }

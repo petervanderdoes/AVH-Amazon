@@ -50,7 +50,7 @@ class AVHAmazonShortcode
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.dev' : '';
 		$admin_pages = array ('post.php', 'page.php' );
 		if ( in_array( $hook_suffix, $admin_pages ) ) {
-			wp_enqueue_script( 'avhamazonmetabox', $this->core->info['install_url'] . '/inc/js/metabox' . $suffix . '.js', array ('jquery' ), $this->core->version, true );
+			wp_enqueue_script( 'avhamazonmetabox', $this->core->info['plugin_url'] . '/inc/js/metabox' . $suffix . '.js', array ('jquery' ), $this->core->version, true );
 		}
 	}
 

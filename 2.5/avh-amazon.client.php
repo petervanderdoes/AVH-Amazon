@@ -54,7 +54,7 @@ class AVHAmazonCore
 	var $comment_end;
 
 	/**
-	 * Paths and URI's of the WordPress information, 'home', 'siteurl', 'install_url', 'install_dir'
+	 * Paths and URI's of the WordPress information, 'home', 'siteurl', 'plugin_url', 'plugin_dir'
 	 *
 	 * @var array
 	 */
@@ -195,26 +195,26 @@ class AVHAmazonCore
 
 		$info['siteurl'] = get_option( 'siteurl' );
 		if ( $this->isMuPlugin() ) {
-			$info['install_url'] = WPMU_PLUGIN_URL;
-			$info['install_dir'] = WPMU_PLUGIN_DIR;
+			$info['plugin_url'] = WPMU_PLUGIN_URL;
+			$info['plugin_dir'] = WPMU_PLUGIN_DIR;
 
 			if ( $path != 'mu-plugins' ) {
-				$info['install_url'] .= '/' . $path;
-				$info['install_dir'] .= '/' . $path;
+				$info['plugin_url'] .= '/' . $path;
+				$info['plugin_dir'] .= '/' . $path;
 			}
 		} else {
-			$info['install_url'] = WP_PLUGIN_URL;
-			$info['install_dir'] = WP_PLUGIN_DIR;
+			$info['plugin_url'] = WP_PLUGIN_URL;
+			$info['plugin_dir'] = WP_PLUGIN_DIR;
 
 			if ( $path != 'plugins' ) {
-				$info['install_url'] .= '/' . $path;
-				$info['install_dir'] .= '/' . $path;
+				$info['plugin_url'] .= '/' . $path;
+				$info['plugin_dir'] .= '/' . $path;
 				$info['install_uri'] = '/wp-content/plugins/' . $path;
 			}
 		}
 
 		// Set class property for info
-		$this->info = array ('home' => get_option( 'home' ), 'siteurl' => $info['siteurl'], 'install_url' => $info['install_url'], 'install_uri' => $info['install_uri'], 'install_dir' => $info['install_dir'], 'graphics_url' => $info['install_url'] . '/images', 'wordpress_version' => $this->getWordpressVersion() );
+		$this->info = array ('home' => get_option( 'home' ), 'siteurl' => $info['siteurl'], 'plugin_url' => $info['plugin_url'], 'install_uri' => $info['install_uri'], 'plugin_dir' => $info['plugin_dir'], 'graphics_url' => $info['plugin_url'] . '/images', 'wordpress_version' => $this->getWordpressVersion() );
 
 		/**
 		 * TODO Localization
@@ -222,7 +222,7 @@ class AVHAmazonCore
 		// Localization.
 		//$locale = get_locale();
 		//if ( !empty( $locale ) ) {
-		//	$mofile = $this->info['install_dir'].'/languages/avhamazon-'.$locale.'.mo';
+		//	$mofile = $this->info['plugin_dir'].'/languages/avhamazon-'.$locale.'.mo';
 		//	load_textdomain('avhamazon', $mofile);
 		//}
 
@@ -324,7 +324,7 @@ class AVHAmazonCore
 	 */
 	function doRemoveCacheFolder ()
 	{
-		$wsdlcachefolder = str_replace( '/2.5', '', $this->info['install_dir'] ) . '/cache/';
+		$wsdlcachefolder = str_replace( '/2.5', '', $this->info['plugin_dir'] ) . '/cache/';
 		if ( ($dirhandle = @opendir( $wsdlcachefolder )) ) {
 			while ( false !== ($filename = readdir( $dirhandle )) ) {
 				$filename = $wsdlcachefolder . $filename;

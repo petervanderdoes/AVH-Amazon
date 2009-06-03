@@ -102,7 +102,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function actionInjectCSS ()
 	{
-		wp_enqueue_style( 'avhamazonadmin', $this->core->info['install_url'] . '/inc/avh-amazon.admin.css', array (), $this->core->version, 'screen' );
+		wp_enqueue_style( 'avhamazonadmin', $this->core->info['plugin_url'] . '/inc/avh-amazon.admin.css', array (), $this->core->version, 'screen' );
 	}
 
 	/**
@@ -145,7 +145,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		static $this_plugin;
 
 		if ( ! $this_plugin )
-			$this_plugin = $this->core->getBaseDirectory( plugin_basename( $this->core->info['install_dir'] ) );
+			$this_plugin = $this->core->getBaseDirectory( plugin_basename( $this->core->info['plugin_dir'] ) );
 		if ( $file )
 			$file = $this->core->getBaseDirectory( $file );
 		if ( $file == $this_plugin ) {
