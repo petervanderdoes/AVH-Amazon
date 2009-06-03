@@ -925,24 +925,6 @@ class AVHAmazonCore
 	}
 
 	/**
-	 * Insert the CSS file
-	 *
-	 * @param string $handle CSS Handle
-	 * @param string $cssfile
-	 *
-	 * @since 2.3
-	 */
-	function handleCssFile ( $handle, $cssfile )
-	{
-		wp_register_style( $handle, $this->info['install_uri'] . $cssfile, array (), $this->version, 'all' );
-		if ( did_action( 'wp_print_styles' ) ) { // we already printed the style queue.  Print this one immediately
-			wp_print_styles( $handle );
-		} else {
-			wp_enqueue_style( $handle );
-		}
-	}
-
-	/**
 	 * Get the backlink for forms
 	 *
 	 * @return strings
