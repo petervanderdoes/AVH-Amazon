@@ -77,9 +77,10 @@ None
 == Arbitrary section ==
 * Version 3.0
 	* It uses the new Widget class introduced in WordPress 2.8.
-	* Optimizations for WordPress 2.8 
+	* Optimizations for WordPress 2.8.
 	* Amazon policy change. Calls to Amazon need to be signed per August 15 of 2009. In order to sign calls you will need an Amazon Web Services account. See the FAQ for more details.
-	* Picture is shown in metabox for ASIN search
+	* Picture is shown in metabox for ASIN search.
+	* Use of defined variables, fixes problems when wp-content directory is moved.
 * Version 2.4
 	* Speed improvements.
 	* Increased security.

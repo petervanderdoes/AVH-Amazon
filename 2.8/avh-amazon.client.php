@@ -166,18 +166,18 @@ class AVHAmazonCore
 		$path = str_replace( '\\', '/', dirname( __FILE__ ) );
 		$path = substr( $path, strpos( $path, 'plugins' ) + 8, strlen( $path ) );
 
-		$info['siteurl'] = get_option( 'siteurl' );
+			$info['siteurl'] = get_option( 'siteurl' );
 		if ( $this->isMuPlugin() ) {
-			$info['install_url'] = $info['siteurl'] . '/wp-content/mu-plugins';
-			$info['install_dir'] = ABSPATH . 'wp-content/mu-plugins';
+			$info['install_url'] = WPMU_PLUGIN_URL;
+			$info['install_dir'] = WPMU_PLUGIN_DIR;
 
 			if ( $path != 'mu-plugins' ) {
 				$info['install_url'] .= '/' . $path;
 				$info['install_dir'] .= '/' . $path;
 			}
 		} else {
-			$info['install_url'] = $info['siteurl'] . '/wp-content/plugins';
-			$info['install_dir'] = ABSPATH . 'wp-content/plugins';
+			$info['install_url'] = WP_PLUGIN_URL;
+			$info['install_dir'] = WP_PLUGIN_DIR;
 
 			if ( $path != 'plugins' ) {
 				$info['install_url'] .= '/' . $path;
