@@ -94,7 +94,7 @@ class AVHAmazonCore
 	{
 		static $_instance;
 		if ( $_instance === null ) {
-			$_instance = new self( );
+			$_instance = & new self( );
 		}
 		return $_instance;
 	}
