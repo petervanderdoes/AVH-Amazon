@@ -371,7 +371,30 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					'text-helper',
 					'helper',
 					'',
-					'<b>Can I use this plugin if I don\'t have a widget enabled theme?</b><br />' . 'Yes you can, you can use the following code to display the wishlist:<br />' . '<&#63;php $avhwidget=& new AVHAmazonWidget();$avhwidget->widgetWishlist(array,1 , FALSE); ?> <br />' . 'array is in the following format<br />' . 'array( [ option => value [, option => value ] ])<br />' . 'Overview of options and values<br />' . '\'title\' => string<br />' . '\'ListID\' => string<br />' . '\'associatedid\' => string<br />' . '\'imagesize\' => Small/Medium/Large<br />' . '\'locale\' => US/CA/DE/UK<br />' . '\'nr_of_items\' => number<br />' . '\'show_footer\' => 0/1<br />' . '\'footer_template\' => string (%nr_of_items% is replaced by the actual number of items in the wishlist.)<br /><br />' . '<i>Important</i>:There is no validity check for the values, entering wrong values can lead to unexpected results.<br /><br >' . '<b>Where is the Baby/Wedding Registry widget?</b><br />' . 'There is no seperate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.<br /><br />' . '<b>How do I find my Baby Registry and/or Wedding Registry ID?</b><br />' . 'When you create either registry Amazon sends you an email with the direct link to access your registry. The ID is the last part of the URL.<br />' . 'Example:<br />' . 'http://www.amazon.com/gp/registry/1234567890ABC<br/>' . 'The ID is 1234567890ABC<br /><br />' . '<b>What is an ASIN?</b><br />' . 'ASIN stands for Amazon Standard Identification Number.<br />' . 'Every product has its own ASIN--a unique code they use to identify it. For books, the ASIN is the same as the 10-digit ISBN number.<br />' . 'You will find an item\'s ASIN on the product detail page.<br /><br />'
+					'<b>Can I use this plugin if I don\'t have a widget enabled theme?</b><br />' .
+					'I will have to do some research.<br />' .
+					'<b>Where is the Baby/Wedding Registry widget?</b><br />' .
+					'There is no seperate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.<br /><br />' .
+					'<b>How do I find my Baby Registry and/or Wedding Registry ID?</b><br />' . 'When you create either registry Amazon sends you an email with the direct link to access your registry. The ID is the last part of the URL.<br />' .
+					'Example:<br />' .
+					'http://www.amazon.com/gp/registry/1234567890ABC<br/>' .
+					'The ID is 1234567890ABC<br /><br />' .
+					'<b>What is an ASIN?</b><br />' .
+					'ASIN stands for Amazon Standard Identification Number.<br />' .
+					'Every product has its own ASIN--a unique code they use to identify it. For books, the ASIN is the same as the 10-digit ISBN number.<br />' .
+					'You will find an item\'s ASIN on the product detail page.<br /><br />' .
+					'<b>Amazon Policy Change per May 11, 2009</b><br />'.
+					'Amazon has decided that calls to Amazon have to signed using a secret key you receive as a developer. Because this key can be used for other purposes as this plugin it is necessary for everybody who uses this plugin to sign up as a developer and receive their secret key.<br />'.
+					'You can sign up at the following pages and signing up is free:<br /><br />'.
+					'Canada https://associates.amazon.ca/gp/flex/advertising/api/sign-in.html<br />'.
+					'Germany https://partnernet.amazon.de/gp/flex/advertising/api/sign-in.html<br />'.
+					'United Kingdom https://affiliate-program.amazon.co.uk/gp/flex/advertising/api/sign-in.html<br />'.
+					'United States https://affiliate-program.amazon.com/gp/flex/advertising/api/sign-in.html<br /><br />'.
+					'After the registration is complete go to this page:<br />'.
+					'https://aws-portal.amazon.com/gp/aws/developer/account/index.html?ie=UTF8&action=access-key<br /><br />'.
+					'And select Access Identifiers You will the ability to see your secret key, if you don\'t see one generate one. Copy your key into the options page of the plugin and you are all set.<br /><br />'.
+					'If you don\'t get a secret key all calls from this plugin to Amazon will fail per August 15, 2009.<br />'.
+					'Until you enter your secret key, you will see a reminder to do this once day in the Admin section WordPress, and all the time when you go to the settings page of this plugin.<br /><br />'
 				)
 			),
 			'about' => array (

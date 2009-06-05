@@ -69,6 +69,22 @@ The ID is 1234567890ABC
 ASIN stands for Amazon Standard Identification Number. Every product has its own ASIN--a unique code they use to identify it. For books, the ASIN is the same as the 10-digit ISBN number.
 You will find an item's ASIN on the product detail page.
 
+= Amazon Policy Change per May 11, 2009 =
+Amazon has decided that calls to Amazon have to signed using a secret key you receive as a developer. Because this key can be used for other purposes as this plugin it is necessary for everybody who uses this plugin to sign up as a developer and receive their secret key.
+You can sign up at the following pages and signing up is free:
+
+Canada https://associates.amazon.ca/gp/flex/advertising/api/sign-in.html
+Germany https://partnernet.amazon.de/gp/flex/advertising/api/sign-in.html
+United Kingdom https://affiliate-program.amazon.co.uk/gp/flex/advertising/api/sign-in.html
+United States https://affiliate-program.amazon.com/gp/flex/advertising/api/sign-in.html
+
+After the registration is complete go to this page:
+https://aws-portal.amazon.com/gp/aws/developer/account/index.html?ie=UTF8&action=access-key
+
+And select Access Identifiers You will the ability to see your secret key, if you don't see one generate one. Copy your key into the options page of the plugin and you are all set.
+
+If you don't get a secret key all calls from this plugin to Amazon will fail per August 15, 2009.
+Until you enter your secret key, you will see a reminder to do this once day in the Admin section WordPress, and all the time when you go to the settings page of this plugin.
 
 == Screenshots ==
 
