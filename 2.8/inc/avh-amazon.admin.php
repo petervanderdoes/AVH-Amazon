@@ -372,7 +372,16 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					'helper',
 					'',
 					'<b>Can I use this plugin if I don\'t have a widget enabled theme?</b><br />' .
-					'I will have to do some research.<br />' .
+					'Yes you can, you can use the following code to display the wishlist:<br />' .
+					'<&#63;php $avhwidget=& new WP_Widget_AVHAmazon_Wishlist();$avhwidget->widget(array,1); ?> <br />' .
+					'array is in the following format<br />' . 'array( [ option => value [, option => value ] ])<br />' .
+					'Overview of options and values<br />' . '\'title\' => string<br />' . '\'ListID\' => string<br />' .
+					'\'associatedid\' => string<br />' . '\'imagesize\' => Small/Medium/Large<br />' .
+					'\'locale\' => US/CA/DE/UK<br />' .
+					'\'nr_of_items\' => number<br />' .
+					'\'show_footer\' => 0/1<br />' .
+					'\'footer_template\' => string (%nr_of_items% is replaced by the actual number of items in the wishlist.)<br /><br />' .
+					'<i>Important</i>:There is no validity check for the values, entering wrong values can lead to unexpected results.<br /><br >' .
 					'<b>Where is the Baby/Wedding Registry widget?</b><br />' .
 					'There is no seperate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.<br /><br />' .
 					'<b>How do I find my Baby Registry and/or Wedding Registry ID?</b><br />' . 'When you create either registry Amazon sends you an email with the direct link to access your registry. The ID is the last part of the URL.<br />' .
