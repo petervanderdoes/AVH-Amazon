@@ -21,7 +21,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 	 *
 	 * @return AVHAmazonWidget
 	 */
-	function AVHAmazonWidget ()
+	function WP_Widget_AVHAmazon_Wishlist ()
 	{
 		$this->__construct();
 
