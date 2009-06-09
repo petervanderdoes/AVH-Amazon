@@ -96,7 +96,7 @@ None
 	* Optimizations for WordPress 2.8.
 	* Amazon policy change. Calls to Amazon need to be signed per August 15 of 2009. In order to sign calls you will need an Amazon Web Services account. See the FAQ for more details.
 	* Picture is shown in metabox for ASIN search.
-	* Use of defined variables, fixes problems when wp-content directory is moved.
+	* Use of WordPress defined variables, fixes problems when wp-content directory is moved.
 * Version 2.4
 	* Speed improvements.
 	* Increased security.
@@ -145,7 +145,7 @@ None
 	* RFC: Added shortcode implementation.
 	* Number of items to be displayed in the widget can now be changed per widget.
 * Version 1.5
-	* Bugfix: Old WSDl was used to look up the Wish List
+	* Bugfix: Old WSDL was used to look up the Wish List
 	* RFC: Added Amazon.co.uk compatibility. 
 * Version 1.4
 	* Bugfix: Only 10 Items from a Wish List were loaded to setup the widget. All items are loaded now.
