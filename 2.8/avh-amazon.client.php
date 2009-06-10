@@ -489,7 +489,7 @@ class AVHAmazonCore
 				$query_array['Signature'] = base64_encode( hash_hmac( 'sha256', $str, $this->options['general']['awssecretkey'], true ) );
 			} else {
 				// PHP4 function to get the hash_hmac sha256
-				$query_array['Signature'] = base64_encode( hmac( $this->options['general']['awssecretkey'], $str ) );
+				$query_array['Signature'] = base64_encode( avh_hmac( $this->options['general']['awssecretkey'], $str ) );
 			}
 		}
 

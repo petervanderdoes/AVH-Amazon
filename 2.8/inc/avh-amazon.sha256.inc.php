@@ -3,10 +3,10 @@
  * Class to construct SHA256
  *
  */
-class shaHelper
+class avh_shaHelper
 {
 
-	function shaHelper ()
+	function avh_shaHelper ()
 	{
 		// nothing to construct here...
 	}
@@ -200,7 +200,7 @@ function avh_sha256 ( $str, $ig_func = false )
 		return hash( "sha256", $str, false );
 	}
 
-	$sh = new shaHelper( );
+	$sh = new avh_shaHelper( );
 
 	// SHA-256 Constants
 	// sequence of sixty-four constant 32-bit words representing the first thirty-two bits
@@ -312,7 +312,7 @@ function avh_sha256 ( $str, $ig_func = false )
  * @return string
  *
  */
-function hmac ( $key, $data, $hashfunc = 'avh_sha256' )
+function avh_hmac ( $key, $data, $hashfunc = 'avh_sha256' )
 {
 	$blocksize = 64;
 
