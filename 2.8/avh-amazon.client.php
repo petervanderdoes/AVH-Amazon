@@ -105,7 +105,7 @@ class AVHAmazonCore
 	 */
 	function __construct ()
 	{
-		$this->version = "3.0";
+		$this->version = "3.0.1";
 		$this->comment_begin = '<!-- AVH Amazon version ' . $this->version . ' Begin -->';
 		$this->comment_end = '<!-- AVH Amazon version ' . $this->version . ' End -->';
 
@@ -948,7 +948,7 @@ class AVHAmazonCore
 /**
  * SHA256 Class.
  */
-require_once 'inc/avh-amazon.sha256.inc.php';
+require_once (dirname( __FILE__ ) . '/inc/avh-amazon.sha256.inc.php');
 
 /**
  * Initialize the plugin

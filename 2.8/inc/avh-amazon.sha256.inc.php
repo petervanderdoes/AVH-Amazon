@@ -190,7 +190,7 @@ if ( ! function_exists( 'str_split' ) ) {
  * @param boolean $ig_func
  *
  */
-function sha256 ( $str, $ig_func = false )
+function avh_sha256 ( $str, $ig_func = false )
 {
 	unset( $binStr ); // binary representation of input string
 	unset( $hexStr ); // 256-bit message digest in readable hex format
@@ -312,7 +312,7 @@ function sha256 ( $str, $ig_func = false )
  * @return string
  *
  */
-function hmac ( $key, $data, $hashfunc = 'sha256' )
+function hmac ( $key, $data, $hashfunc = 'avh_sha256' )
 {
 	$blocksize = 64;
 
