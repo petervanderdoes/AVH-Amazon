@@ -143,7 +143,7 @@ class AVHAmazonCore
 		$this->default_general_options = array (
 			'version' => $this->version,
 			'associated_id' => 'avh-amazon-20',
-			'awskey' => '',
+			'awskey' => '1MPCC36EZ827YJQ02AG2',
 			'awssecretkey' => '',
 			'policychange' => '' );
 
@@ -183,11 +183,6 @@ class AVHAmazonCore
 		 *
 		 */
 		$this->handleOptions();
-
-		/**
-		 * Set the Access Key ID for the requests
-		 */
-		$this->amazon_standard_request['AWSAccessKeyId'] = $this->options['general']['awskey'];
 
 		// Determine installation path & url
 		$path = str_replace( '\\', '/', dirname( __FILE__ ) );
@@ -626,7 +621,7 @@ class AVHAmazonCore
 	function getRestStandardRequest() {
 
 		// @TODO Until August
-		$this->amazon_standard_request['AWSAccessKeyId'] = (empty($this->options['general']['awskey'])) ? '1MPCC36EZ827YJQ02AG2' : $this->options['general']['awskey'];
+		$this->amazon_standard_request['AWSAccessKeyId'] = empty( $this->amazon_standard_request['AWSAccessKeyId'] ) ? '1MPCC36EZ827YJQ02AG2' : $this->getOption('awskey','general');
 		// After August
 		// $this->amazon_standard_request['AWSAccessKeyId'] = $this->options['general']['awskey'];
 		return $this->amazon_standard_request;

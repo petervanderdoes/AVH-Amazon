@@ -115,7 +115,7 @@ class AVHAmazonCore
 		 */
 		$this->amazon_endpoint_table = array ('US' => 'http://ecs.amazonaws.com/onca/xml', 'CA' => 'http://ecs.amazonaws.ca/onca/xml', 'DE' => 'http://ecs.amazonaws.de/onca/xml', 'UK' => 'http://ecs.amazonaws.co.uk/onca/xml' );
 		$this->amazon_endpoint = $this->amazon_endpoint_table['US'];
-		$this->amazon_standard_request = array ('Service' => 'AWSECommerceService', 'Version' => '2009-03-31', 'AWSAccessKeyId' => '1MPCC36EZ827YJQ02AG2', 'Timestamp' => '' );
+		$this->amazon_standard_request = array ('Service' => 'AWSECommerceService', 'Version' => '2009-03-31', 'AWSAccessKeyId' => '', 'Timestamp' => '' );
 
 		/**
 		 * Amazon general options
@@ -131,7 +131,7 @@ class AVHAmazonCore
 		 * Default options - General Purpose
 		 *
 		 */
-		$this->default_general_options = array ('version' => $this->version, 'associated_id' => 'avh-amazon-20', 'awskey' => '', 'awssecretkey' => '', 'policychange' => '' );
+		$this->default_general_options = array ('version' => $this->version, 'associated_id' => 'avh-amazon-20', 'awskey' => '1MPCC36EZ827YJQ02AG2', 'awssecretkey' => '', 'policychange' => '' );
 
 		/**
 		 * Default options - Widget Wishlist
@@ -157,11 +157,6 @@ class AVHAmazonCore
 		 */
 		$this->handleOptions();
 		$this->upgradeWidgetSettings_3_0();
-
-		/**
-		 * Set the Access Key ID for the requests
-		 */
-		$this->amazon_standard_request['AWSAccessKeyId'] = $this->options['general']['awskey'];
 
 		// Determine installation path & url
 		$path = str_replace( '\\', '/', dirname( __FILE__ ) );
@@ -582,7 +577,8 @@ class AVHAmazonCore
 	{
 
 		// @TODO Until August
-		$this->amazon_standard_request['AWSAccessKeyId'] = empty( $this->amazon_standard_request['AWSAccessKeyId'] ) ? '1MPCC36EZ827YJQ02AG2' : $this->options['general']['awskey'];
+		$this->amazon_standard_request['AWSAccessKeyId'] = empty( $this->amazon_standard_request['AWSAccessKeyId'] ) ? '1MPCC36EZ827YJQ02AG2' : $this->getOption('awskey','general');
+
 		// After August
 		// $this->amazon_standard_request['AWSAccessKeyId'] = $this->options['general']['awskey'];
 		return $this->amazon_standard_request;
