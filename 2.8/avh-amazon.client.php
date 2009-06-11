@@ -156,6 +156,7 @@ class AVHAmazonCore
 		 *
 		 */
 		$this->handleOptions();
+		$this->upgradeWidgetSettings_3_0();
 
 		/**
 		 * Set the Access Key ID for the requests
@@ -274,6 +275,7 @@ class AVHAmazonCore
 				if ( $options_from_table['general']['version'] < '3.0' ) {
 					$this->upgradeWidgetSettings_3_0();
 				}
+
 				// Write the new default options and the proper version to the database
 				$default_options['general']['version'] = $this->version;
 				update_option( $this->db_options_name_core, $default_options );
