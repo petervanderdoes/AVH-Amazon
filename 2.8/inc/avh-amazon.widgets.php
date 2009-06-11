@@ -12,7 +12,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		$this->core = & AVHAmazonCore::getInstance();
 
 		$widget_options = array ('description' => 'Gives you the ability to show items from your Amazon wishlist by using widgets or shortcode in posts and pages. The shortcode can also be used to display an item from Amazon', 'classname' => 'widget_avhamazon_wishlist' );
-		parent::__construct( false, __( 'AVH Amazon' ), $widget_options );
+		WP_Widget::__construct( false, __( 'AVH Amazon' ), $widget_options );
 
 	}
 
@@ -75,12 +75,12 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		echo '<label for="' . $this->get_field_id( 'locale' ) . '">';
 		_e( 'Locale Amazon:', 'avhamazon' );
 		echo '</label>';
-		echo '<select class="widefat" id="' . $this->get_field_id( 'locale' ) . '" name="' . $this->get_field_name( 'locale' ) . '" />';
+		echo '<select class="widefat" id="' . $this->get_field_id( 'locale' ) . '" name="' . $this->get_field_name( 'locale' ) . '">';
 		$seldata = '';
 		foreach ( $locale_table as $key => $sel ) {
-			$seldata .= '<option value="' . $key . '" ' . (($locale == $key) ? 'selected="selected"' : '') . ' >' . $sel . '</option>' . "\n";
+			echo '<option value="' . $key . '"' . (($locale == $key) ? ' selected="selected"' : '') . '>' . $sel . '</option>';
 		}
-		echo $seldata;
+		#echo $seldata;
 		echo '</select>';
 		echo '</p>';
 
