@@ -47,7 +47,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		$nr_of_items = format_to_edit( $instance['nr_of_items'] );
 		$show_footer = $instance['show_footer'];
 		$footer_template = format_to_edit( $instance['footer_template'] );
-		$new_window = $instance['footer_template'];
+		$new_window = $instance['new_window'];
 
 		echo '<div>';
 		echo '<p>';
@@ -104,8 +104,8 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		echo '</p>';
 
 		echo '<p>';
-		echo '<label for="' . $this->get_field_id( 'footer_template' ) . '">';
-		echo '<input type="checkbox" id="' . $this->get_field_id( 'footer_template' ) . '" name="' . $this->get_field_name( 'footer_template' ) . '" value="1"' . $this->core->isChecked( '1', $new_window ) . ' />';
+		echo '<label for="' . $this->get_field_id( 'new_window' ) . '">';
+		echo '<input type="checkbox" id="' . $this->get_field_id( 'new_window' ) . '" name="' . $this->get_field_name( 'new_window' ) . '" value="1"' . $this->core->isChecked( '1', $new_window ) . ' />';
 		_e( 'Open links in new window', 'avhamazon' );
 		echo '</label>';
 		echo '</p>';
@@ -223,10 +223,10 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		$instance['associated_id'] = strip_tags( $new_instance['associatedid'] );
 		$instance['wishlist_id'] = strip_tags( $new_instance['wishlistid'] );
 		$instance['locale'] = strip_tags( $new_instance['locale'] );
-		$instance['nr_of_items'] = strip_tags( $new_instance['nr-of-items'] );
-		$instance['show_footer'] = ($new_instance['show-footer'] ? 1 : 0);
-		$instance['footer_template'] = strip_tags( $new_instance['footer-template'] );
-		$instance['new_window'] = ($new_instance['new-window'] ? 1 : 0);
+		$instance['nr_of_items'] = strip_tags( $new_instance['nr_of_items'] );
+		$instance['show_footer'] = ($new_instance['show_footer'] ? 1 : 0);
+		$instance['footer_template'] = strip_tags( $new_instance['footer_template'] );
+		$instance['new_window'] = ($new_instance['new_window'] ? 1 : 0);
 
 		return $instance;
 	}

@@ -162,7 +162,7 @@ class AVHAmazonCore
 		$path = str_replace( '\\', '/', dirname( __FILE__ ) );
 		$path = substr( $path, strpos( $path, 'plugins' ) + 8, strlen( $path ) );
 
-			$info['siteurl'] = get_option( 'siteurl' );
+		$info['siteurl'] = get_option( 'siteurl' );
 		if ( $this->isMuPlugin() ) {
 			$info['plugin_url'] = WPMU_PLUGIN_URL;
 			$info['plugin_dir'] = WPMU_PLUGIN_DIR;
