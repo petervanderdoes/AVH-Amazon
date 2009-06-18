@@ -106,7 +106,7 @@ class AVHAmazonShortcode
 		if ( 'all' == strtolower( $attrs['asin'] ) ) {
 			foreach ( $list_result['Lists']['List']['ListItem'] as $value ) {
 				$attrs['asin'] = $value['Item']['ASIN'];
-				list ( $oneresult, $error ) = $this->core->shortcodeAsin( $attrs, $content, $associatedid );
+				list ( $oneresult, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid );
 				$result .= $oneresult . '<br />';
 			}
 			$attrs['asin'] = null;
