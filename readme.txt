@@ -92,8 +92,9 @@ None
 
 == Arbitrary section ==
 * Version 3.0.4
-	* When multiple pages of a list were retrieved and no AWS Key was supplied an error would occur.
-	* Certain options weren't saved in the widget.
+	* Bugfix: When multiple pages of a list were retrieved and no AWS Key was supplied an error would occur.
+	* Bugfix: Certain options weren't saved in the widget.
+	* Bugfix: Shortcodes didn't work. Call to wrong class.
 * Version 3.0.3
 	* If the plugin was installed prior to upgrading to WordPress 2.8, the widgets would disappear from the sidebars.
 * Version 3.0.2
