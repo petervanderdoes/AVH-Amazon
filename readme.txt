@@ -1,3 +1,4 @@
+
 === AVH Amazon ===
 Contributors: petervanderdoes
 Donate link: http://blog.avirtualhome.com/wordpress-plugins/
@@ -90,98 +91,126 @@ Until you enter your secret key, you will see a reminder to do this once day in 
 
 None
 
-== Arbitrary section ==
-* Version 3.0.4
-	* Bugfix: When multiple pages of a list were retrieved and no AWS Key was supplied an error would occur.
-	* Bugfix: Certain options weren't saved in the widget.
-	* Bugfix: Shortcodes didn't work. Call to wrong class.
-* Version 3.0.3
-	* If the plugin was installed prior to upgrading to WordPress 2.8, the widgets would disappear from the sidebars.
-* Version 3.0.2
-	* Reported in conjunction with my AVH Extended Categories widget. The self class does not exists in getInstance.
-* Version 3.0.1
-	* Conflict with declaration of sha256
-* Version 3.0
-	* It uses the new Widget class introduced in WordPress 2.8.
-	* Optimizations for WordPress 2.8.
-	* Amazon policy change. Calls to Amazon need to be signed per August 15 of 2009. In order to sign calls you will need an Amazon Web Services account. See the FAQ for more details.
-	* Picture is shown in metabox for ASIN search.
-	* Use of WordPress defined variables, fixes problems when wp-content directory is moved.
-* Version 2.4
-	* Speed improvements.
-	* Increased security.
-	* Reduced memory footprint.
-	* RFC: Ability to select picture size in the short code.
-	* Bugfix: Shortcode URL's for items not in a awishlist were wrong.
-	* Several other small bugs are fixed.
-* Version 2.3.4
-	* Bugfix: Footer option in widget didn't show.
-* Version 2.3.3
-	* Bugfix: In the shortcode the default associate ID wasn't set to the right one when using a a non US locale.
-* Version 2.3.2
-	* Bugfix: The shortcode didn't retrieve the assiocated ID set in the admin page.
-* Version 2.3.1
-	* Bugfix: Certain character were not displayed correctly (Characters with Umlauts for example)
-* Version 2.3
-	* RFC: When calling the widget directly the array parameter can hold the widget options.
-	* Updated WDSL
-	* With WordPress 2.7, when deleting the plugin it will clean up the database, removing the entries related the plugin.
-	* Source code improvements.
-* Version 2.2.4
-	* Bugfix: The footer in the widget wasn't linking correctly.
-* Version 2.2.3
-	* Bugfix: Metabox wasn't displayed properly in WordPress 2.7
-* Version 2.2.2
-	* Bugfix: Support for non-widget code was broken.
-	* Bugfix: When running PHP 5 some warnings "Call-time pass-by-reference has been deprecated"
-* Version 2.2.1
-	* Bugfix: Widget didn't get the default values.
-* Version 2.2
-	* Display a "no image available" picture when no picture is available.
-	* Ability to set default settings for the shortcode.
-	* Improve storage of the options.
-	* Clear the cache folder at each upgrade.
-	* Show searching indicator when searching for WishList or Asin in the Shortcode Metabox.
-	* Bugfix: Fixed memory problem. Problem was not using avhamazon class in the shortcode.
-	* Bugfix: Metabox was displayed incorrectly on the Page page.
-	* RFC: Added option pic+text for the linktype parameter in the shortcode.
-	* RFC: Added option all for the asin parameter in the shortcode. This will show all items from a wishlist.
-* Version 2.1
-	* Changed the amount of widgets you can use from 9 to unlimited.
-* Version 2.0.1
-	* Bugfix: Problem with widget header.
-* Version 2.0
-	* Compatibility changed to WordPress 2.5 and higher.
-	* RFC: Added shortcode implementation.
-	* Number of items to be displayed in the widget can now be changed per widget.
-* Version 1.5
-	* Bugfix: Old WSDL was used to look up the Wish List
-	* RFC: Added Amazon.co.uk compatibility. 
-* Version 1.4
-	* Bugfix: Only 10 Items from a Wish List were loaded to setup the widget. All items are loaded now.
-	* Bugfix: When the list contains one item the widget wouldn't process it correctly (No image and wrong link).
-	* RFC: Added Amazon.de compatibility.
-	* RFC: Multiple items from the same Wish List can be displayed in the widget.
-	* RFC: A configurable footer can be displayed on the bottom of the widget linking to the list on Amazon.
-	* Updated WSDL Location.
-	* Code improvements.
-* Version 1.3
-	* RFC: Added Amazon.ca compatibility.
-* Version 1.2
-	* Bug Fix: Creation of the link for the Wish List.
-* Version 1.1
-	* Link from widget makes Amazon recognize it as a link from a Wish List. And the shipping address from the Wish List can be used.
-	* Several bug fixes of files not found for WordPress 2.3. 
-	* Code clean up.
-* Version 1.0.1
-	* Bug Fix: Don't display purchased items from the lists.
-	* Bug Fix: HTML problem when using WordPress 2.3
-* Version 1.0
-	* Added compatibility with WordPress 2.5
-	* Added option to use multiple widgets.
-* Version 0.4.1
-	* Bug Fix: Didn't display picture anymore 
-* Version 0.4
-	* Added an "tools" option under Admin -> Manage. You can look up your Wishlist ID by entering the email you use at Amazon. There is no check if the email is valid, if it isn't you won't see your wishlist(s)
-* Glossary
+== Changelog ==
+= Version 3.0.4 =
+* Bugfix: When multiple pages of a list were retrieved and no AWS Key was supplied an error would occur.
+* Bugfix: Certain options weren't saved in the widget.
+* Bugfix: Shortcodes didn't work. Call to wrong class.
+
+= Version 3.0.3 =
+* If the plugin was installed prior to upgrading to WordPress 2.8, the widgets would disappear from the sidebars.
+
+= Version 3.0.2 =
+* Reported in conjunction with my AVH Extended Categories widget. The self class does not exists in getInstance.
+
+= Version 3.0.1 =
+* Conflict with declaration of sha256
+
+= Version 3.0 =
+* It uses the new Widget class introduced in WordPress 2.8.
+* Optimizations for WordPress 2.8.
+* Amazon policy change. Calls to Amazon need to be signed per August 15 of 2009. In order to sign calls you will need an Amazon Web Services account. See the FAQ for more details.
+* Picture is shown in metabox for ASIN search.
+* Use of WordPress defined variables, fixes problems when wp-content directory is moved.
+
+= Version 2.4 =
+* Speed improvements.
+* Increased security.
+* Reduced memory footprint.
+* RFC: Ability to select picture size in the short code.
+* Bugfix: Shortcode URL's for items not in a awishlist were wrong.
+* Several other small bugs are fixed.
+
+= Version 2.3.4 =
+* Bugfix: Footer option in widget didn't show.
+
+= Version 2.3.3 =
+* Bugfix: In the shortcode the default associate ID wasn't set to the right one when using a a non US locale.
+
+= Version 2.3.2 =
+* Bugfix: The shortcode didn't retrieve the assiocated ID set in the admin page.
+
+= Version 2.3.1 =
+* Bugfix: Certain character were not displayed correctly (Characters with Umlauts for example)
+
+= Version 2.3 =
+* RFC: When calling the widget directly the array parameter can hold the widget options.
+* Updated WDSL
+* With WordPress 2.7, when deleting the plugin it will clean up the database, removing the entries related the plugin.
+* Source code improvements.
+
+= Version 2.2.4 =
+* Bugfix: The footer in the widget wasn't linking correctly.
+
+= Version 2.2.3 =
+* Bugfix: Metabox wasn't displayed properly in WordPress 2.7
+
+= Version 2.2.2 =
+* Bugfix: Support for non-widget code was broken.
+* Bugfix: When running PHP 5 some warnings "Call-time pass-by-reference has been deprecated"
+
+= Version 2.2.1 =
+* Bugfix: Widget didn't get the default values.
+
+= Version 2.2 =
+* Display a "no image available" picture when no picture is available.
+* Ability to set default settings for the shortcode.
+* Improve storage of the options.
+* Clear the cache folder at each upgrade.
+* Show searching indicator when searching for WishList or Asin in the Shortcode Metabox.
+* Bugfix: Fixed memory problem. Problem was not using avhamazon class in the shortcode.
+* Bugfix: Metabox was displayed incorrectly on the Page page.
+* RFC: Added option pic+text for the linktype parameter in the shortcode.
+* RFC: Added option all for the asin parameter in the shortcode. This will show all items from a wishlist.
+
+= Version 2.1 =
+* Changed the amount of widgets you can use from 9 to unlimited.
+
+= Version 2.0.1 =
+* Bugfix: Problem with widget header.
+
+= Version 2.0 =
+* Compatibility changed to WordPress 2.5 and higher.
+* RFC: Added shortcode implementation.
+* Number of items to be displayed in the widget can now be changed per widget.
+
+= Version 1.5 =
+* Bugfix: Old WSDL was used to look up the Wish List
+* RFC: Added Amazon.co.uk compatibility. 
+
+= Version 1.4 =
+* Bugfix: Only 10 Items from a Wish List were loaded to setup the widget. All items are loaded now.
+* Bugfix: When the list contains one item the widget wouldn't process it correctly (No image and wrong link).
+* RFC: Added Amazon.de compatibility.
+* RFC: Multiple items from the same Wish List can be displayed in the widget.
+* RFC: A configurable footer can be displayed on the bottom of the widget linking to the list on Amazon.
+* Updated WSDL Location.
+* Code improvements.
+
+= Version 1.3 =
+* RFC: Added Amazon.ca compatibility.
+
+= Version 1.2 =
+* Bug Fix: Creation of the link for the Wish List.
+
+= Version 1.1 =
+* Link from widget makes Amazon recognize it as a link from a Wish List. And the shipping address from the Wish List can be used.
+* Several bug fixes of files not found for WordPress 2.3. 
+* Code clean up.
+
+= Version 1.0.1 =
+* Bug Fix: Don't display purchased items from the lists.
+* Bug Fix: HTML problem when using WordPress 2.3
+
+= Version 1.0 =
+* Added compatibility with WordPress 2.5
+* Added option to use multiple widgets.
+
+= Version 0.4.1 =
+* Bug Fix: Didn't display picture anymore 
+
+ Version 0.4
+* Added an "tools" option under Admin -> Manage. You can look up your Wishlist ID by entering the email you use at Amazon. There is no check if the email is valid, if it isn't you won't see your wishlist(s)
+
+== Glossary ==
 	* RFC - Request For Change. Changes requested by users.
