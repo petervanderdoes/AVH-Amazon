@@ -1,4 +1,3 @@
-
 === AVH Amazon ===
 Contributors: petervanderdoes
 Donate link: http://blog.avirtualhome.com/wordpress-plugins/
