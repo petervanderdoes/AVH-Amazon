@@ -621,9 +621,14 @@ class AVHAmazonCore
 	function getRestStandardRequest() {
 
 		// @TODO Until August
-		$this->amazon_standard_request['AWSAccessKeyId'] = empty( $this->amazon_standard_request['AWSAccessKeyId'] ) ? '1MPCC36EZ827YJQ02AG2' : $this->getOption('awskey','general');
-		// After August
-		// $this->amazon_standard_request['AWSAccessKeyId'] = $this->options['general']['awskey'];
+		static $key;
+		if (null == $key) {
+			$key = $this->getOption('awskey','general');
+			$this->amazon_standard_request['AWSAccessKeyId'] = empty( $key) ? '1MPCC36EZ827YJQ02AG2' : $key;
+
+			// After August
+			// $this->amazon_standard_request['AWSAccessKeyId'] = $key;
+		}
 		return $this->amazon_standard_request;
 	}
 
