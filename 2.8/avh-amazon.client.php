@@ -115,7 +115,7 @@ class AVHAmazonCore
 		 */
 		$this->amazon_endpoint_table = array ('US' => 'http://ecs.amazonaws.com/onca/xml', 'CA' => 'http://ecs.amazonaws.ca/onca/xml', 'DE' => 'http://ecs.amazonaws.de/onca/xml', 'UK' => 'http://ecs.amazonaws.co.uk/onca/xml' );
 		$this->amazon_endpoint = $this->amazon_endpoint_table['US'];
-		$this->amazon_standard_request = array ('Service' => 'AWSECommerceService', 'Version' => '2009-03-31', 'AWSAccessKeyId' => '', 'Timestamp' => '' );
+		$this->amazon_standard_request = array ('Service' => 'AWSECommerceService', 'Version' => '2009-06-01', 'AWSAccessKeyId' => '', 'Timestamp' => '' );
 
 		/**
 		 * Amazon general options

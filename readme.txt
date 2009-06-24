@@ -91,7 +91,10 @@ Until you enter your secret key, you will see a reminder to do this once day in 
 None
 
 == Changelog ==
-= Version 3.0.5 -
+= Version upcoming =
+* New Amazon API version. Added the ability to see Universal Items on Wishlists.
+
+= Version 3.0.5 =
 * Bugfix: When using the secret key, the call to Amazon would fail.
 
 = Version 3.0.4 =
