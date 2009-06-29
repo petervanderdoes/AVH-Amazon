@@ -90,11 +90,11 @@ class AVHAmazonCore
 	 *
 	 * @return object
 	 */
-	function getInstance ()
+	function &getInstance ()
 	{
 		static $_instance;
 		if ( $_instance === null ) {
-			$_instance = & new AVHAmazonCore( );
+			$_instance = new AVHAmazonCore( );
 		}
 		return $_instance;
 	}
