@@ -193,7 +193,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 				} else {
 					echo '<h3>Wishlist found:<br/></h3>';
 					$this->toolsTableHead();
-					$this->ShowList( $result['Lists']['List'], '' );
+					$this->toolsTableRow( $result['Lists']['List'], '' );
 					$this->toolsTableFooter();
 				}
 			} else {

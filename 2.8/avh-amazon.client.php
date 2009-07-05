@@ -105,7 +105,7 @@ class AVHAmazonCore
 	 */
 	function __construct ()
 	{
-		$this->version = "3.0.6";
+		$this->version = "3.0.7";
 		$this->comment_begin = '<!-- AVH Amazon version ' . $this->version . ' Begin -->';
 		$this->comment_end = '<!-- AVH Amazon version ' . $this->version . ' End -->';
 
