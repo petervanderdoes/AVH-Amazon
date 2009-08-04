@@ -86,6 +86,11 @@ class AVHAmazonCore
 	var $db_options_name_widget_wishlist;
 
 	/**
+	 * Are we running PHP5
+	 */
+	var $running_php5;
+
+	/**
 	 * Singleton method
 	 *
 	 * @return object
@@ -108,6 +113,8 @@ class AVHAmazonCore
 		$this->version = "3.0.8";
 		$this->comment_begin = '<!-- AVH Amazon version ' . $this->version . ' Begin -->';
 		$this->comment_end = '<!-- AVH Amazon version ' . $this->version . ' End -->';
+
+		$this->running_php5 = version_compare( '5', phpversion(), '<');
 
 		/**
 		 * Amazon RESTful properties
