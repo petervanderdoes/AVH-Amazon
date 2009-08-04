@@ -91,6 +91,9 @@ Until you enter your secret key, you will see a reminder to do this once day in 
 None
 
 == Changelog ==
+= Version =
+* Bugfix: In WordPress 2.8 and PHP5, the secret key calculation didn't use native PHP5 function.
+
 = Version 3.0.8 =
 * Bugfix: Regression of Bugfix: When using the secret key, the call to Amazon would fail.
 
