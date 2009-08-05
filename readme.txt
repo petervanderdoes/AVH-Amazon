@@ -93,6 +93,7 @@ None
 == Changelog ==
 = Version =
 * Bugfix: In WordPress 2.8 and PHP5, the secret key calculation didn't use native PHP5 function.
+* RFC: Ability to set number of columns when displaying all items from a wishlist.
 
 = Version 3.0.8 =
 * Bugfix: Regression of Bugfix: When using the secret key, the call to Amazon would fail.
