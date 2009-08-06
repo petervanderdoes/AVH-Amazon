@@ -111,7 +111,7 @@ class AVHAmazonShortcode
 				for ($i=1; $i<=$attrs['col']; $i++) {
 					$value=$list_result['Lists']['List']['ListItem'][$x+$i-1];
 					$attrs['asin'] = $value['Item']['ASIN'];
-					list ( $oneresult, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid );
+					list ( $oneresult, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid, false );
 					$return .= '<td>'.$oneresult .'</td>';
 				}
 				$return .= '</tr>';
