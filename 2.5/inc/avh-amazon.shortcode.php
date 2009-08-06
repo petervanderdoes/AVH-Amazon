@@ -60,7 +60,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		$result = '';
 		$error = '';
 		$locale = $this->getOption( 'locale', 'shortcode' );
-		$attrs = shortcode_atts( array ('asin' => '', 'locale' => $locale, 'linktype' => 'text', 'wishlist' => '', 'picsize' => 'small' ), $atts );
+		$attrs = shortcode_atts( array ('asin' => '', 'locale' => $locale, 'linktype' => 'text', 'wishlist' => '', 'picsize' => 'small', 'col' => 1 ), $atts );
 
 		$locale = $attrs['locale'];
 
@@ -93,13 +93,22 @@ class AVHAmazonShortcode extends AVHAmazonCore
 		}
 
 		if ( 'all' == strtolower( $attrs['asin'] ) ) {
-			foreach ( $list_result['Lists']['List']['ListItem'] as $value ) {
-				$attrs['asin'] = $value['Item']['ASIN'];
-				list ( $oneresult, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid );
-				$result .= $oneresult . '<br />';
+			$return .= '<table style=" border: none; align: left">';
+
+			for ($x=0; $x<=count ( $list_result['Lists']['List']['ListItem'])-1; $x+=$attrs['col'] ) {
+				$return .= '<tr>';
+				for ($i=1; $i<=$attrs['col']; $i++) {
+					$value=$list_result['Lists']['List']['ListItem'][$x+$i-1];
+					$attrs['asin'] = $value['Item']['ASIN'];
+					list ( $oneresult, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid, false );
+					$return .= '<td>'.$oneresult .'</td>';
+				}
+				$return .= '</tr>';
 			}
+			$return .= '</table>';
 			$attrs['asin'] = null;
 		}
+
 		if ( $attrs['asin'] ) {
 			list ( $result, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid );
 		}
@@ -121,7 +130,7 @@ class AVHAmazonShortcode extends AVHAmazonCore
 	 * @param string $associatedid
 	 * @return array $return and $error, if and error occurs the error variable is used and return will be empty.
 	 */
-	function shortcodeAsin ( $attrs, $content, $associatedid )
+	function shortcodeAsin ( $attrs, $content, $associatedid, $single=true )
 	{
 		$error = '';
 		$item_result = $this->handleRESTcall( $this->getRestItemLookupParams( $attrs['asin'], $associatedid ) );
@@ -158,7 +167,11 @@ class AVHAmazonShortcode extends AVHAmazonCore
 						break;
 					case 'pic-text' :
 						$imginfo = $this->getImageInfo( $attrs['picsize'], $item_result );
-						$return = '<table style=" border: none; cellpadding: 2px; align: left"><tr><td><a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $content . '"/></a></td><td><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a></td></tr></table>';
+						if ($single){
+							$return = '<table style=" border: none; cellpadding: 2px; align: left"><tr><td><a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $content . '"/></a></td><td><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a></td></tr></table>';
+						} else {
+							$return = '<a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $content . '"/></a><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
+						}
 						break;
 					default :
 						$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
