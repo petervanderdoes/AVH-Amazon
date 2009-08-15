@@ -447,45 +447,50 @@ class AVHAmazonCore
 	{
 		$xml_array = array ();
 
-		$querystring = $this->getAWSQueryString($query_array);
+		if ( ! empty( $this->options['general']['awssecretkey'] ) ) {
+			$querystring = $this->getAWSQueryString( $query_array );
 
-		$url = $this->amazon_endpoint . '?' . $querystring;
+			$url = $this->amazon_endpoint . '?' . $querystring;
 
-		// Starting with WordPress 2.7 we'll use the HTTP class.
-		if ( function_exists( 'wp_remote_request' ) ) {
-			$response = wp_remote_request( $url );
-			if ( ! is_wp_error( $response ) ) {
-				$xml_array = $this->ConvertXML2Array( $response['body'] );
-			} else {
-				$return_array = array ('Error' => $response->errors );
-			}
-		} else { // Prior to WordPress 2.7 we'll use the Snoopy Class.
-			require_once (ABSPATH . 'wp-includes/class-snoopy.php');
-			$snoopy = new Snoopy( );
-			$snoopy->fetch( $url );
-			if ( ! $snoopy->error ) {
-				$response = $snoopy->results;
-				$xml_array = $this->ConvertXML2Array( $response );
-			} else {
-				$response = array ($snoopy->error => array (0 => $url ) );
-				$return_array = array ('Error' => $response );
-			}
-		}
-
-		// It will be empty if we had an error.
-		if ( ! empty( $xml_array ) ) {
-			// Depending on the Operation called we'll return the right array back.
-			$key = $query_array['Operation'] . 'Response';
-			if ( ! isset( $xml_array[$key] ) ) {
-				echo 'Unknown Operation in rest Call';
-				die();
+			// Starting with WordPress 2.7 we'll use the HTTP class.
+			if ( function_exists( 'wp_remote_request' ) ) {
+				$response = wp_remote_request( $url );
+				if ( ! is_wp_error( $response ) ) {
+					$xml_array = $this->ConvertXML2Array( $response['body'] );
+				} else {
+					$return_array = array ('Error' => $response->errors );
+				}
+			} else { // Prior to WordPress 2.7 we'll use the Snoopy Class.
+				require_once (ABSPATH . 'wp-includes/class-snoopy.php');
+				$snoopy = new Snoopy( );
+				$snoopy->fetch( $url );
+				if ( ! $snoopy->error ) {
+					$response = $snoopy->results;
+					$xml_array = $this->ConvertXML2Array( $response );
+				} else {
+					$response = array ($snoopy->error => array (0 => $url ) );
+					$return_array = array ('Error' => $response );
+				}
 			}
 
-			if ( isset( $xml_array[$key]['OperationRequest']['Errors'] ) ) {
-				$return_array = $xml_array[$key]['OperationRequest']['Errors']['Error'][1];
-			} else {
-				$return_array = $xml_array[$key];
+			// It will be empty if we had an error.
+			if ( ! empty( $xml_array ) ) {
+				// Depending on the Operation called we'll return the right array back.
+				$key = $query_array['Operation'] . 'Response';
+				if ( ! isset( $xml_array[$key] ) ) {
+					echo 'Unknown Operation in rest Call';
+					die();
+				}
+
+				if ( isset( $xml_array[$key]['OperationRequest']['Errors'] ) ) {
+					$return_array = $xml_array[$key]['OperationRequest']['Errors']['Error'][1];
+				} else {
+					$return_array = $xml_array[$key];
+				}
 			}
+		} else {
+			$response = array ('Setup Error' => 'The plugin does not have the personal secret key set.' );
+			$return_array = array ('Error' => $response );
 		}
 		return ($return_array);
 	}
@@ -501,23 +506,20 @@ class AVHAmazonCore
 	function getAWSQueryString ( $query_array )
 	{
 		$query_array['Timestamp'] = gmdate( 'Y-m-d\TH:i:s\Z' );
-		//@TODO Per August 15, 2009 all request to Amazon need to be signed, until then they accept unsigned requests as well.
-		if ( ! empty( $this->options['general']['awssecretkey'] ) ) {
-			$endpoint = parse_url( $this->amazon_endpoint );
-			ksort( $query_array );
 
-			$query_string = $this->BuildQuery( $query_array );
-			$str = "GET\n" . $endpoint['host'] . "\n/onca/xml\n" . $query_string;
+		$endpoint = parse_url( $this->amazon_endpoint );
+		ksort( $query_array );
 
-			if ( $this->running_php5 ) {
-				// PHP5 Native function is much quicker.
-				$query_array['Signature'] = base64_encode( hash_hmac( 'sha256', $str, $this->options['general']['awssecretkey'], true ) );
-			} else {
-				// PHP4 function to get the hash_hmac sha256
-				$query_array['Signature'] = base64_encode( avh_hmac( $this->options['general']['awssecretkey'], $str ) );
-			}
+		$query_string = $this->BuildQuery( $query_array );
+		$str = "GET\n" . $endpoint['host'] . "\n/onca/xml\n" . $query_string;
+
+		if ( $this->running_php5 ) {
+			// PHP5 Native function is much quicker.
+			$query_array['Signature'] = base64_encode( hash_hmac( 'sha256', $str, $this->options['general']['awssecretkey'], true ) );
+		} else {
+			// PHP4 function to get the hash_hmac sha256
+			$query_array['Signature'] = base64_encode( avh_hmac( $this->options['general']['awssecretkey'], $str ) );
 		}
-
 		$querystring = $this->BuildQuery( $query_array );
 		return ($querystring);
 	}
@@ -616,18 +618,13 @@ class AVHAmazonCore
 	 *
 	 * @return array
 	 * @since 3.0
-	 * @TODO Per August 15, 2009 all request to Amazon need to be signed, until then they accept unsigned requests as well.
 	 */
 	function getRestStandardRequest() {
 
-		// @TODO Until August
 		static $key;
 		if (null == $key) {
 			$key = $this->getOption('awskey','general');
-			$this->amazon_standard_request['AWSAccessKeyId'] = empty( $key) ? '1MPCC36EZ827YJQ02AG2' : $key;
-
-			// After August
-			// $this->amazon_standard_request['AWSAccessKeyId'] = $key;
+			$this->amazon_standard_request['AWSAccessKeyId'] = $key;
 		}
 		return $this->amazon_standard_request;
 	}

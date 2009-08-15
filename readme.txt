@@ -94,6 +94,7 @@ None
 = Version 3.1-rc1 =
 * Bugfix: In WordPress 2.8 and PHP5, the secret key calculation didn't use native PHP5 function.
 * RFC: Ability to set number of columns when displaying all items from a wishlist.
+* The personal secret key is mandatory now. If it's not present, the plugin will not work.
 
 = Version 3.0.8 =
 * Bugfix: Regression of Bugfix: When using the secret key, the call to Amazon would fail.

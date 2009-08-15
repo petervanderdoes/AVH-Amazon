@@ -36,7 +36,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 			wp_enqueue_script( 'jquery-ui-tabs' );
 		}
 
-		// Admin notice A AWS developer key is neccasry as well as PHP5. :(
+		// Admin notice A AWS developer key is necessary
 		if ( empty( $this->core->options['general']['awssecretkey'] ) ) {
 			add_action( 'admin_notices', array (&$this, 'actionNotice' ) );
 		}
@@ -130,6 +130,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 			$this->message = 'AVH Amazon Plugin Notice<br />';
 			$this->message .= 'Amazon has changed their policy and per August 15, 2009 all calls to Amazon are going to have to be signed.<br />';
 			$this->message .= 'You will need your own personal AWS account (See the FAQ of the plugin for details on how to get one).<br/>The account gives you access to your personal secret key which is needed for calls to Amazon. When you have your account please enter both keys in the settings page of the AVH Amazon plugin.<br/>';
+			$this->message .= 'The AVH Amazon plugin will not work correctly if you don\'t enter your personal secret key';
 			$this->displayMessage();
 		}
 	}
