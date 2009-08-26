@@ -189,3 +189,12 @@ ul#avhamazon_tabs li.avhamazon-tabs-selected a {
 ul#avhamazon_tabs li.avhamazon-tabs-selected {
 	background-color: #F1F1F1;
 }
+
+/* Donation */
+#avhdonations p {
+	font-size:	11px;
+}
+
+#avhdonations .b {
+	font-weight:	bold;
+}
