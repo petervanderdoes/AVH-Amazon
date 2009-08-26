@@ -90,6 +90,9 @@ If you don't enter a secret key all calls from this plugin to Amazon will fail p
 None
 
 == Changelog ==
+= Version 3.1.1 =
+* Bugfix: CSS for the widget was not loaded.
+
 = Version 3.1 =
 * Bugfix: In WordPress 2.8 and PHP5, the secret key calculation didn't use native PHP5 function.
 * RFC: Ability to set number of columns when displaying all items from a wishlist.

@@ -944,6 +944,16 @@ class AVHAmazonCore
 			return $_SERVER['PHP_SELF'] . "?page=" . $page;
 	}
 
+	function handleCssFile ( $handle, $cssfile )
+	{
+		wp_register_style( $handle, $this->info['plugin_url'] . $cssfile, array (), $this->version, 'all' );
+		if ( did_action( 'wp_print_styles' ) ) { // we already printed the style queue.  Print this one immediately
+			wp_print_styles( $handle );
+		} else {
+			wp_enqueue_style( $handle );
+		}
+	}
+
 } //End Class avh_amazon
 
 
