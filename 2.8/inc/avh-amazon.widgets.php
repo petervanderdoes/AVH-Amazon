@@ -221,8 +221,8 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		$instance = $old_instance;
 
 		$instance['title'] = strip_tags( $new_instance['title'] );
-		$instance['associated_id'] = strip_tags( $new_instance['associatedid'] );
-		$instance['wishlist_id'] = strip_tags( $new_instance['wishlistid'] );
+		$instance['associated_id'] = strip_tags( $new_instance['associated_id'] );
+		$instance['wishlist_id'] = strip_tags( $new_instance['wishlist_id'] );
 		$instance['locale'] = strip_tags( $new_instance['locale'] );
 		$instance['nr_of_items'] = strip_tags( $new_instance['nr_of_items'] );
 		$instance['show_footer'] = ($new_instance['show_footer'] ? 1 : 0);

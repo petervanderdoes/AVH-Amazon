@@ -90,6 +90,9 @@ If you don't enter a secret key all calls from this plugin to Amazon will fail p
 None
 
 == Changelog ==
+= Version 3.1.2 =
+* Bugfix: Widget didn't hold value for Associated ID and Associated ID.
+
 = Version 3.1.1 =
 * Bugfix: CSS for the widget was not loaded.
 
