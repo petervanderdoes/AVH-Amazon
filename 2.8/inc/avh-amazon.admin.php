@@ -28,13 +28,14 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 		// CSS Helper
 		add_action( 'admin_print_styles', array (&$this, 'actionInjectCSS' ) );
+		add_filter( 'admin_enqueue_scripts',  array (&$this, 'filterInjectJS' ) );
 
 		// Enqueue jQuery only on certain pages
-		$avhamazon_pages = array ('avhamazon_options', 'avhamazon_tools' );
+		//$avhamazon_pages = array ('avhamazon_options', 'avhamazon_tools' );
 
-		if ( in_array( $_GET['page'], $avhamazon_pages ) ) {
-			wp_enqueue_script( 'jquery-ui-tabs' );
-		}
+		//if ( in_array( $_GET['page'], $avhamazon_pages ) ) {
+		//	wp_enqueue_script( 'jquery-ui-tabs' );
+		//}
 
 		// Admin notice A AWS developer key is necessary
 		if ( empty( $this->core->options['general']['awssecretkey'] ) ) {
@@ -105,6 +106,22 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		wp_enqueue_style( 'avhamazonadmin', $this->core->info['plugin_url'] . '/inc/avh-amazon.admin.css', array (), $this->core->version, 'screen' );
 	}
 
+	/**
+	 * Add the javascript to the admin pages.
+	 *
+	 * @WordPress Action admin_enqueue_scripts
+	 * @since 3.0
+	 *
+	 */
+	function filterInjectJS ( $hook_suffix )
+	{
+
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.dev' : '';
+		$admin_pages = array ('settings_page_avhamazon_options' );
+		if ( in_array( $hook_suffix, $admin_pages ) ) {
+			wp_enqueue_script( 'avhamazonsettings', $this->core->info['plugin_url'] . '/inc/js/admin' . $suffix . '.js', array ('jquery' ), $this->core->version, true );
+		}
+	}
 	/**
 	 * Notice to get an AWS account
 	 *
