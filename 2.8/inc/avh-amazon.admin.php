@@ -404,7 +404,9 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					'https://aws-portal.amazon.com/gp/aws/developer/account/index.html?ie=UTF8&action=access-key<br /><br />'.
 					'And select Access Identifiers You will the ability to see your secret key, if you don\'t see one generate one. Copy your key into the options page of the plugin and you are all set.<br /><br />'.
 					'If you don\'t get a secret key all calls from this plugin to Amazon will fail per August 15, 2009.<br />'.
-					'Until you enter your secret key, you will see a reminder to do this once day in the Admin section WordPress, and all the time when you go to the settings page of this plugin.<br /><br />'
+					'Until you enter your secret key, you will see a reminder to do this once day in the Admin section WordPress, and all the time when you go to the settings page of this plugin.<br /><br />'.
+					'<b>How can I use multiple columns for the shortcode?</b><br />'.
+					'Use the option col="<nr>" to set the number of columns to display.'
 				)
 			),
 			'about' => array (

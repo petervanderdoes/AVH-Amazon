@@ -33,6 +33,7 @@ In the plugin reference is made to Wishlist only but you can use your Baby Regis
 	* The shortcode creates text, picture or text & picture links.
 	* If a text link or text & picture link is used, the default text is the item description from Amazon but the text of the link can be changed.
 	* The value all for the ASIN option will show all items from your wishlist. In combination with a text & picture link type you can create a wishlist page.
+	* Use the option col="<nr>" to set the number of columns to display.
 
 * Tools
 	* Look up your wishlist ID.
@@ -52,9 +53,6 @@ Yes you can, you can use the following code to display the wishlist:
 
 = What about support? =
 I created a support site at http://forums.avirtualhome.com where you can ask questions or request features.
-
-= Is the plug in available in my language? =
-Maybe, maybe not, I don't really know what your language is, but you can find out in the directory languages. If it's not available feel free to translate it, it's only a few lines of text :). Send your translation to me and I will add it and give you credit for it.
 
 = Where is the Baby/Wedding Registry widget? =
 There is no separate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.
