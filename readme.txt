@@ -94,7 +94,7 @@ None
 * Updated the Amazon API.
 
 = Version 3.1.2 =
-* Bugfix: Widget didn't hold value for Associated ID and Associated ID.
+* Bugfix: Widget didn't hold value for Associated ID and Wish List ID.
 
 = Version 3.1.1 =
 * Bugfix: CSS for the widget was not loaded.
