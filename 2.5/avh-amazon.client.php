@@ -114,7 +114,7 @@ class AVHAmazonCore
 		$this->amazon_endpoint = $this->amazon_endpoint_table['US'];
 		$this->amazon_standard_request = array (
 			'Service' => 'AWSECommerceService',
-			'Version' => '2009-03-31',
+			'Version' => '2009-10-01',
 			'AWSAccessKeyId' => '',
 			'Timestamp' => '' );
 

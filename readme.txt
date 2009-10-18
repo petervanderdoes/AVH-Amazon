@@ -89,7 +89,9 @@ None
 
 == Changelog ==
 = Version 3.1.3 =
+* Bugfix: Uninstall didn't work.
 * Bugfix: The tabs in the settings page didn't always work.
+* Updated the Amazon API.
 
 = Version 3.1.2 =
 * Bugfix: Widget didn't hold value for Associated ID and Associated ID.
