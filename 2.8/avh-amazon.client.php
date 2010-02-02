@@ -757,7 +757,7 @@ class AVHAmazonCore
 	{
 		$imageurl = $this->info['graphics_url'];
 		if (is_array($item_result['Items']['Item']['ImageSets']['ImageSet'])) {
-			if (is_array($item_result['Items']['Item']['ImageSets']['ImageSet'][0])) {
+			if (isset($item_result['Items']['Item']['ImageSets']['ImageSet'][0]) && is_array($item_result['Items']['Item']['ImageSets']['ImageSet'][0])) {
 				$imageset = $item_result['Items']['Item']['ImageSets']['ImageSet'][0];
 			} else {
 				$imageset = $item_result['Items']['Item']['ImageSets']['ImageSet'];
