@@ -160,6 +160,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 			$total_items = count( $list_result['Lists']['List']['ListItem'] );
 			$Item_keys = $this->core->getItemKeys( $list_result['Lists']['List']['ListItem'], $nr_of_items );
 
+
 			foreach ( $Item_keys as $value ) {
 				$Item = $list_result['Lists']['List']['ListItem'][$value];
 				$item_result = $this->core->handleRESTcall( $this->core->getRestItemLookupParams( $Item['Item']['ASIN'], $associated_id ) );
@@ -181,12 +182,12 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 						$myurl .= '?' . $this->core->BuildQuery( $query );
 
 						$target = $new_window == 1 ? 'target="_blank"' : '';
-						echo '<a ' . $target . ' title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a><br/>';
+						echo '<a ' . $target . ' title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a>';
 						echo '<div class="wishlistcaption">' . $Item['Item']['ItemAttributes']['Title'] . '</div>';
-						echo '<BR />';
 					}
 				}
 			}
+
 			if ( $show_footer ) {
 				$footer = apply_filters('avhamazon_text',str_replace( '%nr_of_items%', $total_items, $footer_template ));
 				$myurl = $list_result['Lists']['List']['ListURL'];
