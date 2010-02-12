@@ -99,7 +99,7 @@ class AVHAmazonCore
 	{
 		static $_instance;
 		if ( $_instance === null ) {
-			$_instance = new AVHAmazonCore( );
+			$_instance = new AVHAmazonCore();
 		}
 		return $_instance;
 	}
@@ -114,7 +114,7 @@ class AVHAmazonCore
 		$this->comment_begin = '<!-- AVH Amazon version ' . $this->version . ' Begin -->';
 		$this->comment_end = '<!-- AVH Amazon version ' . $this->version . ' End -->';
 
-		$this->running_php5 = version_compare( '5', phpversion(), '<');
+		$this->running_php5 = version_compare( '5', phpversion(), '<' );
 
 		/**
 		 * Amazon RESTful properties
@@ -192,9 +192,9 @@ class AVHAmazonCore
 		$this->info = array ('home' => get_option( 'home' ), 'siteurl' => $info['siteurl'], 'plugin_url' => $info['plugin_url'], 'plugin_dir' => $info['plugin_dir'], 'graphics_url' => $info['plugin_url'] . '/images', 'wordpress_version' => $this->getWordpressVersion() );
 
 		// Add filter for sanatizing text
-		add_filter('avhamazon_text', 'wptexturize');
-		add_filter('avhamazon_text', 'convert_chars');
-		add_filter('avhamazon_text', 'esc_html');
+		add_filter( 'avhamazon_text', 'wptexturize' );
+		add_filter( 'avhamazon_text', 'convert_chars' );
+		add_filter( 'avhamazon_text', 'esc_html' );
 
 		return;
 	}
@@ -425,9 +425,18 @@ class AVHAmazonCore
 	function getItemKeys ( $list, $nr_of_items = 1 )
 	{
 		$total_items = count( $list );
-		if ( $nr_of_items > $total_items )
+		if ( $nr_of_items > $total_items ) {
 			$nr_of_items = $total_items;
-		return (( array ) array_rand( $list, $nr_of_items ));
+		}
+		$random = false;
+		if ( $random ) {
+			$return = ( array ) array_rand( $list, $nr_of_items );
+		} else {
+			for ($i = 0; $i < $nr_of_items; $i++) {
+				$return[]=$i;
+			}
+		}
+		return ($return);
 	}
 
 	/**
@@ -583,8 +592,8 @@ class AVHAmazonCore
 	{
 
 		static $key;
-		if (null == $key) {
-			$key = $this->getOption('awskey','general');
+		if ( null == $key ) {
+			$key = $this->getOption( 'awskey', 'general' );
 			$this->amazon_standard_request['AWSAccessKeyId'] = $key;
 		}
 		return $this->amazon_standard_request;
@@ -756,16 +765,17 @@ class AVHAmazonCore
 	function getImageInfo ( $imagesize, $item_result )
 	{
 		$imageurl = $this->info['graphics_url'];
-		if (is_array($item_result['Items']['Item']['ImageSets']['ImageSet'])) {
-			if (isset($item_result['Items']['Item']['ImageSets']['ImageSet'][0]) && is_array($item_result['Items']['Item']['ImageSets']['ImageSet'][0])) {
+		if ( is_array( $item_result['Items']['Item']['ImageSets']['ImageSet'] ) ) {
+			if ( isset( $item_result['Items']['Item']['ImageSets']['ImageSet'][0] ) && is_array( $item_result['Items']['Item']['ImageSets']['ImageSet'][0] ) ) {
 				$imageset = $item_result['Items']['Item']['ImageSets']['ImageSet'][0];
 			} else {
 				$imageset = $item_result['Items']['Item']['ImageSets']['ImageSet'];
 			}
 		} else {
-			 $imageset = $item_result['Items']['Item'];
+			$imageset = $item_result['Items']['Item'];
 		}
-		switch ( strtolower( $imagesize ) ) {
+		switch ( strtolower( $imagesize ) )
+		{
 			case 'medium' :
 				$img['url'] = $imageset['MediumImage']['URL'];
 				$img['h'] = $imageset['MediumImage']['Height'];
@@ -973,14 +983,14 @@ function avhamazon_init ()
 	// Admin
 	if ( is_admin() ) {
 		require (dirname( __FILE__ ) . '/inc/avh-amazon.admin.php');
-		$avhamazon_admin = & new AVHAmazonAdmin( );
+		$avhamazon_admin = & new AVHAmazonAdmin();
 		// Installation
 		register_activation_hook( __FILE__, array (&$avhamazon_admin, 'installPlugin' ) );
 	}
 
 	// Include shortcode class
 	require (dirname( __FILE__ ) . '/inc/avh-amazon.shortcode.php');
-	$avhamazon_shortcode = & new AVHAmazonShortcode( );
+	$avhamazon_shortcode = & new AVHAmazonShortcode();
 
 	// Include the widgets code
 	require (dirname( __FILE__ ) . '/inc/avh-amazon.widgets.php');

@@ -1,6 +1,10 @@
 <?php
 class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 {
+	/**
+	 *
+	 * @var AVHAmazonCore
+	 */
 	var $core;
 
 	/**
