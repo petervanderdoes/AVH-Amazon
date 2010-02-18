@@ -452,7 +452,7 @@ class AVHAmazonCore
 		if ( $nr_of_items > $total_items ) {
 			$nr_of_items = $total_items;
 		}
-		$random = false;
+		$random = true;
 		if ( $random ) {
 			$return = ( array ) array_rand( $list, $nr_of_items );
 		} else {
