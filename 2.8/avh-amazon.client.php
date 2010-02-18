@@ -84,6 +84,7 @@ class AVHAmazonCore
 	 */
 	var $db_options_name_core;
 	var $db_options_name_widget_wishlist;
+	var $db_options_name_cached_wishlist;
 
 	/**
 	 * Are we running PHP5
@@ -133,7 +134,7 @@ class AVHAmazonCore
 
 		$this->db_options_name_core = 'avhamazon';
 		$this->db_options_name_widget_wishlist = 'widget_avhamazon_wishlist';
-
+		$this->db_options_name_cached_wishlist = 'avhamazon_cached_wishlist';
 		/**
 		 * Default options - General Purpose
 		 *
@@ -395,23 +396,43 @@ class AVHAmazonCore
 	 */
 	function getListResults ( $ListID )
 	{
-		$list = $this->handleRESTcall( $this->getRestListLookupParams( $ListID ) );
 
-		if ( 1 == $list['Lists']['List']['TotalItems'] ) {
-			$list['Lists']['List']['ListItem'] = array ('0' => $list['Lists']['List']['ListItem'] ); // If one item in the list we need to make it a multi array
-		} else {
-			if ( $list['Lists']['List']['TotalPages'] > 1 ) { // If the list contains over 10 items we need to process the other pages.
-				$page = 2;
-				while ( $page <= $list['Lists']['List']['TotalPages'] ) {
-					$result = $this->handleRESTcall( $this->getRestListLookupParams( $ListID, null, $page ) );
-					foreach ( $result['Lists']['List']['ListItem'] as $key => $value ) {
-						$newkey = 10 * ($page - 1) + $key;
-						$list['Lists']['List']['ListItem'][$newkey] = $value; //Add the items from the remaining pages to the lists.
-					}
-					$page ++;
+		$is_cached = false;
+		$wishlist = get_option( $this->db_options_name_cached_wishlist );
+
+		if ( is_array( $wishlist ) ) {
+			if ( isset( $wishlist[$ListID] ) ) {
+				//$wishlist = unserialize( $cached_wishlist );
+				if ( (time() - $wishlist[$ListID]['time']) < 60 * 60 * 23 ) {
+					$is_cached = true;
+					$list = $wishlist[$ListID]['list'];
 				}
 			}
 		}
+
+		if ( ! $is_cached ) {
+			$list = $this->handleRESTcall( $this->getRestListLookupParams( $ListID ) );
+
+			if ( 1 == $list['Lists']['List']['TotalItems'] ) {
+				$list['Lists']['List']['ListItem'] = array ('0' => $list['Lists']['List']['ListItem'] ); // If one item in the list we need to make it a multi array
+			} else {
+				if ( $list['Lists']['List']['TotalPages'] > 1 ) { // If the list contains over 10 items we need to process the other pages.
+					$page = 2;
+					while ( $page <= $list['Lists']['List']['TotalPages'] ) {
+						$result = $this->handleRESTcall( $this->getRestListLookupParams( $ListID, null, $page ) );
+						foreach ( $result['Lists']['List']['ListItem'] as $key => $value ) {
+							$newkey = 10 * ($page - 1) + $key;
+							$list['Lists']['List']['ListItem'][$newkey] = $value; //Add the items from the remaining pages to the lists.
+						}
+						$page ++;
+					}
+				}
+			}
+			$wishlist[$ListID]['time']=time();
+			$wishlist[$ListID]['list']=$list;
+			update_option($this->db_options_name_cached_wishlist,$wishlist);
+		}
+
 		return ($list);
 	}
 
