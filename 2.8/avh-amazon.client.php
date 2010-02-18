@@ -394,22 +394,23 @@ class AVHAmazonCore
 	 * @param string $ListID The Wish List ID of the list to get
 	 * @return array Items
 	 */
-	function getListResults ( $ListID )
+	function getListResults ( $ListID, $use_cache = TRUE )
 	{
 
 		$is_cached = false;
-		$wishlist = get_option( $this->db_options_name_cached_wishlist );
+		if ( $use_cache ) {
+			$wishlist = get_option( $this->db_options_name_cached_wishlist );
 
-		if ( is_array( $wishlist ) ) {
-			if ( isset( $wishlist[$ListID] ) ) {
-				//$wishlist = unserialize( $cached_wishlist );
-				if ( (time() - $wishlist[$ListID]['time']) < 60 * 60 * 23 ) {
-					$is_cached = true;
-					$list = $wishlist[$ListID]['list'];
+			if ( is_array( $wishlist ) ) {
+				if ( isset( $wishlist[$ListID] ) ) {
+					//$wishlist = unserialize( $cached_wishlist );
+					if ( (time() - $wishlist[$ListID]['time']) < 60 * 60 * 23 ) {
+						$is_cached = true;
+						$list = $wishlist[$ListID]['list'];
+					}
 				}
 			}
 		}
-
 		if ( ! $is_cached ) {
 			$list = $this->handleRESTcall( $this->getRestListLookupParams( $ListID ) );
 
@@ -428,9 +429,11 @@ class AVHAmazonCore
 					}
 				}
 			}
-			$wishlist[$ListID]['time']=time();
-			$wishlist[$ListID]['list']=$list;
-			update_option($this->db_options_name_cached_wishlist,$wishlist);
+			if ( ! (isset( $list['Lists']['Request']['Errors'] ) || isset( $list['Error'] )) ) {
+				$wishlist[$ListID]['time'] = time();
+				$wishlist[$ListID]['list'] = $list;
+				update_option( $this->db_options_name_cached_wishlist, $wishlist );
+			}
 		}
 
 		return ($list);
