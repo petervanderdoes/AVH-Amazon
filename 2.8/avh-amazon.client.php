@@ -85,6 +85,7 @@ class AVHAmazonCore
 	var $db_options_name_core;
 	var $db_options_name_widget_wishlist;
 	var $db_options_name_cached_wishlist;
+	var $db_options_name_cached_item;
 
 	/**
 	 * Are we running PHP5
@@ -111,7 +112,7 @@ class AVHAmazonCore
 	 */
 	function __construct ()
 	{
-		$this->version = "3.1.4.2";
+		$this->version = "3.1.5";
 		$this->comment_begin = '<!-- AVH Amazon version ' . $this->version . ' Begin -->';
 		$this->comment_end = '<!-- AVH Amazon version ' . $this->version . ' End -->';
 
@@ -135,6 +136,8 @@ class AVHAmazonCore
 		$this->db_options_name_core = 'avhamazon';
 		$this->db_options_name_widget_wishlist = 'widget_avhamazon_wishlist';
 		$this->db_options_name_cached_wishlist = 'avhamazon_cached_wishlist';
+		$this->db_options_name_cached_item = 'avhamazon_cached_items';
+
 		/**
 		 * Default options - General Purpose
 		 *
@@ -386,6 +389,39 @@ class AVHAmazonCore
 			}
 			update_option( 'sidebars_widgets', $sidebars_widgets );
 		}
+	}
+
+	/**
+	 * Get the item from Amazon
+	 *
+	 * @param string $asin
+	 * @param string $associateid
+	 * @param boolean $use_cache
+	 */
+	function getItemLookup ( $asin, $associateid, $use_cache = TRUE )
+	{
+		$is_cached = false;
+		if ( $use_cache ) {
+			$cached_item = get_option( $this->db_options_name_cached_item );
+			if ( is_array( $cached_item ) ) {
+				if ( isset( $cached_item[$asin] ) ) {
+					if ( (time() - $cached_item[$asin]['time']) < 60 * 60 * 23 ) {
+						$item_result = $cached_item[$asin]['item'];
+						$is_cached = true;
+					}
+				}
+			}
+		}
+
+		if ( ! $is_cached ) {
+			$item_result = $this->handleRESTcall( $this->getRestItemLookupParams( $asin, $associatedid ) );
+			if ( ! (isset( $item_result['Error'] ) || isset( $item_result['Items']['Request']['Errors'] )) ) {
+				$cached_item[$asin]['time'] = time();
+				$cached_item[$asin]['item'] = $item_result;
+				update_option( $this->db_options_name_cached_item, $cached_item );
+			}
+		}
+		return ($item_result);
 	}
 
 	/**

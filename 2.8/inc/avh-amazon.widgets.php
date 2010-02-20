@@ -167,7 +167,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 
 			foreach ( $Item_keys as $value ) {
 				$Item = $list_result['Lists']['List']['ListItem'][$value];
-				$item_result = $this->core->handleRESTcall( $this->core->getRestItemLookupParams( $Item['Item']['ASIN'], $associated_id ) );
+				$item_result = $this->core->getItemLookup( $Item['Item']['ASIN'], $associated_id );
 				if ( isset( $item_result['Error'] ) ) {
 					echo $this->core->getHttpError( $item_result['Error'] );
 				} else {
@@ -310,7 +310,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 
 			foreach ( $Item_keys as $value ) {
 				$Item = $list_result['Lists']['List']['ListItem'][$value];
-				$item_result = $this->core->handleRESTcall( $this->core->getRestItemLookupParams( $Item['Item']['ASIN'], $associated_id ) );
+				$item_result = $this->core->getItemLookup( $Item['Item']['ASIN'], $associated_id );
 				if ( isset( $item_result['Error'] ) ) {
 					echo $this->core->getHttpError( $item_result['Error'] );
 				} else {

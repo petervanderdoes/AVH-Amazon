@@ -1,6 +1,10 @@
 <?php
 class AVHAmazonShortcode
 {
+	/**
+	 *
+	 * @var AVHAmazoncore
+	 */
 	var $core;
 
 	/**
@@ -144,7 +148,7 @@ class AVHAmazonShortcode
 	function shortcodeAsin ( $attrs, $content, $associatedid, $single=true )
 	{
 		$error = '';
-		$item_result = $this->core->handleRESTcall( $this->core->getRestItemLookupParams( $attrs['asin'], $associatedid ) );
+		$item_result = $this->core->getItemLookup( $attrs['asin'], $associatedid ) ;
 		if ( isset( $item_result['Error'] ) ) {
 			$return = '';
 			$error = $this->core->getHttpError( $item_result['Error'] );
@@ -325,7 +329,7 @@ class AVHAmazonShortcode
 			$listitem = $list_result['Lists']['List']['ListItem'];
 			foreach ( $listitem as $key => $value ) {
 				$Item = $value;
-				$item_result = $this->core->handleRESTcall( $this->core->getRestItemLookupParams( $Item['Item']['ASIN'], '' ) );
+				$item_result = $this->core->getItemLookup( $Item['Item']['ASIN'], '' );
 				$this->metaboxTabOutputItem( $item_result['Items']['Item']['ItemAttributes']['Title'], $Item['Item']['ASIN'], 'avhamazon_scwishlist_asin-' . $key, 'avhamazon_scwishlist_asin', '', ('0' == $key) ? TRUE : FALSE );
 			}
 			// Display the last row as a randomizing option
@@ -352,7 +356,7 @@ class AVHAmazonShortcode
 		 */
 		$this->core->amazon_endpoint = $this->core->amazon_endpoint_table[$locale];
 
-		$item_result = $this->core->handleRESTcall( $this->core->getRestItemLookupParams( $asin, '' ) );
+		$item_result = $this->core->getItemLookup( $asin, '' );
 		if ( $item_result['Items']['Request']['Errors'] ) {
 			echo '<strong>' . __( 'Can\'t find the given item', 'avhamazon' ) . '</strong>';
 		} else {
