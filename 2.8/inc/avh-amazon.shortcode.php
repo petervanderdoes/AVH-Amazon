@@ -94,7 +94,7 @@ class AVHAmazonShortcode
 		}
 
 		if ( isset( $list_result['Error'] ) ) {
-			$error = $this->core->getHttpError( $item_result['Error'] );
+			$error = $this->core->getHttpError( $list_result['Error'] );
 			$attrs['asin'] = null;
 		}
 

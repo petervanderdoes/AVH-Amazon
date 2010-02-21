@@ -398,7 +398,7 @@ class AVHAmazonCore
 	 * @param string $associateid
 	 * @param boolean $use_cache
 	 */
-	function getItemLookup ( $asin, $associateid, $use_cache = TRUE )
+	function getItemLookup ( $asin, $associatedid, $use_cache = TRUE )
 	{
 		$is_cached = false;
 		if ( $use_cache ) {
