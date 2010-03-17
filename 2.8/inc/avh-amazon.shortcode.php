@@ -70,7 +70,7 @@ class AVHAmazonShortcode
 		$result = '';
 		$error = '';
 		$locale = $this->core->getOption( 'locale', 'shortcode' );
-		$attrs = shortcode_atts( array ('asin' => '', 'locale' => $locale, 'linktype' => 'text', 'wishlist' => '', 'picsize' => 'small', 'col' => 1 ), $atts );
+		$attrs = shortcode_atts( array ('asin' => '', 'locale' => $locale, 'linktype' => 'text', 'wishlist' => '', 'picsize' => 'small', 'col' => 1, 'sort_order'=>'LastUpdated' ), $atts );
 
 		$locale = $attrs['locale'];
 
@@ -80,12 +80,17 @@ class AVHAmazonShortcode
 			$associatedid = $this->core->getAssociateId( $locale );
 		}
 
+		$sort_order_table = array ('DateAdded', 'LastUpdated', 'Price', 'Priority' );
+		if (!(in_array($attrs['sort_order'],$sort_order_table))) {
+			$attrs['sort_order'] ='LastUpdated';
+		}
 		/**
 		 * Set up Endpoint
 		 */
 		$this->core->amazon_endpoint = $this->core->amazon_endpoint_table[$locale];
 
 		if ( $attrs['wishlist'] ) {
+			$this->core->wishlist_sort_order = $attrs['sort_order'];
 			$list_result = $this->core->getListResults( $attrs['wishlist'] );
 			if ( $list_result['Lists']['Request']['Errors'] ) {
 				$error = 'WishList ' . $attrs['wishlist'] . ' doesn\'t exists';
@@ -321,7 +326,7 @@ class AVHAmazonShortcode
 		 * Set up endpoint
 		 */
 		$this->core->amazon_endpoint = $this->core->amazon_endpoint_table[$locale];
-
+		$this->core->wishlist_sort_order = 'LastUpdated';
 		$list_result = $this->core->getListResults( $wishlist );
 		$total_items = count( $list_result['Lists']['List']['ListItem'] );
 		if ( $total_items > 0 ) {

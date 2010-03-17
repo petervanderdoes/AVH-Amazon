@@ -39,6 +39,11 @@ class AVHAmazonCore
 	var $associate_table;
 
 	/**
+	 * Sort order for the wishlist
+	 */
+	var $wishlist_sort_order;
+
+	/**
 	 * Version of AVH Amazon
 	 *
 	 * @var string
@@ -118,6 +123,7 @@ class AVHAmazonCore
 
 		$this->running_php5 = version_compare( '5', phpversion(), '<' );
 
+		$this->wishlist_sort_order=null;
 		/**
 		 * Amazon RESTful properties
 		 *
@@ -430,7 +436,7 @@ class AVHAmazonCore
 	 * @param string $ListID The Wish List ID of the list to get
 	 * @return array Items
 	 */
-	function getListResults ( $ListID, $use_cache = TRUE )
+	function getListResults ( $ListID, $sort_order = 'LastUpdated', $use_cache = TRUE )
 	{
 
 		$is_cached = false;
@@ -480,15 +486,16 @@ class AVHAmazonCore
 	 *
 	 * @param array $list The wishlist
 	 * @param int $nr_of_items Amount of keys to return, default is 1
+	 * @param boolean $randomize Select random items from the list. Default is TRUE
 	 * @return array Associative array where the value is the Keys
 	 */
-	function getItemKeys ( $list, $nr_of_items = 1 )
+	function getItemKeys ( $list, $nr_of_items = 1, $randomize = true )
 	{
 		$total_items = count( $list );
 		if ( $nr_of_items > $total_items ) {
 			$nr_of_items = $total_items;
 		}
-		$random = true;
+		//@TODO Make randomization an option in the widget and shortcode
 		if ( $random ) {
 			$return = ( array ) array_rand( $list, $nr_of_items );
 		} else {
@@ -600,8 +607,8 @@ class AVHAmazonCore
 	{
 		$WhatList = (is_null( $WhatList ) ? 'WishList' : $WhatList);
 		$page = (is_null( $page ) ? 1 : $page);
-
-		$listLookup = array ('Operation' => 'ListLookup', 'ListId' => $ListID, 'ListType' => $WhatList, 'ResponseGroup' => 'ListFull', 'IsOmitPurchasedItems' => '1', 'ProductPage' => ( string ) $page, 'Sort' => 'LastUpdated' );
+		$sort_order = (is_null ($this->wishlist_sort_order) ? 'LastUpdated' : $this->wishlist_sort_order);
+		$listLookup = array ('Operation' => 'ListLookup', 'ListId' => $ListID, 'ListType' => $WhatList, 'ResponseGroup' => 'ListFull', 'IsOmitPurchasedItems' => '1', 'ProductPage' => ( string ) $page, 'Sort' => $sort_order );
 
 		$request = array_merge( $this->getRestStandardRequest(), $listLookup );
 

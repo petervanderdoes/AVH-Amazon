@@ -41,15 +41,17 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 	function form ( $instance )
 	{
 
-		$instance = wp_parse_args( ( array ) $instance, array ('title' => '', 'associated_id' => '', 'wishlist_id' => '', 'nr_of_items' => '', 'show_footer' => 0, 'footer_template' => '', 'new_window' => 0 ) );
+		$instance = wp_parse_args( ( array ) $instance, array ('title' => '', 'associated_id' => '', 'wishlist_id' => '', 'nr_of_items' => '', 'randomize' => 1, 'sort_order' => 'LastUpdated', 'show_footer' => 0, 'footer_template' => '', 'new_window' => 0 ) );
 		$locale_table = $this->core->locale_table;
 
 		// Prepare data for display
-		$title = esc_attr($instance['title'] );
+		$title = esc_attr( $instance['title'] );
 		$associated_id = format_to_edit( $instance['associated_id'] );
 		$wishlist_id = format_to_edit( $instance['wishlist_id'] );
 		$locale = $instance['locale'];
 		$nr_of_items = format_to_edit( $instance['nr_of_items'] );
+		$sort_order = $instance['sort_order'];
+		$randomize = $instance['randomize'];
 		$show_footer = $instance['show_footer'];
 		$footer_template = format_to_edit( $instance['footer_template'] );
 		$new_window = $instance['new_window'];
@@ -97,6 +99,26 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		echo '</p>';
 
 		echo '<p>';
+		$sort_order_table = array ('DateAdded' => 'Date Added', 'LastUpdated' => 'Last Updated', 'Price' => 'Price - Cheapest to most expensive', 'Priority' => 'Priority' );
+		echo '<label for="' . $this->get_field_id( 'sort_order' ) . '">';
+		_e( 'Sort Order:', 'avhamazon' );
+		echo '</label>';
+		echo '<select class="widefat" id="' . $this->get_field_id( 'sort_order' ) . '" name="' . $this->get_field_name( 'sort_order' ) . '">';
+		foreach ( $sort_order_table as $key => $sel ) {
+			echo '<option value="' . $key . '"' . (($sort_order == $key) ? ' selected="selected"' : '') . '>' . $sel . '</option>';
+		}
+		echo '</select>';
+		echo '</p>';
+
+		echo '<p>';
+		echo '<label for="' . $this->get_field_id( 'randomize' ) . '">';
+		_e( 'Randomize the items:', 'avhamazon' );
+		echo '</label>';
+		echo '<input type="checkbox" id="' . $this->get_field_id( 'randomize' ) . '" name="' . $this->get_field_name( 'nr_of_items' ) . '"  value="1"' . $this->core->isChecked( '1', $randomize ) . ' /> ';
+		echo '</p>';
+
+
+		echo '<p>';
 		echo '<label for="' . $this->get_field_id( 'footer_template' ) . '">';
 		_e( 'Footer template:', 'avhamazon' );
 		echo '</label>';
@@ -134,22 +156,24 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		extract( $args );
 
 		// Set up variables
-		$title = apply_filters('widget_title',$this->core->getWidgetOptions( $instance, 'title', 'widget_wishlist' ) );
+		$title = apply_filters( 'widget_title', $this->core->getWidgetOptions( $instance, 'title', 'widget_wishlist' ) );
 		$wishlist_id = $this->core->getWidgetOptions( $instance, 'wishlist_id', 'widget_wishlist' );
 		$associated_id = $this->core->getWidgetOptions( $instance, 'associated_id', 'general' );
 		$imagesize = $this->core->getWidgetOptions( $instance, 'wishlist_imagesize', 'widget_wishlist' );
 		$locale = $this->core->getWidgetOptions( $instance, 'locale', 'widget_wishlist' );
 		$nr_of_items = $this->core->getWidgetOptions( $instance, 'nr_of_items', 'widget_wishlist' );
+		$sort_order = $this->core->getWidgetOptions( $instance, 'sort_order', 'widget_wishlist' );
 		$show_footer = $this->core->getWidgetOptions( $instance, 'show_footer', 'widget_wishlist' );
 		$footer_template = $this->core->getWidgetOptions( $instance, 'footer_template', 'widget_wishlist' );
 		$new_window = $this->core->getWidgetOptions( $instance, 'new_window', 'widget_wishlist' );
+		$randomize = $this->core->getWidgetOptions( $instance, 'randomize', 'widget_wishlist' );
 
 		// Check default associate ID and change it for the Locale
 		if ( $this->core->default_options['general']['associated_id'] == $associated_id ) {
 			$associated_id = $this->core->getAssociateId( $locale );
 		}
 		$this->core->amazon_endpoint = $this->core->amazon_endpoint_table[$locale];
-
+		$this->core->wishlist_sort_order = $sort_order;
 		$list_result = $this->core->getListResults( $wishlist_id );
 
 		echo $before_widget;
@@ -162,8 +186,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		} else {
 			// Display the result
 			$total_items = count( $list_result['Lists']['List']['ListItem'] );
-			$Item_keys = $this->core->getItemKeys( $list_result['Lists']['List']['ListItem'], $nr_of_items );
-
+			$Item_keys = $this->core->getItemKeys( $list_result['Lists']['List']['ListItem'], $nr_of_items, $randomize );
 
 			foreach ( $Item_keys as $value ) {
 				$Item = $list_result['Lists']['List']['ListItem'][$value];
@@ -193,7 +216,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 			}
 
 			if ( $show_footer ) {
-				$footer = apply_filters('avhamazon_text',str_replace( '%nr_of_items%', $total_items, $footer_template ));
+				$footer = apply_filters( 'avhamazon_text', str_replace( '%nr_of_items%', $total_items, $footer_template ) );
 				$myurl = $list_result['Lists']['List']['ListURL'];
 				$myurl .= '?tag=' . $associated_id;
 				echo '<div class="footer"><a title="Total items on the list" href="' . $myurl . '">' . $footer . '</a></div><br />';
@@ -230,6 +253,8 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		$instance['wishlist_id'] = strip_tags( $new_instance['wishlist_id'] );
 		$instance['locale'] = strip_tags( $new_instance['locale'] );
 		$instance['nr_of_items'] = strip_tags( $new_instance['nr_of_items'] );
+		$instance['randomize'] = ($new_instance['randomize'] ? 1 : 0);
+		$instance['sort_order'] = strip_tags( $new_instance['sort_order'] );
 		$instance['show_footer'] = ($new_instance['show_footer'] ? 1 : 0);
 		$instance['footer_template'] = strip_tags( $new_instance['footer_template'] );
 		$instance['new_window'] = ($new_instance['new_window'] ? 1 : 0);
@@ -279,6 +304,9 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		// Number of Items
 		$nr_of_items = isset( $nr_of_items ) ? $nr_of_items : $this->core->getWidgetOptions( $options[$number], 'nr_of_items', 'widget_wishlist' );
 
+		// Sort Order
+		$sort_order = isset( $sort_order ) ? $sort_order : $this->core->getWidgetOptions( $options[$number], 'sort_order', 'widget_wishlist' );
+
 		// Show Footer
 		$show_footer = isset( $show_footer ) ? $show_footer : $this->core->getWidgetOptions( $options[$number], 'show_footer', 'widget_wishlist' );
 
@@ -288,12 +316,15 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		// Open in new windows
 		$new_window = isset( $new_window ) ? $new_window : $this->core->getWidgetOptions( $options[$number], 'new_window', 'widget_wishlist' );
 
+		// Randomize the items for display
+		$randomize = isset( $randomize ) ? $randomize : $this->core->getWidgetOptions( $options[$number], 'randomize', 'widget_wishlist' );
+
 		// Check default associate ID and change it for the Locale
 		if ( $this->core->associate_table['US'] == $associated_id ) {
 			$associated_id = $this->core->getAssociateId( $locale );
 		}
 		$this->core->amazon_endpoint = $this->core->amazon_endpoint_table[$locale];
-
+		$this->core->wishlist_sort_order = $sort_order;
 		$list_result = $this->core->getListResults( $wishlist_id );
 
 		echo $before_widget;
