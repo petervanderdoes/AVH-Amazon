@@ -1,6 +1,10 @@
 <?php
 class AVHAmazonAdmin extends AVHAmazonCore
 {
+	/**
+	 * AVHAmazonCore
+	 * @var unknown_type
+	 */
 	var $core;
 
 	/**
@@ -28,14 +32,16 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 		// CSS Helper
 		add_action( 'admin_print_styles', array (&$this, 'actionInjectCSS' ) );
-		add_filter( 'admin_enqueue_scripts',  array (&$this, 'filterInjectJS' ) );
+		add_filter( 'admin_enqueue_scripts', array (&$this, 'filterInjectJS' ) );
 
 		// Enqueue jQuery only on certain pages
 		//$avhamazon_pages = array ('avhamazon_options', 'avhamazon_tools' );
 
+
 		//if ( in_array( $_GET['page'], $avhamazon_pages ) ) {
 		//	wp_enqueue_script( 'jquery-ui-tabs' );
 		//}
+
 
 		// Admin notice A AWS developer key is necessary
 		if ( empty( $this->core->options['general']['awssecretkey'] ) ) {
@@ -122,6 +128,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 			wp_enqueue_script( 'avhamazonsettings', $this->core->info['plugin_url'] . '/inc/js/admin' . $suffix . '.js', array ('jquery' ), $this->core->version, true );
 		}
 	}
+
 	/**
 	 * Notice to get an AWS account
 	 *
@@ -197,7 +204,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 
 		echo '<div class="wrap">';
 		echo '<h2>';
-		echo _e( 'AVH Amazon: Tools', 'avhamazon' );
+		_e( 'AVH Amazon: Tools', 'avhamazon' );
 		echo '</h2>';
 		echo '<h3>Find Wish List ID</h3>';
 		echo '<form id="findid" action=' . $this->core->getBackLink() . ' method="post">';
@@ -222,7 +229,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		echo '</td></tr>';
 		echo '</tbody></table>';
 		echo '<div id="avhamazonwishlistoutputsearch">';
-		if ( isset( $action ) ) {
+		if ( isset( $action ) && 'findid' == $action ) {
 			$this->core->amazon_endpoint = $this->core->amazon_endpoint_table[$locale];
 			$result = $this->core->handleRESTcall( $this->core->getRestListSearchParams( $email ) );
 			$total = $result['Lists']['TotalResults'];
@@ -249,9 +256,30 @@ class AVHAmazonAdmin extends AVHAmazonCore
 						$class = ('alternate' == $class) ? '' : 'alternate';
 					}
 				}
-				$this->toolsTableFooter();
 			}
 		}
+		echo '</div>';
+
+		echo '</form>';
+
+		echo '<h3>Clear Cache</h3>';
+		if ( isset( $action ) && 'clearcache' == $action ) {
+			update_option( $this->core->db_options_name_cached_wishlist, array() );
+			update_option($this->core->db_options_name_cached_item, array());
+		}
+		echo '<form id="clearcache" action=' . $this->core->getBackLink() . ' method="post">';
+		wp_nonce_field( 'avhamazon-tools' );
+		echo '<table class="form-table"><tbody><tr><td>';
+		$wishlists_in_cache = count( get_option( $this->core->db_options_name_cached_wishlist ) );
+		$items_in_cache = count( get_option( $this->core->db_options_name_cached_item ) );
+		echo '<p>Number of Wishlists in cache: ' . $wishlists_in_cache . '</p>';
+		echo '<p>Number of Items in cache:     ' . $items_in_cache . '</p>';
+		echo '<p><input name="action" value="clearcache" type="hidden" />';
+		echo '<input class="button-secondary" type="submit" value="Clear"	name="submitButton" autocomplete="on" /></p>';
+		echo '</td></tr>';
+		echo '</tbody></table>';
+		echo '<div id="avhamazonwishlistoutputclear">';
+
 		echo '</div>';
 
 		echo '</form>';
@@ -299,143 +327,13 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function pageOptions ()
 	{
-		$option_data = array (
-			'general' => array (
-				array (
-					'avhamazon[general][associated_id]',
-					'Associated ID:',
-					'text',
-					16,
-					'Use this Associated ID when clicking on the wishlist.'
-				),
-				array (
-					'avhamazon[general][awskey]',
-					'AWS Key:',
-					'text',
-					20,
-					'Your Amazon Web Services Access Key ID.'
-				),
-				array (
-					'avhamazon[general][awssecretkey]',
-					'AWS Secret Key:',
-					'text',
-					40,
-					'Your Amazon Web Services Secret Access Key.'
-				)
-			),
-			'widget_wishlist' => array (
-				array (
-					'avhamazon[widget_wishlist][wishlist_id]',
-					'Default wishlist ID:',
-					'text',
-					16,
-					'This is the default wishlist ID, if you don\'t fill out a Wishlist ID in the widget this one will be used.'
-				),
-				array (
-					'avhamazon[widget_wishlist][locale]',
-					'Locale Amazon:',
-					'dropdown',
-					'US/CA/DE/UK',  // Locale Value
-					'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk'
-				),  // Locale Text
-				array (
-					'avhamazon[widget_wishlist][wishlist_imagesize]',
-					'Size of thumbnail:',
-					'dropdown',
-					'Small/Medium/Large',  // Value
-					'Small/Medium/Large'
-				),  // Text
-				array (
-					'avhamazon[widget_wishlist][nr_of_items]',
-					'Number of items:',
-					'text',
-					3,
-					'Amount of items of your Wish List to show in the widget.'
-				),
-				array (
-					'avhamazon[widget_wishlist][footer_template]',
-					'Footer template:',
-					'text',
-					30,
-					'The display of the footer is controlled in the widget options<BR />%nr_of_items% is replaced by the actual number of items in the wishlist.'
-				),
-				array (
-					'avhamazon[widget_wishlist][new_window]',
-					'Open in new windows:',
-					'checkbox',
-					1,
-					'When a user clicks on the link open it in a new windows'
-				)
-			),
-			'shortcode' => array (
-				array (
-					'avhamazon[shortcode][wishlist_id]',
-					'Default wishlist ID:',
-					'text',
-					16,
-					'This value will be automatically be entered in the AVH Amazon Short Code - wishlist metabox.'
-				),
-				array (
-					'avhamazon[shortcode][locale]',
-					'Locale Amazon:',
-					'dropdown',
-					'US/CA/DE/UK',  // Locale Value
-					'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk'
-				)
-			),  // Locale Text
-			'faq' => array (
-				array (
-					'text-helper',
-					'text-helper',
-					'helper',
-					'',
-					'<b>Can I use this plugin if I don\'t have a widget enabled theme?</b><br />' .
-					'Yes you can, you can use the following code to display the wishlist:<br />' .
-					'<&#63;php $avhwidget=& new WP_Widget_AVHAmazon_Wishlist();$avhwidget->widget(array,1); ?> <br />' .
-					'array is in the following format<br />' . 'array( [ option => value [, option => value ] ])<br />' .
-					'Overview of options and values<br />' . '\'title\' => string<br />' . '\'ListID\' => string<br />' .
-					'\'associatedid\' => string<br />' . '\'imagesize\' => Small/Medium/Large<br />' .
-					'\'locale\' => US/CA/DE/UK<br />' .
-					'\'nr_of_items\' => number<br />' .
-					'\'show_footer\' => 0/1<br />' .
-					'\'footer_template\' => string (%nr_of_items% is replaced by the actual number of items in the wishlist.)<br /><br />' .
-					'<i>Important</i>:There is no validity check for the values, entering wrong values can lead to unexpected results.<br /><br >' .
-					'<b>Where is the Baby/Wedding Registry widget?</b><br />' .
-					'There is no seperate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.<br /><br />' .
-					'<b>How do I find my Baby Registry and/or Wedding Registry ID?</b><br />' . 'When you create either registry Amazon sends you an email with the direct link to access your registry. The ID is the last part of the URL.<br />' .
-					'Example:<br />' .
-					'http://www.amazon.com/gp/registry/1234567890ABC<br/>' .
-					'The ID is 1234567890ABC<br /><br />' .
-					'<b>What is an ASIN?</b><br />' .
-					'ASIN stands for Amazon Standard Identification Number.<br />' .
-					'Every product has its own ASIN--a unique code they use to identify it. For books, the ASIN is the same as the 10-digit ISBN number.<br />' .
-					'You will find an item\'s ASIN on the product detail page.<br /><br />' .
-					'<b>Amazon Policy Change per May 11, 2009</b><br />'.
-					'Amazon has decided that calls to Amazon have to signed using a secret key you receive as a developer. Because this key can be used for other purposes as this plugin it is necessary for everybody who uses this plugin to sign up as a developer and receive their secret key.<br />'.
-					'You can sign up at the following pages and signing up is free:<br /><br />'.
-					'Canada https://associates.amazon.ca/gp/flex/advertising/api/sign-in.html<br />'.
-					'Germany https://partnernet.amazon.de/gp/flex/advertising/api/sign-in.html<br />'.
-					'United Kingdom https://affiliate-program.amazon.co.uk/gp/flex/advertising/api/sign-in.html<br />'.
-					'United States https://affiliate-program.amazon.com/gp/flex/advertising/api/sign-in.html<br /><br />'.
-					'After the registration is complete go to this page:<br />'.
-					'https://aws-portal.amazon.com/gp/aws/developer/account/index.html?ie=UTF8&action=access-key<br /><br />'.
-					'And select Access Identifiers You will the ability to see your secret key, if you don\'t see one generate one. Copy your key into the options page of the plugin and you are all set.<br /><br />'.
-					'If you don\'t get a secret key all calls from this plugin to Amazon will fail per August 15, 2009.<br />'.
-					'Until you enter your secret key, you will see a reminder to do this once day in the Admin section WordPress, and all the time when you go to the settings page of this plugin.<br /><br />'.
-					'<b>How can I use multiple columns for the shortcode?</b><br />'.
-					'Use the option col="<nr>" to set the number of columns to display.'
-				)
-			),
-			'about' => array (
-				array (
-					'text-helper',
-					'text-helper',
-					'helper',
-					'',
-					'<p>The AVH Amazon plugin gives you the ability to add multiple widgets which will display one or more random item(s) from your Amazon wishlist, baby registry and/or wedding registry. It also has the ability to show items with their link, in posts and pages by use of shortcode.<br />' . 'In the plugin reference is made to Wishlist only but you can use your Baby Registry ID or Wedding Registry ID as well.</p>' . '<b>General</b>' . '<ul>' . '<li>Works with amazon.com, and locales amazon.ca, amazon.de and amazon.co.uk.<br /><br />' . '</ul>' . '<b>Wishlist</b>' . '<ul>' . '<li>Add Associated ID.' . '<li>Choice of thumbnail size, Small/Medium/Large.' . '<li>Option to use up to unlimited widgets.' . '<li>Multiple items from the same Wish List can be displayed in the widget.' . '<li>A configurable footer can be displayed on the bottom of the widget linking to the list on Amazon.' . '</ul>' . '<b>Shortcode</b>' . '<ul>' . '<li>Create the shortcode with the help of a metabox' . '<li>In the metabox you can select an item or select to randomize the items from your wishlist or search for an item by ASIN.' . '<li>The shortcode creates text, picture or text & picture links.' . '<li>If a text link or text & picture links is used, the default text is the item description from Amazon but the text of the link can be changed.' . '<li>The value all for the ASIN option will show all items from your wishlist. In combination with a text & picture link type you can create a wishlist page.' . '</ul>' . '<b>Tools</b>' . '<ul>' . '<li>Look up your wishlist ID.' . '</ul>' . '<b>Support</b><br />' . 'For support visit the AVH support forums at <a href="http://forums.avirtualhome.com/">http://forums.avirtualhome.com/</a><br /><br />' . '<b>Developer</b><br />' . 'Peter van der Does'
-				)
-			)
-		);
+		$option_data = array ('general' => array (array ('avhamazon[general][associated_id]', 'Associated ID:', 'text', 16, 'Use this Associated ID when clicking on the wishlist.' ), array ('avhamazon[general][awskey]', 'AWS Key:', 'text', 20, 'Your Amazon Web Services Access Key ID.' ), array ('avhamazon[general][awssecretkey]', 'AWS Secret Key:', 'text', 40, 'Your Amazon Web Services Secret Access Key.' ) ), 'widget_wishlist' => array (array ('avhamazon[widget_wishlist][wishlist_id]', 'Default wishlist ID:', 'text', 16, 'This is the default wishlist ID, if you don\'t fill out a Wishlist ID in the widget this one will be used.' ), array ('avhamazon[widget_wishlist][locale]', 'Locale Amazon:', 'dropdown', 'US/CA/DE/UK', // Locale Value
+'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk' ), // Locale Text
+array ('avhamazon[widget_wishlist][wishlist_imagesize]', 'Size of thumbnail:', 'dropdown', 'Small/Medium/Large', // Value
+'Small/Medium/Large' ), // Text
+array ('avhamazon[widget_wishlist][nr_of_items]', 'Number of items:', 'text', 3, 'Amount of items of your Wish List to show in the widget.' ), array ('avhamazon[widget_wishlist][footer_template]', 'Footer template:', 'text', 30, 'The display of the footer is controlled in the widget options<BR />%nr_of_items% is replaced by the actual number of items in the wishlist.' ), array ('avhamazon[widget_wishlist][new_window]', 'Open in new windows:', 'checkbox', 1, 'When a user clicks on the link open it in a new windows' ) ), 'shortcode' => array (array ('avhamazon[shortcode][wishlist_id]', 'Default wishlist ID:', 'text', 16, 'This value will be automatically be entered in the AVH Amazon Short Code - wishlist metabox.' ), array ('avhamazon[shortcode][locale]', 'Locale Amazon:', 'dropdown', 'US/CA/DE/UK', // Locale Value
+'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk' ) ), // Locale Text
+'faq' => array (array ('text-helper', 'text-helper', 'helper', '', '<b>Can I use this plugin if I don\'t have a widget enabled theme?</b><br />' . 'Yes you can, you can use the following code to display the wishlist:<br />' . '<&#63;php $avhwidget=& new WP_Widget_AVHAmazon_Wishlist();$avhwidget->widget(array,1); ?> <br />' . 'array is in the following format<br />' . 'array( [ option => value [, option => value ] ])<br />' . 'Overview of options and values<br />' . '\'title\' => string<br />' . '\'ListID\' => string<br />' . '\'associatedid\' => string<br />' . '\'imagesize\' => Small/Medium/Large<br />' . '\'locale\' => US/CA/DE/UK<br />' . '\'nr_of_items\' => number<br />' . '\'show_footer\' => 0/1<br />' . '\'footer_template\' => string (%nr_of_items% is replaced by the actual number of items in the wishlist.)<br /><br />' . '<i>Important</i>:There is no validity check for the values, entering wrong values can lead to unexpected results.<br /><br >' . '<b>Where is the Baby/Wedding Registry widget?</b><br />' . 'There is no seperate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.<br /><br />' . '<b>How do I find my Baby Registry and/or Wedding Registry ID?</b><br />' . 'When you create either registry Amazon sends you an email with the direct link to access your registry. The ID is the last part of the URL.<br />' . 'Example:<br />' . 'http://www.amazon.com/gp/registry/1234567890ABC<br/>' . 'The ID is 1234567890ABC<br /><br />' . '<b>What is an ASIN?</b><br />' . 'ASIN stands for Amazon Standard Identification Number.<br />' . 'Every product has its own ASIN--a unique code they use to identify it. For books, the ASIN is the same as the 10-digit ISBN number.<br />' . 'You will find an item\'s ASIN on the product detail page.<br /><br />' . '<b>Amazon Policy Change per May 11, 2009</b><br />' . 'Amazon has decided that calls to Amazon have to signed using a secret key you receive as a developer. Because this key can be used for other purposes as this plugin it is necessary for everybody who uses this plugin to sign up as a developer and receive their secret key.<br />' . 'You can sign up at the following pages and signing up is free:<br /><br />' . 'Canada https://associates.amazon.ca/gp/flex/advertising/api/sign-in.html<br />' . 'Germany https://partnernet.amazon.de/gp/flex/advertising/api/sign-in.html<br />' . 'United Kingdom https://affiliate-program.amazon.co.uk/gp/flex/advertising/api/sign-in.html<br />' . 'United States https://affiliate-program.amazon.com/gp/flex/advertising/api/sign-in.html<br /><br />' . 'After the registration is complete go to this page:<br />' . 'https://aws-portal.amazon.com/gp/aws/developer/account/index.html?ie=UTF8&action=access-key<br /><br />' . 'And select Access Identifiers You will the ability to see your secret key, if you don\'t see one generate one. Copy your key into the options page of the plugin and you are all set.<br /><br />' . 'If you don\'t get a secret key all calls from this plugin to Amazon will fail per August 15, 2009.<br />' . 'Until you enter your secret key, you will see a reminder to do this once day in the Admin section WordPress, and all the time when you go to the settings page of this plugin.<br /><br />' . '<b>How can I use multiple columns for the shortcode?</b><br />' . 'Use the option col="<nr>" to set the number of columns to display.' ) ), 'about' => array (array ('text-helper', 'text-helper', 'helper', '', '<p>The AVH Amazon plugin gives you the ability to add multiple widgets which will display one or more random item(s) from your Amazon wishlist, baby registry and/or wedding registry. It also has the ability to show items with their link, in posts and pages by use of shortcode.<br />' . 'In the plugin reference is made to Wishlist only but you can use your Baby Registry ID or Wedding Registry ID as well.</p>' . '<b>General</b>' . '<ul>' . '<li>Works with amazon.com, and locales amazon.ca, amazon.de and amazon.co.uk.<br /><br />' . '</ul>' . '<b>Wishlist</b>' . '<ul>' . '<li>Add Associated ID.' . '<li>Choice of thumbnail size, Small/Medium/Large.' . '<li>Option to use up to unlimited widgets.' . '<li>Multiple items from the same Wish List can be displayed in the widget.' . '<li>A configurable footer can be displayed on the bottom of the widget linking to the list on Amazon.' . '</ul>' . '<b>Shortcode</b>' . '<ul>' . '<li>Create the shortcode with the help of a metabox' . '<li>In the metabox you can select an item or select to randomize the items from your wishlist or search for an item by ASIN.' . '<li>The shortcode creates text, picture or text & picture links.' . '<li>If a text link or text & picture links is used, the default text is the item description from Amazon but the text of the link can be changed.' . '<li>The value all for the ASIN option will show all items from your wishlist. In combination with a text & picture link type you can create a wishlist page.' . '</ul>' . '<b>Tools</b>' . '<ul>' . '<li>Look up your wishlist ID.' . '</ul>' . '<b>Support</b><br />' . 'For support visit the AVH support forums at <a href="http://forums.avirtualhome.com/">http://forums.avirtualhome.com/</a><br /><br />' . '<b>Developer</b><br />' . 'Peter van der Does' ) ) );
 
 		// Update or reset options
 		if ( isset( $_POST['updateoptions'] ) ) {
@@ -620,7 +518,8 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					continue;
 				}
 
-				switch ( $option[2] ) {
+				switch ( $option[2] )
+				{
 					case 'checkbox' :
 						$input_type = '<input type="checkbox" id="' . $option[0] . '" name="' . $option[0] . '" value="' . esc_attr( $option[3] ) . '" ' . $this->core->isChecked( '1', $option_actual[$section][$option_key] ) . ' />' . "\n";
 						$checkbox .= $option[0] . '|';
@@ -677,7 +576,8 @@ class AVHAmazonAdmin extends AVHAmazonCore
 	 */
 	function getNiceTitleOptions ( $id = '' )
 	{
-		switch ( $id ) {
+		switch ( $id )
+		{
 			case 'general' :
 				return __( 'General', 'avhamazon' );
 				break;

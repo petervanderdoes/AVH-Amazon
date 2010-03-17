@@ -436,7 +436,7 @@ class AVHAmazonCore
 	 * @param string $ListID The Wish List ID of the list to get
 	 * @return array Items
 	 */
-	function getListResults ( $ListID, $sort_order = 'LastUpdated', $use_cache = TRUE )
+	function getListResults ( $ListID, $use_cache = TRUE )
 	{
 
 		$is_cached = false;
