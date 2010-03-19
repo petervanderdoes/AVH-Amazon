@@ -198,3 +198,12 @@ ul#avhamazon_tabs li.avhamazon-tabs-selected {
 #avhdonations .b {
 	font-weight:	bold;
 }
+
+.avh_wrap #faq ul {
+	line-height:0.6em;
+	list-style:disc inside none;
+}
+.avh_wrap #faq ul li{
+	padding-left: 2em;
+	line-height: 100%;
+}

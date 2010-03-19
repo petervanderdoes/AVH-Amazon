@@ -496,7 +496,7 @@ class AVHAmazonCore
 			$nr_of_items = $total_items;
 		}
 		//@TODO Make randomization an option in the widget and shortcode
-		if ( $random ) {
+		if ( $randomize ) {
 			$return = ( array ) array_rand( $list, $nr_of_items );
 		} else {
 			for ($i = 0; $i < $nr_of_items; $i++) {

@@ -3,8 +3,8 @@ Contributors: petervanderdoes
 Donate link: http://blog.avirtualhome.com/wordpress-plugins/
 Tags: amazon, wishlist, widget, wedding registry, baby registry, shortcode, post, page
 Requires at least: 2.5
-Tested up to: 2.9.1
-Stable tag: 3.1.4.4
+Tested up to: 2.9.2
+Stable tag: 3.2
 
 The AVH Amazon plugin gives you the ability to show items from your Amazon wishlist by using widgets or shortcode in posts and pages.
 
@@ -26,6 +26,8 @@ In the plugin reference is made to Wishlist only but you can use your Baby Regis
 	* Option to use unlimited widgets.
 	* Multiple items from the same Wish List can be displayed in the widget.
 	* A configurable footer can be displayed on the bottom of the widget linking to the list on Amazon.
+	* Randomize the items retrieved or keep them in the order retrieved.
+	* Retrieve the items in order. The folllowing orders are possible, Last Updated, Date Added, Price - Cheapest to most expensive, Priority.
 
 * Shortcode
 	* Create the shortcode with the help of a metabox
@@ -34,9 +36,11 @@ In the plugin reference is made to Wishlist only but you can use your Baby Regis
 	* If a text link or text & picture link is used, the default text is the item description from Amazon but the text of the link can be changed.
 	* The value all for the ASIN option will show all items from your wishlist. In combination with a text & picture link type you can create a wishlist page.
 	* Use the option col="<nr>" to set the number of columns to display.
+	* Retrieve the items in order. The folllowing orders are possible, Last Updated, Date Added, Price - Cheapest to most expensive, Priority.
 
 * Tools
 	* Look up your wishlist ID.
+	* Clear the complete cache.
 
 == Installation ==
 
@@ -88,12 +92,11 @@ If you don't enter a secret key all calls from this plugin to Amazon will fail p
 None
 
 == Changelog ==
-= 3.1.4.4 (Unreleased) =
-* RFC: Widget: Instead of selecting random items, select the ones that were added last. (Not completely implemented, currently requires a hard coded change for this to work.)
-* Added caching. Wishlists and Items are cached for 23 hours to speed up the lookup process.
-
-= 3.1.4.1 =
+= Version 3.2 =
+* RFC: Widget: Ability to disable the randomization of items in a wishlist.
+* RFC: Widget: Ability to select the sort order of the wishlist. Options are Last Updated, Date Added, Price (only cheapest to most expensive is allowed by Amazon), 
 * RFC: Removed line break tags in the wishlist widget after the image and caption.
+* Added caching. Wishlists and Items are cached for 23 hours to speed up the lookup process.
 
 = Version 3.1.4 =
 * Bugfix: Invalid argument when there are no widgets on the blog.
