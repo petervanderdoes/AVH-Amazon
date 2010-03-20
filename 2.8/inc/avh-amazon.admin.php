@@ -350,8 +350,8 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					'avhamazon[widget_wishlist][locale]',
 					'Locale Amazon:',
 					'dropdown',
-					'US/CA/DE/UK',  // Locale Value
-					'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk' ),  // Locale Text
+					'US/CA/DE/UK/FR',  // Locale Value
+					'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk'/'Amazon.fr' ),  // Locale Text
 				array (
 					'avhamazon[widget_wishlist][wishlist_imagesize]',
 					'Size of thumbnail:',
@@ -425,10 +425,10 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					'	<i>all</i> to display all the items from the given wishlist.<br />'.
 					'	<i>random</i> to display a random item from thw wishlist.</li><br />'.
 					'<li>locale<br />'.
-					'	US/CA/DE/UK. If not given it defaults to the locale set up in the administration page.</li><br />'.
+					'	US/CA/DE/UK/FR. If not given it defaults to the locale set up in the administration page.</li><br />'.
 					'<li>linktype<br />'.
 					'	text		: Only show the text of the item that is retrieved<br />'.
-					'	pic			: Only show the picture of the item that is retrieved<br />'.
+					'	pic		: Only show the picture of the item that is retrieved<br />'.
 					'	pic-text	: Show a picture with a caption of the item that is retrieved</li><br />'.
 					'<li>wishlist<br />'.
 					'	Wishlist ID. Use this in combination with the ASIN values all or random.</li><br />'.
@@ -460,6 +460,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					'You can sign up at the following pages and signing up is free:<br />'.
 					'<br />'.
 					'Canada https://associates.amazon.ca/gp/flex/advertising/api/sign-in.html<br />'.
+					'France https://partenaires.amazon.fr/gp/flex/advertising/api/sign-in.html<br />'.
 					'Germany https://partnernet.amazon.de/gp/flex/advertising/api/sign-in.html<br />'.
 					'United Kingdom https://affiliate-program.amazon.co.uk/gp/flex/advertising/api/sign-in.html<br />'.
 					'United States https://affiliate-program.amazon.com/gp/flex/advertising/api/sign-in.html<br />'.

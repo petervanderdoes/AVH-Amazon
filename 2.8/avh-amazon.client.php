@@ -136,8 +136,8 @@ class AVHAmazonCore
 		 * Amazon general options
 		 *
 		 */
-		$this->locale_table = array ('US' => 'Amazon.com', 'CA' => 'Amazon.ca', 'DE' => 'Amazon.de', 'UK' => 'Amazon.co.uk' );
-		$this->associate_table = array ('US' => 'avh-amazon-20', 'CA' => 'avh-amazon-ca-20', 'DE' => 'avh-amazon-de-21', 'UK' => 'avh-amazon-uk-21' );
+		$this->locale_table = array ('US' => 'Amazon.com', 'CA' => 'Amazon.ca', 'DE' => 'Amazon.de', 'UK' => 'Amazon.co.uk', 'FR' => 'Amazon.fr' );
+		$this->associate_table = array ('US' => 'avh-amazon-20', 'CA' => 'avh-amazon-ca-20', 'DE' => 'avh-amazon-de-21', 'UK' => 'avh-amazon-uk-21', 'FR'=>'avh-amazon-fr-21' );
 
 		$this->db_options_name_core = 'avhamazon';
 		$this->db_options_name_widget_wishlist = 'widget_avhamazon_wishlist';

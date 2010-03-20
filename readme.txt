@@ -96,6 +96,7 @@ None
 * RFC: Widget: Ability to disable the randomization of items in a wishlist.
 * RFC: Widget: Ability to select the sort order of the wishlist. Options are Last Updated, Date Added, Price (only cheapest to most expensive is allowed by Amazon), 
 * RFC: Removed line break tags in the wishlist widget after the image and caption.
+* RFC: Added Amazon.fr
 * Added caching. Wishlists and Items are cached for 23 hours to speed up the lookup process.
 
 = Version 3.1.4 =
