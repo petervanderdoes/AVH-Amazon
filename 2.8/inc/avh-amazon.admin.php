@@ -423,7 +423,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					'	ASIN can have the following values:<br />'.
 					'	The ASIN of the item you want to display.<br />'.
 					'	<i>all</i> to display all the items from the given wishlist.<br />'.
-					'	<i>random</i> to display a random item from thw wishlist.</li><br />'.
+					'	<i>random</i> to display a random item from the wishlist.</li><br />'.
 					'<li>locale<br />'.
 					'	US/CA/DE/UK/FR. If not given it defaults to the locale set up in the administration page.</li><br />'.
 					'<li>linktype<br />'.
@@ -442,7 +442,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					'All values are case-senitive.<br />'.
 					'<br />'.
 					'<strong>Where is the Baby/Wedding Registry widget?</strong><br />'.
-					'There is no seperate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.<br />'.
+					'There is no separate widget for the registries. To show the registry items use the Wishlist widget and use your Baby Registry ID or Wedding Registry ID.<br />'.
 					'<br />'.
 					'<strong>How do I find my Baby Registry and/or Wedding Registry ID?</strong><br />'.
 					'When you create either registry Amazon sends you an email with the direct link to access your registry. The ID is the last part of the URL.<br />'.

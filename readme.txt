@@ -27,7 +27,7 @@ In the plugin reference is made to Wishlist only but you can use your Baby Regis
 	* Multiple items from the same Wish List can be displayed in the widget.
 	* A configurable footer can be displayed on the bottom of the widget linking to the list on Amazon.
 	* Randomize the items retrieved or keep them in the order retrieved.
-	* Retrieve the items in order. The folllowing orders are possible, Last Updated, Date Added, Price - Cheapest to most expensive, Priority.
+	* Retrieve the items in order. The following orders are possible, Last Updated, Date Added, Price - Cheapest to most expensive, Priority.
 
 * Shortcode
 	* Create the shortcode with the help of a metabox
@@ -36,7 +36,7 @@ In the plugin reference is made to Wishlist only but you can use your Baby Regis
 	* If a text link or text & picture link is used, the default text is the item description from Amazon but the text of the link can be changed.
 	* The value all for the ASIN option will show all items from your wishlist. In combination with a text & picture link type you can create a wishlist page.
 	* Use the option col="<nr>" to set the number of columns to display.
-	* Retrieve the items in order. The folllowing orders are possible, Last Updated, Date Added, Price - Cheapest to most expensive, Priority.
+	* Retrieve the items in order. The following orders are possible, Last Updated, Date Added, Price - Cheapest to most expensive, Priority.
 
 * Tools
 	* Look up your wishlist ID.
