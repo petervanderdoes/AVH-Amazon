@@ -351,7 +351,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					'Locale Amazon:',
 					'dropdown',
 					'US/CA/DE/UK/FR',  // Locale Value
-					'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk'/'Amazon.fr' ),  // Locale Text
+					'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk/Amazon.fr' ),  // Locale Text
 				array (
 					'avhamazon[widget_wishlist][wishlist_imagesize]',
 					'Size of thumbnail:',
