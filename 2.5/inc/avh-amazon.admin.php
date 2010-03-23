@@ -294,8 +294,8 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					'avhamazon[widget_wishlist][locale]',
 					'Locale Amazon:',
 					'dropdown',
-					'US/CA/DE/UK',  // Locale Value
-					'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk'
+					'US/CA/DE/UK/FR',  // Locale Value
+					'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk/Amazon.fr'
 				),  // Locale Text
 				array (
 					'avhamazon[widget_wishlist][wishlist_imagesize]',
@@ -338,8 +338,8 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					'avhamazon[shortcode][locale]',
 					'Locale Amazon:',
 					'dropdown',
-					'US/CA/DE/UK',  // Locale Value
-					'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk'
+					'US/CA/DE/UK/FR',  // Locale Value
+					'Amazon.com/Amazon.ca/Amazon.de/Amazon.co.uk/Amazon.fr'
 				)
 			),  // Locale Text
 			'faq' => array (
@@ -354,7 +354,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 					'array is in the following format<br />' . 'array( [ option => value [, option => value ] ])<br />' .
 					'Overview of options and values<br />' . '\'title\' => string<br />' . '\'ListID\' => string<br />' .
 					'\'associatedid\' => string<br />' . '\'imagesize\' => Small/Medium/Large<br />' .
-					'\'locale\' => US/CA/DE/UK<br />' .
+					'\'locale\' => US/CA/DE/UK/FR<br />' .
 					'\'nr_of_items\' => number<br />' .
 					'\'show_footer\' => 0/1<br />' .
 					'\'footer_template\' => string (%nr_of_items% is replaced by the actual number of items in the wishlist.)<br /><br />' .

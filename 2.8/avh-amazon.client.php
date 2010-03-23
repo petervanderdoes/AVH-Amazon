@@ -128,7 +128,7 @@ class AVHAmazonCore
 		 * Amazon RESTful properties
 		 *
 		 */
-		$this->amazon_endpoint_table = array ('US' => 'http://ecs.amazonaws.com/onca/xml', 'CA' => 'http://ecs.amazonaws.ca/onca/xml', 'DE' => 'http://ecs.amazonaws.de/onca/xml', 'UK' => 'http://ecs.amazonaws.co.uk/onca/xml' );
+		$this->amazon_endpoint_table = array ('US' => 'http://ecs.amazonaws.com/onca/xml', 'CA' => 'http://ecs.amazonaws.ca/onca/xml', 'DE' => 'http://ecs.amazonaws.de/onca/xml', 'UK' => 'http://ecs.amazonaws.co.uk/onca/xml', 'FR' => 'http://ecs.amazonaws.fr/onca/xml' );
 		$this->amazon_endpoint = $this->amazon_endpoint_table['US'];
 		$this->amazon_standard_request = array ('Service' => 'AWSECommerceService', 'Version' => '2009-10-01', 'AWSAccessKeyId' => '', 'Timestamp' => '' );
 
