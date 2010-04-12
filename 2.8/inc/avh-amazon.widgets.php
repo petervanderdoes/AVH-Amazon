@@ -114,7 +114,7 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 		echo '<label for="' . $this->get_field_id( 'randomize' ) . '">';
 		_e( 'Randomize the items:', 'avhamazon' );
 		echo '</label>';
-		echo '<input type="checkbox" id="' . $this->get_field_id( 'randomize' ) . '" name="' . $this->get_field_name( 'nr_of_items' ) . '"  value="1"' . $this->core->isChecked( '1', $randomize ) . ' /> ';
+		echo '<input type="checkbox" id="' . $this->get_field_id( 'randomize' ) . '" name="' . $this->get_field_name( 'randomize' ) . '"  value="1"' . $this->core->isChecked( '1', $randomize ) . ' /> ';
 		echo '</p>';
 
 

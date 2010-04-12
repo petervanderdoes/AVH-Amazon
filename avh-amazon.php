@@ -3,7 +3,7 @@
 Plugin Name: AVH Amazon
 Plugin URI: http://blog.avirtualhome.com/wordpress-plugins
 Description: This plugin gives you the abillity to add multiple widgets which will display one or more random item(s) from your Amazon wishlist, baby registry and/or wedding registry. It also has the ability to show items, with their link, in posts and pages by use of shortcode.
-Version: 3.2.0.1
+Version: 3.2.0.2
 Author: Peter van der Does
 Author URI: http://blog.avirtualhome.com/
 
@@ -51,6 +51,7 @@ switch ( (floatval( $wp_version )) ) {
 		break;
 	case 2.8 :
 	case 2.9 :
+	case 3.0 :
 		require (dirname( __FILE__ ) . '/2.8/avh-amazon.client.php');
 		break;
 	default :
