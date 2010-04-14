@@ -608,7 +608,7 @@ class AVHAmazonCore
 		$WhatList = (is_null( $WhatList ) ? 'WishList' : $WhatList);
 		$page = (is_null( $page ) ? 1 : $page);
 		$sort_order = (is_null ($this->wishlist_sort_order) ? 'LastUpdated' : $this->wishlist_sort_order);
-		$listLookup = array ('Operation' => 'ListLookup', 'ListId' => $ListID, 'ListType' => $WhatList, 'ResponseGroup' => 'ListFull', 'IsOmitPurchasedItems' => '1', 'ProductPage' => ( string ) $page, 'Sort' => $sort_order );
+		$listLookup = array ('Operation' => 'ListLookup', 'ListId' => $ListID, 'ListType' => $WhatList, 'ResponseGroup' => 'ListFull', 'IsOmitPurchasedItems' => '1', 'ProductPage' => ( string ) $page, 'Sort' => $sort_order, 'IsIncludeUniversal'=> '1' );
 
 		$request = array_merge( $this->getRestStandardRequest(), $listLookup );
 
