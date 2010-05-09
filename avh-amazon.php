@@ -30,25 +30,6 @@ require (ABSPATH . WPINC . '/version.php');
 
 switch ( (floatval( $wp_version )) ) {
 
-	case 2.5 :
-	case 2.6 :
-	case 2.7:
-		// Pre-2.6 compatibility
-		if ( ! defined( 'WP_CONTENT_URL' ) )
-			define( 'WP_CONTENT_URL', get_option( 'siteurl' ) . '/wp-content' );
-		if ( ! defined( 'WP_CONTENT_DIR' ) )
-			define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
-		if ( ! defined( 'WP_PLUGIN_URL' ) )
-			define( 'WP_PLUGIN_URL', WP_CONTENT_URL . '/plugins' );
-		if ( ! defined( 'WP_PLUGIN_DIR' ) )
-			define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
-		if ( ! defined( 'WPMU_PLUGIN_DIR' ) )
-			define( 'WPMU_PLUGIN_DIR', WP_CONTENT_DIR . '/mu-plugins' ); // full path, no trailing slash
-		if ( ! defined( 'WPMU_PLUGIN_URL' ) )
-			define( 'WPMU_PLUGIN_URL', WP_CONTENT_URL . '/mu-plugins' ); // full url, no trailing slash
-
-		require (dirname( __FILE__ ) . '/2.5/avh-amazon.client.php');
-		break;
 	case 2.8 :
 	case 2.9 :
 	case 3.0 :

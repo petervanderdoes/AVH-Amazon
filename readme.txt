@@ -2,7 +2,7 @@
 Contributors: petervanderdoes
 Donate link: http://blog.avirtualhome.com/wordpress-plugins/
 Tags: amazon, wishlist, widget, wedding registry, baby registry, shortcode, post, page
-Requires at least: 2.5
+Requires at least: 2.8
 Tested up to: 3.0-b1
 Stable tag: 3.2.1
 
@@ -76,6 +76,9 @@ You will find an item's ASIN on the product detail page.
 None
 
 == Changelog ==
+= Version Next =
+* Dropped support for WordPress 2.7 and lower
+
 = Version 3.2.1 =
 * Bugfix: Locale France didn't work.
 * WordPress 3.0 compatibility
