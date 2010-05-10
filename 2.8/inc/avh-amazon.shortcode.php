@@ -119,8 +119,12 @@ class AVHAmazonShortcode
 				$return .= '<tr>';
 				for ($i=1; $i<=$attrs['col']; $i++) {
 					$value=$list_result['Lists']['List']['ListItem'][$x+$i-1];
-					$attrs['asin'] = $value['Item']['ASIN'];
-					list ( $oneresult, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid, false );
+					if (isset($value['UniversalListItem'])) {
+						$oneresult = $this->shortcodeUniversalListItem($attrs,$value['UniversalListItem'], $content, false);
+					} else {
+						$attrs['asin'] = $value['Item']['ASIN'];
+						list ( $oneresult, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid, false );
+					}
 					$return .= '<td>'.$oneresult .'</td>';
 				}
 				$return .= '</tr>';
@@ -202,6 +206,36 @@ class AVHAmazonShortcode
 		return array ($return, $error );
 	}
 
+	function shortcodeUniversalListItem ( $attrs, $universalitem, $content, $single = true )
+	{
+		$myurl = $universalitem['ProductUrl'];
+
+		// If no content is given we use the Title from Amazon.
+		$content = ($content) ? $content : $universalitem['Title'];
+
+		switch ( $attrs['linktype'] )
+		{
+			case 'text' :
+				$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
+				break;
+			case 'pic' :
+				$imginfo = $this->core->getImageInfo( $attrs['picsize'] );
+				$return = '<div class="wp-caption alignleft"><a title="' . $content . '" href="' . $myurl . '"><img width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $content . '"/></a></div>';
+				break;
+			case 'pic-text' :
+				$imginfo = $this->core->getImageInfo( $attrs['picsize'] );
+				if ( $single ) {
+					$return = '<table style=" border: none; cellpadding: 2px; align: left"><tr><td><a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $content . '"/></a></td><td><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a></td></tr></table>';
+				} else {
+					$return = '<a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $content . '"/></a><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
+				}
+				break;
+			default :
+				$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
+				break;
+		}
+		return ($return);
+	}
 	/**
 	 * Create the metabox
 	 *

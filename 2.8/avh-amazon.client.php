@@ -829,34 +829,46 @@ class AVHAmazonCore
 	 * @param array Result of the Item Lookup call
 	 * @return array the image's URL, Height, Width
 	 */
-	function getImageInfo ( $imagesize, $item_result )
+	function getImageInfo ( $imagesize, $item_result = null )
 	{
 		$imageurl = $this->info['graphics_url'];
-		if ( is_array( $item_result['Items']['Item']['ImageSets']['ImageSet'] ) ) {
-			if ( isset( $item_result['Items']['Item']['ImageSets']['ImageSet'][0] ) && is_array( $item_result['Items']['Item']['ImageSets']['ImageSet'][0] ) ) {
-				$imageset = $item_result['Items']['Item']['ImageSets']['ImageSet'][0];
+		$imageset = null;
+		if ( null != $item_result ) {
+			if ( is_array( $item_result['Items']['Item']['ImageSets']['ImageSet'] ) ) {
+				if ( isset( $item_result['Items']['Item']['ImageSets']['ImageSet'][0] ) && is_array( $item_result['Items']['Item']['ImageSets']['ImageSet'][0] ) ) {
+					$imageset = $item_result['Items']['Item']['ImageSets']['ImageSet'][0];
+				} else {
+					$imageset = $item_result['Items']['Item']['ImageSets']['ImageSet'];
+				}
 			} else {
-				$imageset = $item_result['Items']['Item']['ImageSets']['ImageSet'];
+				$imageset = $item_result['Items']['Item'];
 			}
-		} else {
-			$imageset = $item_result['Items']['Item'];
 		}
+
 		switch ( strtolower( $imagesize ) )
 		{
 			case 'medium' :
-				$img['url'] = $imageset['MediumImage']['URL'];
-				$img['h'] = $imageset['MediumImage']['Height'];
-				$img['w'] = $imageset['MediumImage']['Width'];
+				if ( NULL === $imageset ) {
+					$img['url']='';
+				} else {
+					$img['url'] = $imageset['MediumImage']['URL'];
+					$img['h'] = $imageset['MediumImage']['Height'];
+					$img['w'] = $imageset['MediumImage']['Width'];
+				}
 				if ( empty( $img['url'] ) ) {
 					$img['url'] = $imageurl . '/no-image-160.gif';
-					$img['h'] = 75;
-					$img['w'] = 75;
+					$img['h'] = 160;
+					$img['w'] = 160;
 				}
 				break;
 			case 'small' :
-				$img['url'] = $imageset['SmallImage']['URL'];
-				$img['h'] = $imageset['SmallImage']['Height'];
-				$img['w'] = $imageset['SmallImage']['Width'];
+				if ( NULL === $imageset ) {
+					$img['url']='';
+				} else {
+					$img['url'] = $imageset['SmallImage']['URL'];
+					$img['h'] = $imageset['SmallImage']['Height'];
+					$img['w'] = $imageset['SmallImage']['Width'];
+				}
 				if ( empty( $img['url'] ) ) {
 					$img['url'] = $imageurl . '/no-image-75.gif';
 					$img['h'] = 75;
@@ -864,19 +876,27 @@ class AVHAmazonCore
 				}
 				break;
 			case 'large' :
-				$img['url'] = $imageset['LargeImage']['URL'];
-				$img['h'] = $imageset['LargeImage']['Height'];
-				$img['w'] = $imageset['LargeImage']['Width'];
+				if ( NULL === $imageset ) {
+					$img['url']='';
+				} else {
+					$img['url'] = $imageset['LargeImage']['URL'];
+					$img['h'] = $imageset['LargeImage']['Height'];
+					$img['w'] = $imageset['LargeImage']['Width'];
+				}
 				if ( empty( $img['url'] ) ) {
 					$img['url'] = $imageurl . '/no-image-500.gif';
-					$img['h'] = 75;
-					$img['w'] = 75;
+					$img['h'] = 500;
+					$img['w'] = 500;
 				}
 				break;
 			case 'swatch' :
-				$img['url'] = $imageset['SwatchImage']['URL'];
-				$img['h'] = $imageset['SwatchImage']['Height'];
-				$img['w'] = $imageset['SwatchImage']['Width'];
+				if ( NULL === $imageset ) {
+					$img['url']='';
+				} else {
+					$img['url'] = $imageset['SwatchImage']['URL'];
+					$img['h'] = $imageset['SwatchImage']['Height'];
+					$img['w'] = $imageset['SwatchImage']['Width'];
+				}
 				if ( empty( $img['url'] ) ) {
 					$img['url'] = '';
 					$img['h'] = 0;
@@ -884,13 +904,17 @@ class AVHAmazonCore
 				}
 				break;
 			default :
-				$img['url'] = $imageset['MediumImage']['URL'];
-				$img['h'] = $imageset['MediumImage']['Height'];
-				$img['w'] = $imageset['MediumImage']['Width'];
+				if ( NULL === $imageset ) {
+					$img['url']='';
+				} else {
+					$img['url'] = $imageset['MediumImage']['URL'];
+					$img['h'] = $imageset['MediumImage']['Height'];
+					$img['w'] = $imageset['MediumImage']['Width'];
+				}
 				if ( empty( $img['url'] ) ) {
 					$img['url'] = $imageurl . '/no-image-160.gif';
-					$img['h'] = 75;
-					$img['w'] = 75;
+					$img['h'] = 160;
+					$img['w'] = 160;
 				}
 				break;
 		}
