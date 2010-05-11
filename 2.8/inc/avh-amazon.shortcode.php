@@ -109,7 +109,11 @@ class AVHAmazonShortcode
 			foreach ( $Item_keys as $value ) {
 				$Item = $list_result['Lists']['List']['ListItem'][$value];
 			}
-			$attrs['asin'] = $Item['Item']['ASIN'];
+			if (!isset($Item['UniversalListIten'])) {
+				$attrs['asin'] = $Item['Item']['ASIN'];
+			} else {
+				$attr['asin']='UniversalListItem';
+			}
 		}
 
 		if ( 'all' == strtolower( $attrs['asin'] ) ) {
@@ -119,11 +123,11 @@ class AVHAmazonShortcode
 				$return .= '<tr>';
 				for ($i=1; $i<=$attrs['col']; $i++) {
 					$value=$list_result['Lists']['List']['ListItem'][$x+$i-1];
-					if (isset($value['UniversalListItem'])) {
-						$oneresult = $this->shortcodeUniversalListItem($attrs,$value['UniversalListItem'], $content, false);
-					} else {
+					if (!isset($value['UniversalListItem'])) {
 						$attrs['asin'] = $value['Item']['ASIN'];
 						list ( $oneresult, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid, false );
+					} else {
+						$oneresult = $this->shortcodeUniversalListItem($attrs,$value['UniversalListItem'], $content, false);
 					}
 					$return .= '<td>'.$oneresult .'</td>';
 				}
@@ -133,8 +137,10 @@ class AVHAmazonShortcode
 			$attrs['asin'] = null;
 		}
 
-		if ( $attrs['asin'] ) {
+		if ( $attrs['asin'] != 'UniversalListItem') {
 			list ( $result, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid );
+		} else {
+			$result = $this->shortcodeUniversalListItem($attrs,$Item['UniversalListItem'], $content, false);
 		}
 
 		if ( $error ) {

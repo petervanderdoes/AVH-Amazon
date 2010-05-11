@@ -190,28 +190,35 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 
 			foreach ( $Item_keys as $value ) {
 				$Item = $list_result['Lists']['List']['ListItem'][$value];
-				$item_result = $this->core->getItemLookup( $Item['Item']['ASIN'], $associated_id );
-				if ( isset( $item_result['Error'] ) ) {
-					echo $this->core->getHttpError( $item_result['Error'] );
-				} else {
-					if ( isset( $item_result['Items']['Request']['Errors'] ) ) {
-						echo 'Item with ASIN ' . $Item['Item']['ASIN'] . ' doesn\'t exist';
+				if (!isset($Item['UniversalListItem'])) {
+					$item_result = $this->core->getItemLookup( $Item['Item']['ASIN'], $associated_id );
+					if ( isset( $item_result['Error'] ) ) {
+						echo $this->core->getHttpError( $item_result['Error'] );
 					} else {
-						$imginfo = $this->core->getImageInfo( $imagesize, $item_result );
+						if ( isset( $item_result['Items']['Request']['Errors'] ) ) {
+							echo 'Item with ASIN ' . $Item['Item']['ASIN'] . ' doesn\'t exist';
+						} else {
+							$imginfo = $this->core->getImageInfo( $imagesize, $item_result );
 
-						$pos = strpos( $item_result['Items']['Item']['DetailPageURL'], $Item['Item']['ASIN'] );
-						$myurl = substr( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen( $Item['Item']['ASIN'] ) );
-						$myurl .= '/ref=wl_it_dp';
+							$pos = strpos( $item_result['Items']['Item']['DetailPageURL'], $Item['Item']['ASIN'] );
+							$myurl = substr( $item_result['Items']['Item']['DetailPageURL'], 0, $pos + strlen( $Item['Item']['ASIN'] ) );
+							$myurl .= '/ref=wl_it_dp';
 
-						$query['ie'] = 'UTF8';
-						$query['colid'] = $wishlist_id;
-						$query['tag'] = $associated_id;
-						$myurl .= '?' . $this->core->BuildQuery( $query );
+							$query['ie'] = 'UTF8';
+							$query['colid'] = $wishlist_id;
+							$query['tag'] = $associated_id;
+							$myurl .= '?' . $this->core->BuildQuery( $query );
 
-						$target = $new_window == 1 ? 'target="_blank"' : '';
-						echo '<a ' . $target . ' title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a>';
-						echo '<div class="wishlistcaption">' . $Item['Item']['ItemAttributes']['Title'] . '</div>';
+							$target = $new_window == 1 ? 'target="_blank"' : '';
+							echo '<a ' . $target . ' title="' . $Item['Item']['ItemAttributes']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $Item['Item']['ItemAttributes']['Title'] . '"/></a>';
+							echo '<div class="wishlistcaption">' . $Item['Item']['ItemAttributes']['Title'] . '</div>';
+						}
 					}
+				} else {
+					$myurl = $Item['UniversalListItem']['ProductUrl'];
+					$imginfo = $this->core->getImageInfo( $imagesize);
+					echo '<a ' . $target . ' title="' . $Item['UniversalListItem']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $Item['UniversalListItem']['Title'] . '"/></a>';
+					echo '<div class="wishlistcaption">' . $Item['UniversalListItem']['Title'] . '</div>';
 				}
 			}
 
