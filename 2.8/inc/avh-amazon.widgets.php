@@ -216,8 +216,8 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 					}
 				} else {
 					$myurl = $Item['UniversalListItem']['ProductUrl'];
-					$imginfo = $this->core->getImageInfo( $imagesize);
-					echo '<a ' . $target . ' title="' . $Item['UniversalListItem']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $Item['UniversalListItem']['Title'] . '"/></a>';
+					$imginfo = $this->core->getUniversalListImageInfo( $imagesize, $Item['ListItemId']);
+					echo '<a ' . $target . ' title="' . $Item['UniversalListItem']['Title'] . '" href="' . $myurl . '"><img class="wishlistimage" width="' . $imginfo[1] . '" height="' . $imginfo[2] . '" src="' . $imginfo[0] . '" alt="' . $Item['UniversalListItem']['Title'] . '"/></a>';
 					echo '<div class="wishlistcaption">' . $Item['UniversalListItem']['Title'] . '</div>';
 				}
 			}

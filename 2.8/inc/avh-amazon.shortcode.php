@@ -109,7 +109,7 @@ class AVHAmazonShortcode
 			foreach ( $Item_keys as $value ) {
 				$Item = $list_result['Lists']['List']['ListItem'][$value];
 			}
-			if (!isset($Item['UniversalListIten'])) {
+			if (!isset($Item['UniversalListItem'])) {
 				$attrs['asin'] = $Item['Item']['ASIN'];
 			} else {
 				$attr['asin']='UniversalListItem';
@@ -122,12 +122,12 @@ class AVHAmazonShortcode
 			for ($x=0; $x<=count ( $list_result['Lists']['List']['ListItem'])-1; $x+=$attrs['col'] ) {
 				$return .= '<tr>';
 				for ($i=1; $i<=$attrs['col']; $i++) {
-					$value=$list_result['Lists']['List']['ListItem'][$x+$i-1];
-					if (!isset($value['UniversalListItem'])) {
-						$attrs['asin'] = $value['Item']['ASIN'];
+					$item=$list_result['Lists']['List']['ListItem'][$x+$i-1];
+					if (!isset($item['UniversalListItem'])) {
+						$attrs['asin'] = $item['Item']['ASIN'];
 						list ( $oneresult, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid, false );
 					} else {
-						$oneresult = $this->shortcodeUniversalListItem($attrs,$value['UniversalListItem'], $content, false);
+						$oneresult = $this->shortcodeUniversalListItem($attrs,$item, $content, false);
 					}
 					$return .= '<td>'.$oneresult .'</td>';
 				}
@@ -140,7 +140,7 @@ class AVHAmazonShortcode
 		if ( $attrs['asin'] != 'UniversalListItem') {
 			list ( $result, $error ) = $this->shortcodeAsin( $attrs, $content, $associatedid );
 		} else {
-			$result = $this->shortcodeUniversalListItem($attrs,$Item['UniversalListItem'], $content, false);
+			$result = $this->shortcodeUniversalListItem($attrs,$Item, $content, false);
 		}
 
 		if ( $error ) {
@@ -212,8 +212,9 @@ class AVHAmazonShortcode
 		return array ($return, $error );
 	}
 
-	function shortcodeUniversalListItem ( $attrs, $universalitem, $content, $single = true )
+	function shortcodeUniversalListItem ( $attrs, $item, $content, $single = true )
 	{
+		$universalitem=$item['UniversalListItem'];
 		$myurl = $universalitem['ProductUrl'];
 
 		// If no content is given we use the Title from Amazon.
@@ -225,15 +226,15 @@ class AVHAmazonShortcode
 				$return = '<a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
 				break;
 			case 'pic' :
-				$imginfo = $this->core->getImageInfo( $attrs['picsize'] );
-				$return = '<div class="wp-caption alignleft"><a title="' . $content . '" href="' . $myurl . '"><img width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $content . '"/></a></div>';
+				$imginfo = $this->core->getUniversalListImageInfo( $attrs['picsize'],$item['ListItemId'] );
+				$return = '<div class="wp-caption alignleft"><a title="' . $content . '" href="' . $myurl . '"><img width="' . $imginfo[1] . '" height="' . $imginfo[2] . '" src="' . $imginfo[0] . '" alt="' . $content . '"/></a></div>';
 				break;
 			case 'pic-text' :
-				$imginfo = $this->core->getImageInfo( $attrs['picsize'] );
+				$imginfo = $this->core->getUniversalListImageInfo( $attrs['picsize'],$item['ListItemId'] );
 				if ( $single ) {
-					$return = '<table style=" border: none; cellpadding: 2px; align: left"><tr><td><a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $content . '"/></a></td><td><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a></td></tr></table>';
+					$return = '<table style=" border: none; cellpadding: 2px; align: left"><tr><td><a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" width="' . $imginfo[1] . '" height="' . $imginfo[2] . '" src="' . $imginfo[0] . '" alt="' . $content . '"/></a></td><td><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a></td></tr></table>';
 				} else {
-					$return = '<a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" width="' . $imginfo['w'] . '" height="' . $imginfo['h'] . '" src="' . $imginfo['url'] . '" alt="' . $content . '"/></a><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
+					$return = '<a title="' . $content . '" href="' . $myurl . '"><img class="alignleft" width="' . $imginfo[1] . '" height="' . $imginfo[2] . '" src="' . $imginfo[0] . '" alt="' . $content . '"/></a><a title="' . $content . '" href="' . $myurl . '">' . $content . '</a>';
 				}
 				break;
 			default :

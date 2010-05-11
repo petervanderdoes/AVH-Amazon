@@ -269,9 +269,57 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		echo '<input class="button-secondary" type="submit" value="Clear"	name="submitButton" autocomplete="on" /></p>';
 		echo '</td></tr>';
 		echo '</tbody></table>';
-		echo '<div id="avhamazonwishlistoutputclear">';
 
-		echo '</div>';
+		echo '</form>';
+
+		echo '<h3>Get Pictures for Universal List items in the cache</h3>';
+		$pictures = get_option( $this->core->db_options_name_uli_pics );
+		if ( isset( $action ) && 'uli-pictures-update' == $action ) {
+			$wishlist = get_option( $this->core->db_options_name_cached_wishlist );
+			if ( 0 <= count( $wishlist ) ) {
+				foreach ( $wishlist as $wishlist_id => $value ) {
+					foreach ( $value['list']['Lists']['List']['ListItem'] as $key => $item ) {
+						if ( isset( $item['UniversalListItem'] ) ) {
+							$item_id = $item['ListItemId'];
+							if ( ! isset( $pictures[$item_id] ) ) {
+
+								// Download the image
+								$tmp_file = download_url( $item['UniversalListItem']['ImageUrl'] );
+								if ( ! is_wp_error( $tmp_file ) ) {
+									// Determine the mimetype and set the approriate extension
+									$imgstats = @getimagesize( $tmp_file );
+									$ext = image_type_to_extension( $imgstats[2] );
+
+									// Upload the picture into the media Library
+									$file_array['name'] = strtolower( $item['ListItemId'] . $ext );
+									$file_array['tmp_name'] = $tmp_file;
+									$desc = 'AVH Amazon - Universal List Item - ' . $file_array['name'];
+									$picture_src = media_handle_sideload( $file_array, 0, $desc );
+									$picture_attachment_id = $this->getIdByGuid( $picture_src );
+									if ( ! is_wp_error( $picture_attachment_id ) ) {
+										// Associate the item_id with the attachement.
+										$pictures[$item_id] = $picture_attachment_id;
+										update_option( $this->core->db_options_name_uli_pics, $pictures );
+
+									} else {
+										@unlink( $file_array['tmp_name'] );
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		echo '<form id="uli-pictures" action=' . $this->core->getBackLink() . ' method="post">';
+		wp_nonce_field( 'avhamazon-tools' );
+		echo '<table class="form-table"><tbody><tr><td>';
+		$uli_pictures = is_array( $pictures ) ? count( $pictures ) : 0;
+		echo '<p>Number of pictures: ' . $uli_pictures . '</p>';
+		echo '<p><input name="action" value="uli-pictures-update" type="hidden" />';
+		echo '<input class="button-secondary" type="submit" value="Get Pictures" name="submitButton" autocomplete="on" /></p>';
+		echo '</td></tr>';
+		echo '</tbody></table>';
 
 		echo '</form>';
 
@@ -740,6 +788,14 @@ class AVHAmazonAdmin extends AVHAmazonCore
 				break;
 		}
 		return 'Unknown';
+	}
+
+	function getIdByGuid($picture_src) {
+		global $wpdb;
+
+		$mysql = 'SELECT ID from '.$wpdb->posts.' where guid="'.$picture_src.'"';
+		$result = $wpdb->get_row($mysql);
+		return $result->ID;
 	}
 }
 ?>

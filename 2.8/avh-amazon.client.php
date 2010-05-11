@@ -91,6 +91,7 @@ class AVHAmazonCore
 	var $db_options_name_widget_wishlist;
 	var $db_options_name_cached_wishlist;
 	var $db_options_name_cached_item;
+	var $db_options_name_uli_pics;
 
 	/**
 	 * Are we running PHP5
@@ -143,7 +144,7 @@ class AVHAmazonCore
 		$this->db_options_name_widget_wishlist = 'widget_avhamazon_wishlist';
 		$this->db_options_name_cached_wishlist = 'avhamazon_cached_wishlist';
 		$this->db_options_name_cached_item = 'avhamazon_cached_items';
-
+		$this->db_options_name_uli_pics='avhamazon_uli_pics';
 		/**
 		 * Default options - General Purpose
 		 *
@@ -205,7 +206,7 @@ class AVHAmazonCore
 		add_filter( 'avhamazon_text', 'wptexturize' );
 		add_filter( 'avhamazon_text', 'convert_chars' );
 		add_filter( 'avhamazon_text', 'esc_html' );
-
+		add_action('init',array(&$this,'setupUniversalListImagesSizes'));
 		return;
 	}
 
@@ -921,6 +922,36 @@ class AVHAmazonCore
 		return ($img);
 	}
 
+	function getUniversalListImageInfo ( $imagesize, $item_id )
+	{
+		$picture_attachment_id = null;
+		$imageurl = $this->info['graphics_url'];
+
+		$pictures = get_option( $this->db_options_name_uli_pics );
+		$picture_size = 'avh-amazon-uli-' . strtolower( $imagesize );
+		if ( array_key_exists( $item_id, $pictures ) ) {
+			$picture_attachment_id = $pictures[$item_id];
+			$img_src = wp_get_attachment_image_src( $picture_attachment_id, $picture_size );
+		} else {
+			switch ( strtolower( $imagesize ) )
+			{
+				case 'medium' :
+					$img_src = array ($imageurl . '/no-image-160.gif', 160, 160 );
+					break;
+				case 'small' :
+					$img_src = array ($imageurl . '/no-image-75.gif', 75, 75 );
+					break;
+				case 'large' :
+					$img_src = array ($imageurl . '/no-image-500.gif', 500, 500 );
+					break;
+				default :
+					$img_src = array ($imageurl . '/no-image-160.gif', 160, 160 );
+					break;
+			}
+		}
+
+		return ($img_src);
+	}
 	/**
 	 * Get the options for the widget
 	 *
@@ -1057,6 +1088,25 @@ class AVHAmazonCore
 		}
 	}
 
+	function setupUniversalListImagesSizes(){
+		$thumbnails = array (
+			'avh-amazon-uli-medium' => array(
+					'height' => 160,
+					'width' => 160,
+					'crop' => false),
+			'avh-amazon-uli-small'  => array(
+					'height' => 75,
+					'width' => 75,
+					'crop' => false),
+			'avh-amazon-uli-large' => array(
+				'height' => 500,
+				'width' => 500,
+				'crop' => false));
+		foreach ( $thumbnails as $name => $value ) {
+			add_image_size ( $name, $value['width'],$value['height'],$value['crop'] );
+		}
+
+	}
 } //End Class avh_amazon
 
 
