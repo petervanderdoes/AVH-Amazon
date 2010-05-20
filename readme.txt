@@ -78,6 +78,7 @@ None
 == Changelog ==
 = Version Next =
 * Dropped support for WordPress 2.7 and lower
+* Universal Item support
 
 = Version 3.2.1 =
 * Bugfix: Locale France didn't work.
