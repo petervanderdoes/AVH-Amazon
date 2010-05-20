@@ -118,7 +118,7 @@ class AVHAmazonCore
 	 */
 	function __construct ()
 	{
-		$this->version = "3.3";
+		$this->version = "3.3.1";
 		$this->comment_begin = '<!-- AVH Amazon version ' . $this->version . ' Begin -->';
 		$this->comment_end = '<!-- AVH Amazon version ' . $this->version . ' End -->';
 
@@ -928,6 +928,9 @@ class AVHAmazonCore
 		$imageurl = $this->info['graphics_url'];
 
 		$pictures = get_option( $this->db_options_name_uli_pics );
+		if ( ! (is_array( $pictures )) ) {
+			$pictures = array ();
+		}
 		$picture_size = 'avh-amazon-uli-' . strtolower( $imagesize );
 		if ( array_key_exists( $item_id, $pictures ) ) {
 			$picture_attachment_id = $pictures[$item_id];
