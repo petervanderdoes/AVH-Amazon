@@ -18,7 +18,8 @@ In the plugin reference is made to Wishlist only but you can use your Baby Regis
 = Features =
 
 * General
-	* Works with amazon.com, and locales amazon.ca, amazon.de, amazon.co.uk and amazon.fr
+	* Works with amazon.com, and locales amazon.ca, amazon.de, amazon.co.uk and amazon.fr.
+	* Universal List Items from the lists will be shown as well. Thumbnails for the items need to be generated seperately by using the option in the Tools section. 
 
 * Wishlist
 	* Add Associated ID.
@@ -41,6 +42,7 @@ In the plugin reference is made to Wishlist only but you can use your Baby Regis
 * Tools
 	* Look up your wishlist ID.
 	* Clear the complete cache.
+	* Get the pictures for Universal List items in the cache.
 
 == Installation ==
 
