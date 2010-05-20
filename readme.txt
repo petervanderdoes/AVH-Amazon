@@ -78,7 +78,7 @@ You will find an item's ASIN on the product detail page.
 None
 
 == Changelog ==
-= 3.3.1 =
+= Version 3.3.1 =
 * Bugfix: When no Universal Item pictures have been generated, an error occurs.
 
 = Version 3.3 =
