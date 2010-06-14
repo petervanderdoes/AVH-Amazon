@@ -4,7 +4,7 @@ Donate link: http://blog.avirtualhome.com/wordpress-plugins/
 Tags: amazon, wishlist, widget, wedding registry, baby registry, shortcode, post, page
 Requires at least: 2.8
 Tested up to: 3.0-b1
-Stable tag: 3.3.1
+Stable tag: 3.3.2
 
 The AVH Amazon plugin gives you the ability to show items from your Amazon wishlist by using widgets or shortcode in posts and pages.
 
@@ -78,6 +78,9 @@ You will find an item's ASIN on the product detail page.
 None
 
 == Changelog ==
+=Version 3.3.2 =
+* Bugfix: Change of the widget HTML code. Makes it more like the WordPress widgets, helping with the layout of certain themes.
+
 = Version 3.3.1 =
 * Bugfix: When no Universal Item pictures have been generated, an error occurs.
 

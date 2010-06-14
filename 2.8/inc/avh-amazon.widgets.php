@@ -178,9 +178,9 @@ class WP_Widget_AVHAmazon_Wishlist extends WP_Widget
 
 		echo $before_widget;
 		echo $this->core->comment_begin;
-		echo '<div id="avhamazon-widget">';
-		echo $before_title . $title . $after_title;
 
+		echo $before_title . $title . $after_title;
+		echo '<div id="avhamazon-widget">';
 		if ( isset( $list_result['Error'] ) ) {
 			echo $this->core->getHttpError( $list_result['Error'] );
 		} else {
