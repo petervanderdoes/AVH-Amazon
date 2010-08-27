@@ -155,7 +155,7 @@ class AVHAmazonCore
 		 * Default options - Widget Wishlist
 		 *
 		 */
-		$this->default_widget_wishlist_options = array ('title' => 'Amazon Wish List', 'wishlist_id' => '2CC2KKW02870', 'wishlist_imagesize' => 'Medium', 'locale' => 'US', 'nr_of_items' => 1, 'show_footer' => 0, 'footer_template' => 'Show all %nr_of_items% items', 'new_window' => 0 );
+		$this->default_widget_wishlist_options = array ('title' => 'Amazon Wish List', 'wishlist_id' => '2CC2KKW02870', 'wishlist_imagesize' => 'Medium', 'locale' => 'US', 'nr_of_items' => 1, 'show_footer' => 0, 'footer_template' => 'Show all %nr_of_items% items', 'new_window' => 0, 'sort_order' => 'LastUpdated', 'randomize' => 0 );
 
 		/**
 		 * Default options - Shortcode
@@ -261,7 +261,8 @@ class AVHAmazonCore
 			// Update default options by getting not empty values from options table
 			foreach ( $default_options as $section_key => $section_array ) {
 				foreach ( $section_array as $name => $value ) {
-					if ( ! is_null( $options_from_table[$section_key][$name] ) ) {
+
+					if ( isset( $options_from_table[$section_key][$name] ) && (! is_null( $options_from_table[$section_key][$name] )) ) {
 						if ( is_int( $value ) ) {
 							$default_options[$section_key][$name] = ( int ) $options_from_table[$section_key][$name];
 						} else {
