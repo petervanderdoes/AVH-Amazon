@@ -30,10 +30,9 @@ require (ABSPATH . WPINC . '/version.php');
 
 switch ( (floatval( $wp_version )) ) {
 
-	case 2.8 :
 	case 2.9 :
 	case 3.0 :
-		require (dirname( __FILE__ ) . '/2.8/avh-amazon.client.php');
+		require (dirname( __FILE__ ) . '/2.9/avh-amazon.client.php');
 		break;
 	default :
 		$message = '<div class="updated fade"><p><strong>' . __( 'AVH Amazon can\'t work with this WordPress version !', 'avhamazon' ) . '</strong></p></div>';

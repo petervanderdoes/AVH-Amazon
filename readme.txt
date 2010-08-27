@@ -2,7 +2,7 @@
 Contributors: petervanderdoes
 Donate link: http://blog.avirtualhome.com/wordpress-plugins/
 Tags: amazon, wishlist, widget, wedding registry, baby registry, shortcode, post, page
-Requires at least: 2.8
+Requires at least: 2.9
 Tested up to: 3.0-b1
 Stable tag: 3.3.2
 
@@ -80,6 +80,7 @@ None
 == Changelog ==
 =Version 3.3.2 =
 * Bugfix: Change of the widget HTML code. Makes it more like the WordPress widgets, helping with the layout of certain themes.
+* Dropped support for WordPress 2.8, at least WordPress 2.9 is required. 
 
 = Version 3.3.1 =
 * Bugfix: When no Universal Item pictures have been generated, an error occurs.
