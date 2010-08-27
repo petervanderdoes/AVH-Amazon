@@ -984,7 +984,7 @@ class AVHAmazonCore
 	 */
 	function getOption ( $key, $option )
 	{
-		if ( $this->options[$option][$key] ) {
+		if ( isset( $this->options[$option][$key] ) ) {
 			$return = $this->options[$option][$key]; // From Admin Page
 		} else {
 			$return = $this->default_options[$option][$key]; // Default
