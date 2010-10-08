@@ -222,7 +222,7 @@ class AVHAmazonAdmin extends AVHAmazonCore
 		echo '<div id="avhamazonwishlistoutputsearch">';
 		if ( isset( $action ) && 'findid' == $action ) {
 			$this->core->amazon_endpoint = $this->core->amazon_endpoint_table[$locale];
-			$result = $this->core->handleRESTcall( $this->core->getRestListSearchParams( $email ) );
+			$result = $this->core->handleRESTcall( $this->core->getRestListSearchParams( $email ), false );
 			$total = $result['Lists']['TotalResults'];
 
 			if ( 0 == $total ) {

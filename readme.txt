@@ -80,7 +80,8 @@ None
 == Changelog ==
 =Version 3.3.2 =
 * Bugfix: Change of the widget HTML code. Makes it more like the WordPress widgets, helping with the layout of certain themes.
-* Dropped support for WordPress 2.8, at least WordPress 2.9 is required. 
+* Dropped support for WordPress 2.8, at least WordPress 2.9 is required.
+* Do not use the cache on the tools page and in the metabox on the editing post/page page.
 
 = Version 3.3.1 =
 * Bugfix: When no Universal Item pictures have been generated, an error occurs.

@@ -368,7 +368,7 @@ class AVHAmazonShortcode
 		 */
 		$this->core->amazon_endpoint = $this->core->amazon_endpoint_table[$locale];
 		$this->core->wishlist_sort_order = 'LastUpdated';
-		$list_result = $this->core->getListResults( $wishlist );
+		$list_result = $this->core->getListResults( $wishlist, FALSE );
 		$total_items = count( $list_result['Lists']['List']['ListItem'] );
 		if ( $total_items > 0 ) {
 			$this->metaboxTabOutputHeader();
@@ -402,7 +402,7 @@ class AVHAmazonShortcode
 		 */
 		$this->core->amazon_endpoint = $this->core->amazon_endpoint_table[$locale];
 
-		$item_result = $this->core->getItemLookup( $asin, '' );
+		$item_result = $this->core->getItemLookup( $asin, FALSE );
 		if ( $item_result['Items']['Request']['Errors'] ) {
 			echo '<strong>' . __( 'Can\'t find the given item', 'avhamazon' ) . '</strong>';
 		} else {
