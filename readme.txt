@@ -9,6 +9,7 @@ Stable tag: 3.3.2
 The AVH Amazon plugin gives you the ability to show items from your Amazon wishlist by using widgets or shortcode in posts and pages.
 
 == Description ==
+As Amazon changed their API this plugin no longer works. It's hosted on github for historic reasons.
 
 The AVH Amazon plugin gives you the ability to add multiple widgets which will display one or more random item(s) from your Amazon wishlist, baby registry and/or wedding registry.
 It also has the ability to show an item with its link, in posts and pages by use of shortcode. 
